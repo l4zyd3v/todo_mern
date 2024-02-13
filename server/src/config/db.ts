@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const mongoUrl = "your_mongodb_connection_string_here";
+const mongoUrl = "mongodb://localhost:27017/todoApp";
 const client = new MongoClient(mongoUrl);
 
 export async function connectToDatabase() {
