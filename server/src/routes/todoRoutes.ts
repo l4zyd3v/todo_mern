@@ -4,7 +4,7 @@ import { body, validationResult } from "express-validator";
 
 export function todoRoutes(db: Db) {
   const router = Router();
-  const collection = db.collection("todo");
+  const collection = db.collection("todos");
 
   // Fetch all todos
   router.get("/", async (req, res) => {
