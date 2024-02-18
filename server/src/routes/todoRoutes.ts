@@ -11,6 +11,7 @@ export function todoRoutes(db: Db) {
     try {
       const todos = await collection.find({}).toArray();
       res.json(todos);
+      console.log("User requested all todos");
     } catch (e: any) {
       res.status(500).json({ message: e.message });
     }
@@ -24,6 +25,7 @@ export function todoRoutes(db: Db) {
       const todo = await collection.findOne({ _id: new ObjectId(id) });
       if (todo) {
         res.json(todo);
+        console.log("User requested a single todo by ID");
       } else {
         res.status(404).json({ message: "Todo not found" });
       }
