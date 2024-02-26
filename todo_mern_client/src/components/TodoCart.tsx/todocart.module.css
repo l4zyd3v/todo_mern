@@ -1,3 +1,15 @@
+@keyframes deleteAnimLeftSwipe {
+  to {
+    left: -100vw;
+  }
+}
+
+@keyframes deleteAnimRightSwipe {
+  to {
+    left: 100vw;
+  }
+}
+
 .wrapper {
   background-color: white;
   height: 5rem;

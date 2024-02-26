@@ -16,7 +16,7 @@ async function startServer() {
     app.use("/todos", todoRoutes(db));
   }
 
-  app.listen(PORT, () => {
+  app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running at http://localhost:${PORT}`);
   });
 }
