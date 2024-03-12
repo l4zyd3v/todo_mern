@@ -9,9 +9,6 @@ const host = "192.168.1.207";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [touchStartY, setTouchStartY] = useState(0);
-  const [animCreationThreshold, setAnimCreationThreshold] = useState(0);
-  const [createNewTodo, setCreateNewTodo] = useState(false);
 
   const [touchMoved, setTouchMoved] = useState(0);
 
@@ -29,12 +26,6 @@ function App() {
     getAll();
   }, []);
 
-  // useEffect(() => {
-  // animation.current = anime({
-  //   targets: "#createNewTodoBox",
-  //   translateY: -440,
-  // });
-  // }, []);
   const animation = useRef<AnimeInstance | null>(null);
 
   function startAnimation() {
@@ -45,40 +36,6 @@ function App() {
       width: "90vw",
     });
   }
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartY(e.touches[0].clientY);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchMoved(e.touches[0].clientY);
-    setAnimCreationThreshold(-(touchStartY - e.touches[0].clientY));
-
-    setCreateNewTodo(false);
-  };
-
-  const handleTouchEnd = () => {
-    setCreateNewTodo(false);
-    if (animCreationThreshold < -110) {
-      startAnimation();
-      console.log("hello");
-      setCreateNewTodo(true);
-    }
-
-    setCreateNewTodo(false);
-    if (animCreationThreshold > -110) {
-      setAnimCreationThreshold(0);
-    }
-  };
-  console.log(touchMoved);
-
-  const creationAnimationStyle = {
-    bottom: `-${animCreationThreshold + 440}px`,
-    // width: `125vw`,
-    borderTopLeftRadius: `${touchMoved / -10}%`,
-
-    borderTopRightRadius: `${touchMoved / -10}%`,
-  };
 
   return (
     <div className={s.outerWrapper}>
@@ -92,21 +49,6 @@ function App() {
             />
           );
         })}
-      </div>
-      <div
-        style={creationAnimationStyle}
-        className={s.creationAnimation}
-        id="createNewTodoBox"
-      />
-      <div
-        onTouchMove={handleTouchMove}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className={s.swipeCreateArea}
-      >
-        {createNewTodo ? (
-          <span className={s.createNewTodoMsg}>Create new</span>
-        ) : null}
       </div>
     </div>
   );
