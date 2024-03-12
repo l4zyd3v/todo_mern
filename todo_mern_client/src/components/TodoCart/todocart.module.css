@@ -11,9 +11,11 @@
 }
 
 .wrapper {
-  background-color: white;
+  background-color: #1b1b1b;
+  border: 3px solid black;
   height: 5rem;
   margin: 0.8rem 0.8rem 0 0.8rem;
   border-radius: 10px;
   position: relative;
+  z-index: 500;
 }

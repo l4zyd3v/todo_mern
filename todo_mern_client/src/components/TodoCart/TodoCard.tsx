@@ -1,7 +1,7 @@
 import s from "./todocart.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Todo } from "../../types/types.ts";
+import { Todo } from "../../types/todo.ts";
 
 export default function TodoCard({ _id, description }: Todo) {
   const [touchstart, setTouchstart] = useState(0);
