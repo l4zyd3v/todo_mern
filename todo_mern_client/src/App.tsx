@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import s from "./app.module.css";
-import TodoCard from "./components/TodoCart.tsx/TodoCard";
+import TodoCard from "./components/TodoCart/TodoCard";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
 import { Todo } from "./types/todo";
@@ -10,8 +10,10 @@ const host = "192.168.1.207";
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [touchStartY, setTouchStartY] = useState(0);
-  const [animCreation, setAnimCreation] = useState(0);
+  const [animCreationThreshold, setAnimCreationThreshold] = useState(0);
   const [createNewTodo, setCreateNewTodo] = useState(false);
+
+  const [touchMoved, setTouchMoved] = useState(0);
 
   useEffect(() => {
     async function getAll() {
@@ -27,55 +29,60 @@ function App() {
     getAll();
   }, []);
 
+  // useEffect(() => {
+  // animation.current = anime({
+  //   targets: "#createNewTodoBox",
+  //   translateY: -440,
+  // });
+  // }, []);
   const animation = useRef<AnimeInstance | null>(null);
-  useEffect(() => {
+
+  function startAnimation() {
     animation.current = anime({
       targets: "#createNewTodoBox",
-      easing: "easeOutExpo",
-      autoplay: false,
+      top: "25vh",
+      borderRadius: "0%",
+      width: "90vw",
     });
-  }, []);
+  }
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartY(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setAnimCreation(-(touchStartY - e.touches[0].clientY));
+    setTouchMoved(e.touches[0].clientY);
+    setAnimCreationThreshold(-(touchStartY - e.touches[0].clientY));
 
     setCreateNewTodo(false);
-    if (animCreation < -110) {
-      console.log("hello");
-      setCreateNewTodo(true);
-    }
   };
 
   const handleTouchEnd = () => {
     setCreateNewTodo(false);
+    if (animCreationThreshold < -110) {
+      startAnimation();
+      console.log("hello");
+      setCreateNewTodo(true);
+    }
 
     setCreateNewTodo(false);
-    if (animCreation > -110) {
-      setAnimCreation(0);
+    if (animCreationThreshold > -110) {
+      setAnimCreationThreshold(0);
     }
   };
+  console.log(touchMoved);
 
   const creationAnimationStyle = {
-    bottom: `-${animCreation + 440}px`,
-    width: `125vw`,
-    boxShadow: `0 2px 30px 3px white`,
-    // left: "0",
-    // right: "0",
-    // margin: "auto",
+    bottom: `-${animCreationThreshold + 440}px`,
+    // width: `125vw`,
+    borderTopLeftRadius: `${touchMoved / -10}%`,
+
+    borderTopRightRadius: `${touchMoved / -10}%`,
   };
 
   return (
     <div className={s.outerWrapper}>
-      <div
-        className={s.wrapper}
-        onTouchMove={handleTouchMove}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className={s.wrapper}>
         {todos.map((todo) => {
           return (
             <TodoCard
@@ -91,9 +98,16 @@ function App() {
         className={s.creationAnimation}
         id="createNewTodoBox"
       />
-      {createNewTodo ? (
-        <span className={s.createNewTodoMsg}>Create new</span>
-      ) : null}
+      <div
+        onTouchMove={handleTouchMove}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className={s.swipeCreateArea}
+      >
+        {createNewTodo ? (
+          <span className={s.createNewTodoMsg}>Create new</span>
+        ) : null}
+      </div>
     </div>
   );
 }
