@@ -1,21 +1,33 @@
-@keyframes deleteAnimLeftSwipe {
-  to {
-    left: -100vw;
-  }
+.card {
+  background-color: #1b1b1b;
+  border: 3px solid black;
+  border-radius: 10px;
+  position: relative;
+  z-index: 500;
+  display: flex;
 }
 
-@keyframes deleteAnimRightSwipe {
+.trash_icon {
+  position: fixed;
+  left: 1rem;
+
+  font-size: 2rem;
+  align-self: center;
+}
+.remove_trash_icon {
+  display: none;
+}
+
+@keyframes deleteAnim {
   to {
     left: 100vw;
   }
 }
 
-.wrapper {
-  background-color: #1b1b1b;
-  border: 3px solid black;
-  height: 5rem;
-  margin: 0.8rem 0.8rem 0 0.8rem;
-  border-radius: 10px;
-  position: relative;
-  z-index: 500;
+.animateCardAway {
+  animation: deleteAnim 0.3s forwards;
+}
+
+.removeCardAfterAnim {
+  display: none;
 }

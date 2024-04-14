@@ -1,55 +1,73 @@
-import s from "./todocart.module.css";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Todo } from "../../types/todo.ts";
+import s from "./todocart.module.css";
+import { Todo } from "../../types/todo";
 
-export default function TodoCard({ _id, description }: Todo) {
-  const [touchstart, setTouchstart] = useState(0);
-  const [touchmove, setTouchmove] = useState(0);
-  const [touchmoveX, setTouchMoveX] = useState(0);
-  const [todoId, setTodoId] = useState("");
+const TodoCard: React.FC<Todo> = ({ _id, description }) => {
+  const [startTouchPosition, setStartTouchPosition] = useState(0);
+  const [currentTouchPosition, setCurrentTouchPosition] = useState(0);
+  const [deletionThresholdReached, setDeletionThressHoldReached] =
+    useState(false);
+  const [deleteAnimationActive, setDeletionAnimationActive] = useState(false);
+  const [isRemoveAfterAnimation, setIsRemoveAfterAnimation] = useState(false);
 
-  // useEffect(() => {
-  //    console.log("useeffect");
-  //    async function deleteSelected() {
-  //      try {
-  //        const res = await axios.delete(`http://localhost:3000/todos/${todoId}`);
-  //        console.log(res.data);
-  //      } catch (error) {
-  //        console.log(error);
-  //      }
-  //    }
-  //
-  //    deleteSelected();
-  //  }, [todoId]);
+  const trashIcon = "\u{1F5D1}";
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    setTouchstart(e.touches[0].clientX);
+    setStartTouchPosition(e.touches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    // console.log("TouchMove", e.touches[0].clientX);
-    setTouchMoveX(e.touches[0].clientX - touchstart);
+    const touchDifference = e.touches[0].clientX - startTouchPosition;
+    const isOutOfBounds = touchDifference > 80 || touchDifference < 0;
+    const isDeletionBound = touchDifference > 65;
 
-    console.log(touchmoveX);
+    setCurrentTouchPosition(touchDifference);
 
-    if (touchmoveX > 120 || touchmoveX < -120) {
+    if (isOutOfBounds) {
+      return;
+    }
+
+    setDeletionThressHoldReached(isDeletionBound);
+
+    if (isDeletionBound) {
       deleteTodoCard();
     }
   };
 
-  function deleteTodoCard() {
-    console.log("Delete");
-  }
+  const handleTouchEnd = () => {
+    if (deletionThresholdReached) {
+      setDeletionAnimationActive(true);
+    }
+  };
+
+  const handleAnimationEnd = () => {
+    setIsRemoveAfterAnimation(true);
+  };
+
+  const deleteTodoCard = () => {
+    // Implement deletion logic here
+  };
 
   return (
     <div
-      className={s.wrapper}
+      className={`${s.card} ${deleteAnimationActive ? s.animateCardAway : ""} ${isRemoveAfterAnimation ? s.removeCardAfterAnim : ""}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      style={{ left: `${touchmoveX}px` }}
+      onTouchEnd={handleTouchEnd}
+      onAnimationEnd={handleAnimationEnd}
+      style={{ left: `${currentTouchPosition}px` }}
     >
+      {deletionThresholdReached && (
+        <span
+          className={`${s.trash_icon} ${deleteAnimationActive ? s.remove_trash_icon : ""}`}
+        >
+          {trashIcon}
+        </span>
+      )}
       {description}
     </div>
   );
-}
+};
+
+export default TodoCard;

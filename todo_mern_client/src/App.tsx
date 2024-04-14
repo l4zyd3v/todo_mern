@@ -38,8 +38,8 @@ function App() {
   }
 
   return (
-    <div className={s.outerWrapper}>
-      <div className={s.wrapper}>
+    <div className={s.mainWrapper}>
+      <div className={s.cardWrapper}>
         {todos.map((todo) => {
           return (
             <TodoCard
