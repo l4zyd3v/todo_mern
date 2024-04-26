@@ -1,0 +1,12 @@
+.todoButton {
+  height: 3.3rem;
+  width: 3.3rem;
+  background-color: var(--pink);
+  border-radius: 100%;
+  position: absolute;
+  bottom: 2.3rem;
+  right: 2.3rem;
+  font-size: 2.4rem;
+  color: white;
+  border: none;
+}

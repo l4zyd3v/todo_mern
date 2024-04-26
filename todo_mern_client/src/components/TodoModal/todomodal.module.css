@@ -1,0 +1,70 @@
+:root {
+  /*todoModal*/
+  --todoModalBorderRadius: 1rem;
+
+  /*exitButton*/
+  --exitButtonSize: 1.9rem;
+  --top-left-distance: 0.8rem;
+}
+
+@keyframes showModalAnim {
+  20% {
+    right: 20%;
+  }
+  60% {
+    right: -15%;
+  }
+  100% {
+    right: 0%;
+  }
+}
+
+@keyframes hideModalAnim {
+  0% {
+    right: 0;
+  }
+  20% {
+    right: 30%;
+  }
+  99% {
+    right: -100%;
+  }
+  100% {
+    display: none;
+  }
+}
+
+.modalHide {
+  animation: hideModalAnim 0.5s forwards;
+}
+
+.modalVisible {
+  animation: showModalAnim 0.5s forwards;
+}
+
+.todoModal {
+  position: absolute;
+  background: var(--Dark-blue);
+  height: 95vh;
+  width: 96vw;
+  z-index: 1000;
+  align-self: center;
+  border-top-left-radius: var(--todoModalBorderRadius);
+  border-bottom-left-radius: var(--todoModalBorderRadius);
+  /* box-shadow: 1px 2px 14px 5px black; */
+  right: -100%;
+}
+
+.exitButton {
+  height: var(--exitButtonSize);
+  width: var(--exitButtonSize);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  border: none;
+  position: absolute;
+  top: var(--top-left-distance);
+  left: var(--top-left-distance);
+}
