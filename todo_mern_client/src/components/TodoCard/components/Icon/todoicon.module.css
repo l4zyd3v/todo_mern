@@ -1,0 +1,11 @@
+:root {
+  --icon-size: 1.4rem;
+}
+
+.icon {
+  height: var(--icon-size);
+  width: var(--icon-size);
+  border: 2px solid var(--pink);
+  border-radius: 100%;
+  justify-self: center;
+}

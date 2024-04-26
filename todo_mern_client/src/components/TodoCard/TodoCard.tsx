@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import s from "./todocart.module.css";
+import s from "./todocard.module.css";
 import { Todo } from "../../types/todo";
+import TodoIcon from "./components/Icon/TodoIcon";
 
 const TodoCard: React.FC<Todo> = ({ _id, description }) => {
   const [startTouchPosition, setStartTouchPosition] = useState(0);
@@ -58,6 +59,7 @@ const TodoCard: React.FC<Todo> = ({ _id, description }) => {
       onAnimationEnd={handleAnimationEnd}
       style={{ left: `${currentTouchPosition}px` }}
     >
+      <TodoIcon />
       {deletionThresholdReached && (
         <span
           className={`${s.trash_icon} ${deleteAnimationActive ? s.remove_trash_icon : ""}`}

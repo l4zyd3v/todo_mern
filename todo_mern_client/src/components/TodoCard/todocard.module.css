@@ -1,10 +1,13 @@
 .card {
   background-color: var(--Dark-blue);
-  border: 3px solid black;
   border-radius: 10px;
   position: relative;
   z-index: 500;
-  display: flex;
+  color: vag(--text-color);
+
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  align-items: center;
 }
 
 .trash_icon {
