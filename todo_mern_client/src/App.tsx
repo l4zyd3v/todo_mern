@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import s from "./app.module.css";
-import TodoCard from "./components/TodoCart/TodoCard";
+import TodoCard from "./components/TodoCard/TodoCard";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
 import { Todo } from "./types/todo";
@@ -42,6 +42,7 @@ function App() {
   return (
     <div className={s.mainWrapper}>
       <div className={s.cardWrapper}>
+        <h2 className={s.heading2}>Tasks bla bla bla</h2>
         {todos.map((todo) => {
           return (
             <TodoCard

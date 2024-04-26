@@ -1,3 +1,5 @@
+// All the functions below are not being used from here, yet.. just making it ready to modularize to make it easier to read the function component
+
 const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
   setStartTouchPosition(e.touches[0].clientX);
 };
