@@ -5,13 +5,14 @@ import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
 import { Todo } from "./types/todo";
 import TodoButton from "./components/TodoButton/TodoButton";
+import TodoModal from "./components/TodoModal/TodoModal";
 
 const host = "192.168.1.207";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
-
   const [touchMoved, setTouchMoved] = useState(0);
+  const [modalVisibility, setModalVisibility] = useState(null);
 
   useEffect(() => {
     async function getAll() {
@@ -51,7 +52,11 @@ function App() {
           );
         })}
       </div>
-      <TodoButton />
+      <TodoButton setModal={setModalVisibility} />
+      <TodoModal
+        visibility={modalVisibility}
+        setVisibility={setModalVisibility}
+      />
     </div>
   );
 }

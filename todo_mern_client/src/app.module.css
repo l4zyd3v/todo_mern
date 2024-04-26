@@ -1,5 +1,4 @@
 .cardWrapper {
-  border: 5px solid green;
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
@@ -11,10 +10,14 @@
   grid-row: 4/5;
   padding: 3rem 1.5rem;
 }
+
 .mainWrapper {
   height: 100vh;
   display: grid;
   grid-template-rows: 1fr 1fr 2fr 5fr;
 
-  border: 1px solid red;
+  background-color: var(--light-blue);
+
+  position: relative;
+  overflow: hidden;
 }
