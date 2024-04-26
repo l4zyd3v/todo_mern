@@ -1,7 +1,7 @@
 import s from "./todobutton.module.css";
 
 interface TodoButtonProps {
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModal: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 export default function TodoButton({ setModal }: TodoButtonProps) {

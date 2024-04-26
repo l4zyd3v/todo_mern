@@ -1,10 +1,10 @@
 :root {
   /*todoModal*/
-  --todoModalBorderRadius: 2rem;
+  --todoModalBorderRadius: 1rem;
 
   /*exitButton*/
-  --exitButtonBorderRadius: 2.5rem;
-  --top-left-distance: 0.5rem;
+  --exitButtonSize: 1.9rem;
+  --top-left-distance: 0.8rem;
 }
 
 @keyframes showModalAnim {
@@ -45,19 +45,19 @@
 .todoModal {
   position: absolute;
   background: var(--Dark-blue);
-  height: 90vh;
+  height: 95vh;
   width: 96vw;
   z-index: 1000;
   align-self: center;
   border-top-left-radius: var(--todoModalBorderRadius);
   border-bottom-left-radius: var(--todoModalBorderRadius);
-  box-shadow: 1px 2px 14px 5px black;
+  /* box-shadow: 1px 2px 14px 5px black; */
   right: -100%;
 }
 
 .exitButton {
-  height: var(--exitButtonBorderRadius);
-  width: var(--exitButtonBorderRadius);
+  height: var(--exitButtonSize);
+  width: var(--exitButtonSize);
   border-radius: 100%;
   display: flex;
   justify-content: center;
