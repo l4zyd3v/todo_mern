@@ -1,23 +1,7 @@
-.cardWrapper {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  position: relative;
-  /* width: 100vw; */
-  overflow: hidden;
-
-  display: grid;
-  grid-template-rows: 0.5fr repeat(5, 1fr);
-  grid-row: 4/5;
-  padding: 3rem 1.5rem;
-  position: relative;
-  gap: 0.3rem;
-  color: var(--text-color);
-}
-
 .mainWrapper {
   height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 1fr 2fr 4fr;
+  grid-template-rows: 1fr 1fr 1fr 3fr;
 
   background-color: var(--light-blue);
 
@@ -25,8 +9,51 @@
   overflow: hidden;
 }
 
-.heading2 {
+/*categories*/
+.categoriesWrapper {
+  grid-row: 3/4;
+  /* width: 100%; */
+  display: grid;
+  grid-template-rows: 2fr 4fr;
+  padding: 0 1.5rem;
+}
+
+.categoriesScrollWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.categoriesHeading {
   color: var(--text-color2);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   align-self: center;
+  /* margin-top: 2rem; */
+  text-transform: capitalize;
+}
+
+/*todo cards*/
+.cardWrapper {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  /* width: 100vw; */
+  overflow: hidden;
+  margin-top: 2rem;
+
+  display: grid;
+  grid-template-rows: 0.5fr repeat(5, 1fr);
+  grid-row: 4/5;
+  margin-bottom: 2.6rem;
+  padding: 0 1.5rem;
+  position: relative;
+  gap: 0.3rem;
+  color: var(--text-color);
+}
+.cardsHeading {
+  color: var(--text-color2);
+  font-size: 1.1rem;
+  align-self: center;
+  text-transform: capitalize;
+  /* margin-top: 2rem; */
 }

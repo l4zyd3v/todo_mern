@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import s from "./todocard.module.css";
-import { Todo } from "../../types/todo";
+import { todoCardInterface } from "../../types/todoCardInterface";
 import TodoIcon from "./components/Icon/TodoIcon";
 
-const TodoCard: React.FC<Todo> = ({ _id, description }) => {
+const TodoCard: React.FC<todoCardInterface> = ({ _id, description }) => {
   const [startTouchPosition, setStartTouchPosition] = useState(0);
   const [currentTouchPosition, setCurrentTouchPosition] = useState(0);
   const [deletionThresholdReached, setDeletionThressHoldReached] =
