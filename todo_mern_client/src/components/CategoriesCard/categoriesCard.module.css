@@ -9,6 +9,8 @@
   justify-content: space-evenly;
   position: relative;
   padding: 0 0.9rem;
+  border: 2px solid white;
+  height: 7rem;
 }
 
 .tasksAmount {
