@@ -1,4 +1,4 @@
-export interface Todo {
+export interface todoCardInterface {
   _id: string;
   description: string;
 }

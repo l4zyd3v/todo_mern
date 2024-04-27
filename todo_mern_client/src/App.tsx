@@ -3,19 +3,23 @@ import s from "./app.module.css";
 import TodoCard from "./components/TodoCard/TodoCard";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
-import { Todo } from "./types/todo";
+import { todoCardInterface } from "./types/todoCardInterface.ts";
+import { categoryCardInterface } from "./types/categoryCardInterface.ts";
 import TodoButton from "./components/TodoButton/TodoButton";
 import TodoModal from "./components/TodoModal/TodoModal";
+import CategoriesCard from "./components/CategoriesCard/CategoriesCard.tsx";
 
 const host = "192.168.1.207";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<todoCardInterface[]>([]);
+  const [categories, setCategories] = useState<categoryCardInterface[]>([]);
+
   const [touchMoved, setTouchMoved] = useState(0);
   const [modalVisibility, setModalVisibility] = useState(null);
 
   useEffect(() => {
-    async function getAll() {
+    async function getTodos() {
       try {
         const res = await axios.get(`http://${host}:3000/todos`);
         console.log(res.data);
@@ -25,7 +29,21 @@ function App() {
       }
     }
 
-    getAll();
+    getTodos();
+  }, []);
+
+  useEffect(() => {
+    async function getCategories() {
+      try {
+        const res = await axios.get(`http://${host}:3000/categories`);
+        console.log(res.data);
+        setCategories(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getCategories();
   }, []);
 
   const animation = useRef<AnimeInstance | null>(null);
@@ -41,8 +59,23 @@ function App() {
 
   return (
     <div className={s.mainWrapper}>
+      <div className={s.categoriesWrapper}>
+        <h2 className={s.categoriesHeading}>categories</h2>
+        <div className={s.categoriesScrollWrapper}>
+          {categories.map((category) => {
+            return (
+              <CategoriesCard
+                key={category._id}
+                _id={category._id}
+                description={category.description}
+              />
+            );
+          })}
+        </div>
+      </div>
+
       <div className={s.cardWrapper}>
-        <h2 className={s.heading2}>Tasks bla bla bla</h2>
+        <h2 className={s.cardsHeading}>today's tasks</h2>
         {todos.map((todo) => {
           return (
             <TodoCard
