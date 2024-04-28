@@ -1,12 +1,21 @@
 .mainWrapper {
   height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 1fr 1.5fr 3fr;
+  grid-template-rows: 1fr 1fr 2fr 5fr;
 
   background-color: var(--light-blue);
 
   position: relative;
   overflow: hidden;
+}
+
+.heading1 {
+  grid-row: 2/3;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  font-size: 2.6rem;
 }
 
 /*categories*/
@@ -30,7 +39,6 @@
   /* margin-top: 2rem; */
   text-transform: capitalize;
 
-  border: 2px solid black;
   display: flex;
   align-items: end;
 }

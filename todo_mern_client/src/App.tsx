@@ -46,6 +46,10 @@ function App() {
     getCategories();
   }, []);
 
+  function userGreetings() {
+    const greetings = ["What's up, ", "What's up"];
+  }
+
   const animation = useRef<AnimeInstance | null>(null);
 
   function startAnimation() {
@@ -59,6 +63,7 @@ function App() {
 
   return (
     <div className={s.mainWrapper}>
+      <h1 className={s.heading1}>What's up, Morten</h1>
       <div className={s.categoriesWrapper}>
         <h2 className={s.categoriesHeading}>categories</h2>
         <div className={s.categoriesScrollWrapper}>
