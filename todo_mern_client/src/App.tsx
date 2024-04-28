@@ -5,7 +5,7 @@ import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
 import { todoCardInterface } from "./types/todoCardInterface.ts";
 import { categoryCardInterface } from "./types/categoryCardInterface.ts";
-import TodoButton from "./components/TodoButton/TodoButton";
+import NewTodoBtn from "./components/NewTodoBtn/NewTodoBtn.tsx";
 import TodoModal from "./components/TodoModal/TodoModal";
 import CategoriesCard from "./components/CategoriesCard/CategoriesCard.tsx";
 
@@ -91,7 +91,7 @@ function App() {
           );
         })}
       </div>
-      <TodoButton setModal={setModalVisibility} />
+      <NewTodoBtn setModal={setModalVisibility} />
       <TodoModal
         visibility={modalVisibility}
         setVisibility={setModalVisibility}
