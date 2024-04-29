@@ -1,0 +1,15 @@
+:root {
+  --burgerMenuSize: 1.5rem;
+}
+.burgerMenu {
+  height: var(--burgerMenuSize);
+  width: var(--burgerMenuSize);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.burgerElement {
+  width: 100%;
+  background: var(--text-color2);
+  height: 3px;
+}

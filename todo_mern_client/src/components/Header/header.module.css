@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 1.5rem;
+}
+
+.rightSideWrapper {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  width: 5rem;
+}
+
+.icons {
+  color: var(--text-color2);
+  font-size: 1.5rem;
+}

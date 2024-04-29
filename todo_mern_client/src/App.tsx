@@ -8,8 +8,10 @@ import { categoryCardInterface } from "./types/categoryCardInterface.ts";
 import NewTodoBtn from "./components/NewTodoBtn/NewTodoBtn.tsx";
 import TodoModal from "./components/TodoModal/TodoModal";
 import CategoriesCard from "./components/CategoriesCard/CategoriesCard.tsx";
+import Header from "./components/Header/Header.tsx";
 
 const host = "192.168.1.207";
+// const host = "localhost";
 
 function App() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);
@@ -63,6 +65,7 @@ function App() {
 
   return (
     <div className={s.mainWrapper}>
+      <Header />
       <h1 className={s.heading1}>What's up, Morten</h1>
       <div className={s.categoriesWrapper}>
         <h2 className={s.categoriesHeading}>categories</h2>
