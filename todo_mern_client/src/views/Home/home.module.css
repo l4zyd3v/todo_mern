@@ -1,0 +1,96 @@
+.mainWrapper {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr 2fr 5fr;
+
+  background-color: var(--light-blue);
+
+  position: relative;
+  overflow: hidden;
+  z-index: 200;
+  overflow: hidden;
+}
+
+@keyframes animateNav {
+  0% {
+    right: 0rem;
+    height: 100svh;
+  }
+  100% {
+    right: -16.5rem;
+    height: 90svh;
+  }
+}
+
+.mainWrapperNavOpen {
+  animation: animateNav 0.3s ease-out forwards;
+  right: -16.5rem;
+  height: 90svh;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  border-bottom-left-radius: 2rem;
+  border-top-left-radius: 2rem;
+  position: relative;
+  overflow: visible;
+}
+
+.heading1 {
+  grid-row: 2/3;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  font-size: 2rem;
+}
+
+/*categories*/
+.categoriesWrapper {
+  grid-row: 3/4;
+  /* width: 100%; */
+  display: grid;
+  /* grid-template-rows: 2fr 4fr; */
+  padding: 0 1.5rem;
+}
+
+.categoriesScrollWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.categoriesHeading {
+  color: var(--text-color2);
+  font-size: 1.1rem;
+  /* margin-top: 2rem; */
+  text-transform: capitalize;
+
+  display: flex;
+  align-items: end;
+}
+
+/*todo cards*/
+.cardWrapper {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  /* width: 100vw; */
+  overflow: hidden;
+  margin-top: 2rem;
+
+  display: grid;
+  grid-template-rows: 0.5fr repeat(5, 1fr);
+  grid-row: 4/5;
+  margin-bottom: 2.6rem;
+  padding: 0 1.5rem;
+  position: relative;
+  gap: 0.3rem;
+  color: var(--text-color);
+}
+.cardsHeading {
+  color: var(--text-color2);
+  font-size: 1.1rem;
+  align-self: center;
+  text-transform: capitalize;
+  /* margin-top: 2rem; */
+}
