@@ -3,17 +3,18 @@ import { NavToggleContext } from "./context/NavToggleContext.tsx";
 import s from "./app.module.css";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
-import { todoCardInterface } from "./types/todoCardInterface.ts";
-import { categoryCardInterface } from "./types/categoryCardInterface.ts";
-import TodoCard from "./components/TodoCard/TodoCard";
-import NewTodoBtn from "./components/NewTodoBtn/NewTodoBtn.tsx";
-import TodoModal from "./components/TodoModal/TodoModal";
-import CategoriesCard from "./components/CategoriesCard/CategoriesCard.tsx";
-import Header from "./components/Header/Header.tsx";
-import Nav from "./components/Nav/Nav.tsx";
+import { todoCardInterface, categoryCardInterface } from "./types";
+import {
+  TodoCard,
+  NewTodoBtn,
+  TodoModal,
+  CategoriesCard,
+  Header,
+  Nav,
+} from "./components";
 
-const host = "192.168.1.207";
-// const host = "localhost";
+// const host = "192.168.1.207";
+const host = "localhost";
 
 function App() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);

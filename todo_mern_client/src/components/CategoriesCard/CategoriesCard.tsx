@@ -1,5 +1,5 @@
 import s from "./categoriesCard.module.css";
-import { todoCardInterface } from "../../types/todoCardInterface";
+import { todoCardInterface } from "../../types";
 
 export default function CategoriesCard({ _id, description }) {
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import s from "./todocard.module.css";
-import { todoCardInterface } from "../../types/todoCardInterface";
+import { todoCardInterface } from "../../types";
 import TodoIcon from "./components/Icon/TodoIcon";
 
 const TodoCard: React.FC<todoCardInterface> = ({ _id, description }) => {
