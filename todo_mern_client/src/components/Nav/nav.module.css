@@ -12,18 +12,24 @@
 
 .profilePicWrapper {
   grid-row: 1/2;
-  height: 5rem;
-  width: 5rem;
+  height: 7rem;
+  width: 7rem;
   border-radius: 5rem;
-  border: 2px solid var(--pink);
+  border-top: 3.5px solid var(--pink);
+  border-right: 3.5px solid var(--pink);
+
   position: relative;
   top: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .profilePic {
   object-fit: cover;
   width: 6rem;
   height: 6rem;
   border-radius: 5rem;
+  opacity: 0.8;
 }
 
 .profileName {
@@ -31,9 +37,12 @@
   color: var(--text-color);
   display: flex;
   flex-direction: column;
-  font-size: 2rem;
+  font-size: 2.5rem;
   position: relative;
   top: 2rem;
+}
+.profileName__top {
+  margin-bottom: 0.4rem;
 }
 
 .listOfNavLinks {
@@ -67,8 +76,8 @@
 
 .consistancyWrapper {
   grid-row: 4/5;
-  /* border: 2px solid pink; */
-  height: 12rem;
+  border: 2px solid pink;
+  height: 10rem;
   width: 13rem;
   position: relative;
   top: 1rem;

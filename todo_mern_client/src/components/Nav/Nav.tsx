@@ -14,8 +14,8 @@ export default function Nav() {
         />
       </div>
       <h4 className={s.profileName}>
-        <span>Morten</span>
-        <span>Nielsen</span>
+        <span className={s.profileName__top}>Morten</span>
+        <span className={s.profileName__bottom}>Nielsen</span>
       </h4>
       <ul className={s.listOfNavLinks}>
         <li className={s.li}>
