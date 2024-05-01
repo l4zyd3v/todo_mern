@@ -13,8 +13,8 @@ import {
   Nav,
 } from "../../components";
 
-// const host = "192.168.1.207";
-const host = "localhost";
+const host = "192.168.1.207";
+// const host = "localhost";
 
 export default function Home() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);
