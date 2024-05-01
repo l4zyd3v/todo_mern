@@ -1,5 +1,5 @@
 .card {
-  background-color: var(--Dark-blue);
+  background-color: var(--dark-blue);
   border-radius: 10px;
   position: relative;
   z-index: 500;

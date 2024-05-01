@@ -1,14 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
+import { NavToggleContext } from "./context/NavToggleContext.tsx";
 import s from "./app.module.css";
-import TodoCard from "./components/TodoCard/TodoCard";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
 import { todoCardInterface } from "./types/todoCardInterface.ts";
 import { categoryCardInterface } from "./types/categoryCardInterface.ts";
+import TodoCard from "./components/TodoCard/TodoCard";
 import NewTodoBtn from "./components/NewTodoBtn/NewTodoBtn.tsx";
 import TodoModal from "./components/TodoModal/TodoModal";
 import CategoriesCard from "./components/CategoriesCard/CategoriesCard.tsx";
 import Header from "./components/Header/Header.tsx";
+import Nav from "./components/Nav/Nav.tsx";
 
 const host = "192.168.1.207";
 // const host = "localhost";
@@ -19,6 +21,7 @@ function App() {
 
   const [touchMoved, setTouchMoved] = useState(0);
   const [modalVisibility, setModalVisibility] = useState(null);
+  const { toggleNav } = useContext(NavToggleContext);
 
   useEffect(() => {
     async function getTodos() {
@@ -64,42 +67,47 @@ function App() {
   }
 
   return (
-    <div className={s.mainWrapper}>
-      <Header />
-      <h1 className={s.heading1}>What's up, Morten</h1>
-      <div className={s.categoriesWrapper}>
-        <h2 className={s.categoriesHeading}>categories</h2>
-        <div className={s.categoriesScrollWrapper}>
-          {categories.map((category) => {
+    <>
+      <div
+        className={`${s.mainWrapper} ${toggleNav ? s.mainWrapperNavOpen : ""}`}
+      >
+        <Header />
+        <h1 className={s.heading1}>What's up, Morten</h1>
+        <div className={s.categoriesWrapper}>
+          <h2 className={s.categoriesHeading}>categories</h2>
+          <div className={s.categoriesScrollWrapper}>
+            {categories.map((category) => {
+              return (
+                <CategoriesCard
+                  key={category._id}
+                  _id={category._id}
+                  description={category.description}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <div className={s.cardWrapper}>
+          <h2 className={s.cardsHeading}>today's tasks</h2>
+          {todos.map((todo) => {
             return (
-              <CategoriesCard
-                key={category._id}
-                _id={category._id}
-                description={category.description}
+              <TodoCard
+                key={todo._id}
+                _id={todo._id}
+                description={todo.description}
               />
             );
           })}
         </div>
+        <NewTodoBtn setModal={setModalVisibility} />
+        <TodoModal
+          visibility={modalVisibility}
+          setVisibility={setModalVisibility}
+        />
       </div>
-
-      <div className={s.cardWrapper}>
-        <h2 className={s.cardsHeading}>today's tasks</h2>
-        {todos.map((todo) => {
-          return (
-            <TodoCard
-              key={todo._id}
-              _id={todo._id}
-              description={todo.description}
-            />
-          );
-        })}
-      </div>
-      <NewTodoBtn setModal={setModalVisibility} />
-      <TodoModal
-        visibility={modalVisibility}
-        setVisibility={setModalVisibility}
-      />
-    </div>
+      <Nav />
+    </>
   );
 }
 

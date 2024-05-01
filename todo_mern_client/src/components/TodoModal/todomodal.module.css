@@ -44,8 +44,8 @@
 
 .todoModal {
   position: absolute;
-  background: var(--Dark-blue);
-  height: 95vh;
+  background: var(--dark-blue);
+  height: 95svh;
   width: 96vw;
   z-index: 1000;
   align-self: center;
