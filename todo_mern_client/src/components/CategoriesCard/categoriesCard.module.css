@@ -3,7 +3,7 @@
   height: 100%;
   align-self: center;
   border-radius: 10px;
-  background-color: var(--Dark-blue);
+  background-color: var(--dark-blue);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

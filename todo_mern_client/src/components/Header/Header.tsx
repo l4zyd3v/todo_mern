@@ -1,3 +1,4 @@
+import { useState } from "react";
 import s from "./header.module.css";
 import { GoBell } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
