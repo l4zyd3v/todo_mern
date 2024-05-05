@@ -2,16 +2,16 @@ import { Router } from "express";
 import { Db, ObjectId } from "mongodb"; // import Db type for type checking
 import { body, validationResult } from "express-validator";
 
-export function todoRoutes(db: Db) {
+export function taskRoutes(db: Db) {
   const router = Router();
-  const collection = db.collection("todos");
+  const collection = db.collection("tasks");
 
   // Fetch all todos
   router.get("/", async (req, res) => {
     try {
-      const todos = await collection.find({}).toArray();
-      res.json(todos);
-      console.log("User requested all todos");
+      const tasks = await collection.find({}).toArray();
+      res.json(tasks);
+      console.log("User requested all tasks");
     } catch (e: any) {
       res.status(500).json({ message: e.message });
     }
@@ -22,12 +22,12 @@ export function todoRoutes(db: Db) {
     const { id } = req.params;
 
     try {
-      const todo = await collection.findOne({ _id: new ObjectId(id) });
-      if (todo) {
-        res.json(todo);
-        console.log("User requested a single todo by ID");
+      const tasks = await collection.findOne({ _id: new ObjectId(id) });
+      if (tasks) {
+        res.json(tasks);
+        console.log("User requested a single tasks by ID");
       } else {
-        res.status(404).json({ message: "Todo not found" });
+        res.status(404).json({ message: "Tasks not found" });
       }
     } catch (e: any) {
       res.status(500).json({ message: e.message });
@@ -37,11 +37,11 @@ export function todoRoutes(db: Db) {
   // Create a todo
   router.post("/", async (req, res) => {
     try {
-      const newTodo = req.body; // Assuming the body contains the todo structure
-      const result = await collection.insertOne(newTodo);
+      const newTasks = req.body; // Assuming the body contains the todo structure
+      const result = await collection.insertOne(newTasks);
       if (result.acknowledged) {
-        const todo = await collection.findOne({ _id: result.insertedId }); // Return the created todo
-        res.status(201).json(todo); // Send the created todo back to the client
+        const task = await collection.findOne({ _id: result.insertedId }); // Return the created todo
+        res.status(201).json(task); // Send the created todo back to the client
       } else {
         res.status(400).json({ message: "Todo could not be created" });
       }
@@ -61,9 +61,9 @@ export function todoRoutes(db: Db) {
         { $set: updateData },
       );
       if (result.modifiedCount === 1) {
-        res.json({ message: "Todo updated successfully." });
+        res.json({ message: "Tasks updated successfully." });
       } else {
-        res.status(404).json({ message: "Todo not found" });
+        res.status(404).json({ message: "Tasks not found" });
       }
     } catch (e: any) {
       res.status(500).json({ message: e.message });
@@ -77,9 +77,9 @@ export function todoRoutes(db: Db) {
     try {
       const result = await collection.deleteOne({ _id: new ObjectId(id) });
       if (result.deletedCount === 1) {
-        res.json({ message: "Todo deleted successfully" });
+        res.json({ message: "Tasks deleted successfully" });
       } else {
-        res.status(404).json({ message: "Todo not found" });
+        res.status(404).json({ message: "Tasks not found" });
       }
     } catch (e: any) {
       res.status(500).json({ message: e.message });
