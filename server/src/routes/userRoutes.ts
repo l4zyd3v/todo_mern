@@ -10,7 +10,7 @@ export function userRoutes(db: Db) {
   // Fetch all users
   router.get("/", async (req, res) => {
     try {
-      const tasks = await collection.find({}).toArray();
+      const users = await collection.find({}).toArray();
       res.json(tasks);
       console.log("User requested all tasks");
     } catch (e: any) {

@@ -1,34 +1,13 @@
 import { connectToDatabase } from "../src/config/db";
 import { Db } from "mongodb"; // Import the Db type
+import { titles, descriptions, priorities } from "./fields/taskfields";
+import { names, userNames } from "./fields/userFields";
 
 // for later use perhaps
 // function randomizeFieldValue(arrOfValues: []) {
 //   let randomValue = arrOfValues[Math.floor(Math.random() * arrOfValues.length)];
 //   return randomValue;
 // }
-
-import { names, userNames } from "./userFields";
-
-async function seedUsers(db: Db) {
-  for (let i = 0; i < userNames.length; i++) {
-    await db.collection("users").insertOne([
-      {
-        username: userNames[Math.floor(Math.random() * userNames.length)],
-        password: "password",
-        profilePicture: "https://www.google.com",
-        credentials: {
-          firstName: names[Math.floor(Math.random() * names.length)].firstName,
-          lastName: names[Math.floor(Math.random() * names.length)].lastName,
-          email: `${userNames[i].toLowerCase()}@mail.com`,
-        },
-      },
-    ]);
-  }
-
-  console.log("Users seeded");
-
-  return;
-}
 
 async function randomizeTaskUserAssociation(db: Db) {
   const users = await db.collection("users").find().toArray();
@@ -51,20 +30,35 @@ async function randomizeTaskUserAssociation(db: Db) {
   return;
 }
 
-import { titles, descriptions, priorities } from "./taskfields";
-
-async function seedTasks(db: Db, amountIfTasks: number) {
-  for (let i = 0; i < amountIfTasks; i++) {
-    await db.collection("tasks").insertOne([
-      {
-        title: titles[Math.floor(Math.random() * titles.length)],
-        description:
-          descriptions[Math.floor(Math.random() * descriptions.length)],
-        dueDate: "2021-12-12",
-        priority: priorities[Math.floor(Math.random() * priorities.length)],
-        userId: "nothinh for now..",
+async function seedUsers(db: Db) {
+  for (let i = 0; i < userNames.length; i++) {
+    await db.collection("users").insertOne({
+      username: userNames[Math.floor(Math.random() * userNames.length)],
+      password: "password",
+      profilePicture: "https://www.google.com",
+      credentials: {
+        firstName: names[Math.floor(Math.random() * names.length)].firstName,
+        lastName: names[Math.floor(Math.random() * names.length)].lastName,
+        email: `${userNames[i].toLowerCase()}@mail.com`,
       },
-    ]);
+    });
+  }
+
+  console.log("Users seeded");
+
+  return;
+}
+
+async function seedTasks(db: Db, amountOfTasks: number) {
+  for (let i = 0; i < amountOfTasks; i++) {
+    await db.collection("tasks").insertOne({
+      title: titles[Math.floor(Math.random() * titles.length)],
+      description:
+        descriptions[Math.floor(Math.random() * descriptions.length)],
+      dueDate: "2021-12-12",
+      priority: priorities[Math.floor(Math.random() * priorities.length)],
+      userId: "nothinh for now..",
+    });
   }
 
   console.log("Tasks seeded");
@@ -82,6 +76,7 @@ async function main() {
   // 10 users
   await seedUsers(db);
   await seedTasks(db, 200);
+  await randomizeTaskUserAssociation(db);
 
   return;
 }
