@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors"; // Changed this line
 import { connectToDatabase } from "./config/db";
-import { todoRoutes } from "./routes/todoRoutes";
-import { categoriesRoutes } from "./routes/categoriesRoutes";
+import { taskRoutes } from "./routes/taskRoutes";
 
 const app = express();
 // const cors = require("cors");
@@ -14,8 +13,7 @@ app.use(cors());
 async function startServer() {
   const db = await connectToDatabase();
   if (db) {
-    app.use("/todos", todoRoutes(db));
-    app.use("/categories", categoriesRoutes(db));
+    app.use("/tasks", taskRoutes(db));
   }
 
   app.listen(PORT, "0.0.0.0", () => {
