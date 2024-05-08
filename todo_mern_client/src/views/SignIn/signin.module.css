@@ -10,7 +10,7 @@
 .wrapper {
   display: grid;
   grid-template-rows: 1fr 3fr;
-  height: 50lvh;
+  height: 60lvh;
   width: 90lvw;
   background-color: var(--dark-blue);
   border-radius: 15px;
@@ -27,7 +27,7 @@
 }
 
 .heading {
-  font-size: 2.7rem;
+  font-size: 3rem;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -108,7 +108,7 @@ input:focus {
 }
 
 .submit {
-  height: 2.5rem;
+  height: 2.8rem;
   font-size: 1rem;
   color: var(--text-color);
   background-color: var(--blue);
@@ -116,7 +116,7 @@ input:focus {
   border-radius: 5px;
   box-shadow: 0px 1px 4px 1px black;
   position: relative;
-  top: -1rem;
+  top: -1.7rem;
 }
 
 .submit:active {
@@ -129,8 +129,8 @@ input:focus {
   border: none;
   color: var(--text-color);
   position: relative;
-  top: -0.5rem;
-  font-size: 0.8rem;
+  top: -0.9rem;
+  font-size: 1rem;
 }
 .registerBtn_secondText {
   text-decoration: underline var(--pink);
