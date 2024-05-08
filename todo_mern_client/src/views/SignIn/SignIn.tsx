@@ -61,6 +61,7 @@ export default function SignIn() {
               password
             </label>
             <input
+              type="password"
               className={s.input}
               id="password"
               {...register("passWord", { required: true })}

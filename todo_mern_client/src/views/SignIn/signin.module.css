@@ -10,7 +10,8 @@
 .wrapper {
   display: grid;
   grid-template-rows: 1fr 3fr;
-  height: 60lvh;
+  height: 75lvh;
+  max-height: 30rem;
   width: 90lvw;
   background-color: var(--dark-blue);
   border-radius: 15px;
@@ -73,7 +74,6 @@
   border-radius: 5px;
   padding-left: 0.5rem;
   color: black;
-
 }
 
 input:focus {
@@ -94,7 +94,20 @@ input:focus {
   gap: 0.5rem;
 }
 
+@keyframes errorArrow {
+  0% {
+    transform: translateX(0rem);
+  }
+  50% {
+    transform: translateX(-1rem);
+  }
+  100% {
+    transform: translateX(0rem);
+  }
+}
+
 .errorArrow {
+  animation: errorArrow 2s infinite;
 }
 
 .rememberMeWrapper {
@@ -126,7 +139,7 @@ input:focus {
 
 .submit:active {
   box-shadow: none;
-  border: 1px solid black;
+  border: 3px solid black;
 }
 
 .registerBtn {
@@ -137,6 +150,7 @@ input:focus {
   top: -0.9rem;
   font-size: 1rem;
 }
+
 .registerBtn_secondText {
   text-decoration: underline var(--pink);
 }
