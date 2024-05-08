@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import s from "./signin.module.css";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 type Inputs = {
   userName: string;
@@ -46,7 +47,9 @@ export default function SignIn() {
               onFocus={() => setUserNameFocus(true)}
             />
             {errors.userName && (
-              <span className={s.inputError}>Username is required</span>
+              <span className={s.inputError}>
+                <FaArrowLeftLong className={s.errorArrow} /> required
+              </span>
             )}
           </div>
 
@@ -64,7 +67,9 @@ export default function SignIn() {
               onFocus={() => setPasswordFocus(true)}
             />
             {errors.passWord && (
-              <span className={s.inputError}>Password is required</span>
+              <span className={s.inputError}>
+                <FaArrowLeftLong className={s.errorArrow} /> required
+              </span>
             )}
           </div>
           <div className={s.rememberMeWrapper}>
