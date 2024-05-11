@@ -1,4 +1,4 @@
-import { Home, Login } from "./views";
+import { Home, Login, Signup } from "./views";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -11,6 +11,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
     </>,
   ),
 );
