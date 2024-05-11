@@ -28,13 +28,13 @@ const handlePasskwordIconVisibility = (showPassword: boolean) => {
 const handleInputError = (
   errors: FieldErrors<Inputs>,
   inputName: keyof Inputs | undefined,
-  className: CSSModuleClasses[string],
+  className?: CSSModuleClasses[string],
 ) => {
   if (inputName === undefined) return;
 
   if (errors[inputName]) {
     return (
-      <span className={`${s.inputError} ${s[className]}`}>
+      <span className={`${s.inputError} ${className ? s[className] : ""}`}>
         <FaArrowLeftLong className={s.errorArrow} /> required
       </span>
     );
