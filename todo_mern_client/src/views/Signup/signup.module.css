@@ -16,7 +16,7 @@
   max-width: 26rem;
   min-width: 15rem;
   background-color: var(--dark-blue);
-  border-radius: 15px;
+  border-radius: 3px;
   box-shadow: 0px 2px 5px 1px black;
   /* the code below + not having align-items: center on .main is a hack to make it center on the phone, beacuse of theme_color in manifest.json - it gives the same background color to the search bar of the phone, making the wrapper look like its higher up on the screen that it acutally is   */
   position: relative;
@@ -33,7 +33,7 @@
 .formWrapper {
   display: flex;
   flex-direction: column;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
   justify-content: space-around;
   position: relative;
 }
@@ -59,6 +59,7 @@
 .inputLabel {
   position: absolute;
   color: black;
+  opacity: 0.7;
   transition: all 0.3s ease;
   font-size: 1.2rem;
   z-index: 100;
@@ -95,6 +96,7 @@ input:focus {
 .inputError {
   position: absolute;
   color: red;
+  opacity: 0.8;
   font-size: 1rem;
   /* top: 0.2rem; */
   bottom: 45%;
@@ -104,6 +106,10 @@ input:focus {
   align-items: center;
   gap: 0.5rem;
   text-transform: capitalize;
+}
+
+.moveErrorMessageAbit {
+  right: 13%;
 }
 
 @keyframes errorArrow {

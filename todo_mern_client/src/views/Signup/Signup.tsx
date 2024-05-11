@@ -19,21 +19,22 @@ type Inputs = {
 
 const handlePasskwordIconVisibility = (showPassword: boolean) => {
   return showPassword ? (
-    <CiLock className={s.togglePasswordVisibility_icons} />
-  ) : (
     <CiUnlock className={s.togglePasswordVisibility_icons} />
+  ) : (
+    <CiLock className={s.togglePasswordVisibility_icons} />
   );
 };
 
 const handleInputError = (
   errors: FieldErrors<Inputs>,
   inputName: keyof Inputs | undefined,
+  className: CSSModuleClasses[string],
 ) => {
   if (inputName === undefined) return;
 
   if (errors[inputName]) {
     return (
-      <span className={s.inputError}>
+      <span className={`${s.inputError} ${s[className]}`}>
         <FaArrowLeftLong className={s.errorArrow} /> required
       </span>
     );
@@ -205,7 +206,7 @@ export default function Login() {
             >
               {handlePasskwordIconVisibility(showPassword)}
             </button>
-            {handleInputError(errors, "passWord")}
+            {handleInputError(errors, "passWord", "moveErrorMessageAbit")}
           </div>
 
           <button className={s.submit} type="submit">
