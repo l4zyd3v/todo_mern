@@ -2,41 +2,35 @@ import { useState } from "react";
 import s from "../signup.module.css";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { CiLock, CiUnlock } from "react-icons/ci";
+import { Inputs } from "../types";
 
-type Inputs = {
-  username: string;
-  password: string;
-  email: string;
-  firstname: string;
-  lastname: string;
+const handlePasskwordIconVisibility = (showPassword: boolean) => {
+  return showPassword ? (
+    <CiUnlock className={s.togglePasswordVisibility_icons} />
+  ) : (
+    <CiLock className={s.togglePasswordVisibility_icons} />
+  );
 };
 
-type InputProps = {
+interface InputProps {
   name: keyof Inputs;
   register: UseFormRegister<Inputs>;
+  rules?: {
+    required?: string;
+    pattern?: {
+      value: RegExp;
+      message: string;
+    };
+  };
   errors: FieldErrors<Inputs>;
-};
+}
 
-// const handleInputError = (
-//   errors: FieldErrors<Inputs>,
-//   inputName: keyof Inputs | undefined,
-//   className?: CSSModuleClasses[string],
-// ) => {
-//   if (inputName === undefined) return;
-//
-//   if (errors[inputName]) {
-//     return (
-//       <span className={`${s.inputError} ${className ? s[className] : ""}`}>
-//         <FaArrowLeftLong className={s.errorArrow} /> required
-//       </span>
-//     );
-//   }
-// };
-
-export default function Input({ name, register, errors }: InputProps) {
+export default function Input({ name, register, errors, rules }: InputProps) {
   const [inputFocus, setInputFocus] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  console.log(errors);
+  console.log("validation rule errors_message: " + rules?.pattern?.message);
 
   return (
     <div className={s.inputWrapper}>
@@ -50,10 +44,24 @@ export default function Input({ name, register, errors }: InputProps) {
         type={name}
         className={s.input}
         id={name}
-        {...register(name, { required: true })}
+        {...register(name, { required: true, ...rules })}
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
       />
+
+      {name === "password" && (
+        <button
+          className={s.togglePasswordVisibility}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowPassword(!showPassword);
+          }}
+        >
+          {handlePasskwordIconVisibility(showPassword)}
+        </button>
+      )}
+
       {errors[name] && (
         <span className={`${s.inputError}`}>
           <FaArrowLeftLong className={s.errorArrow} /> required
