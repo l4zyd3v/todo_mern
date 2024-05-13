@@ -17,11 +17,9 @@ interface InputProps {
   name: keyof Inputs;
   register: UseFormRegister<Inputs>;
   rules?: {
-    required?: string;
-    pattern?: {
-      value: RegExp;
-      message: string;
-    };
+    required?: boolean;
+    pattern?: RegExp;
+    minLength?: number;
   };
   errors: FieldErrors<Inputs>;
 }
@@ -30,7 +28,9 @@ export default function Input({ name, register, errors, rules }: InputProps) {
   const [inputFocus, setInputFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log("validation rule errors_message: " + rules?.pattern?.message);
+  // console.log("validation rule errors_message: " + rules?.pattern?.message);
+
+  console.log("input focus: ", inputFocus);
 
   return (
     <div className={s.inputWrapper}>
@@ -44,9 +44,10 @@ export default function Input({ name, register, errors, rules }: InputProps) {
         type={name}
         className={s.input}
         id={name}
-        {...register(name, { required: true, ...rules })}
-        onFocus={() => setInputFocus(true)}
-        onBlur={() => setInputFocus(false)}
+        {...register(name, { ...rules })}
+        onChange={() => setInputFocus(true)}
+        // onFocus={() => setInputFocus(true)}
+        // onBlur={() => setInputFocus(false)}
       />
 
       {name === "password" && (

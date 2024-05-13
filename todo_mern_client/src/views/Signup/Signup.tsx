@@ -3,7 +3,7 @@ import s from "./signup.module.css";
 import Input from "./components/Input";
 import { Inputs } from "./types";
 
-export default function Login() {
+export default function () {
   const {
     register,
     handleSubmit,
@@ -23,19 +23,45 @@ export default function Login() {
             name="email"
             register={register}
             rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Invalid email address",
-              },
+              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
             }}
             errors={errors}
           />
 
-          <Input name="username" register={register} errors={errors} />
-          <Input name="firstname" register={register} errors={errors} />
-          <Input name="lastname" register={register} errors={errors} />
-          <Input name="password" register={register} errors={errors} />
+          <Input
+            name="username"
+            register={register}
+            rules={{
+              minLength: 3,
+            }}
+            errors={errors}
+          />
+          <Input
+            name="firstname"
+            register={register}
+            rules={{
+              required: true,
+              minLength: 3,
+            }}
+            errors={errors}
+          />
+          <Input
+            name="lastname"
+            register={register}
+            rules={{
+              required: true,
+              minLength: 3,
+            }}
+            errors={errors}
+          />
+          <Input
+            name="password"
+            register={register}
+            rules={{
+              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
+            }}
+            errors={errors}
+          />
 
           <button className={s.submit} type="submit">
             Create Account
