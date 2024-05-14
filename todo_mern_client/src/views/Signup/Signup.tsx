@@ -3,7 +3,7 @@ import s from "./signup.module.css";
 import Input from "./components/Input";
 import { Inputs } from "./types";
 
-export default function () {
+export default Signup function () {
   const {
     register,
     handleSubmit,

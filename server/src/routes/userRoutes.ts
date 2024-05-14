@@ -7,17 +7,6 @@ export function userRoutes(db: Db) {
   const router = Router();
   const collection = db.collection("users");
 
-  // Fetch all users
-  router.get("/", async (req, res) => {
-    try {
-      const users = await collection.find({}).toArray();
-      res.json(tasks);
-      console.log("User requested all tasks");
-    } catch (e: any) {
-      res.status(500).json({ message: e.message });
-    }
-  });
-
   // Fetch a single todo by ID
   router.get("/:id", async (req, res) => {
     const { id } = req.params;
