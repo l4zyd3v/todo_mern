@@ -6,6 +6,7 @@ import { CiLock, CiUnlock } from "react-icons/ci";
 import { Inputs } from "../types";
 
 const handlePasskwordIconVisibility = (showPassword: boolean) => {
+  console.log("showPassword", showPassword);
   return showPassword ? (
     <CiUnlock className={s.togglePasswordVisibility_icons} />
   ) : (
@@ -41,7 +42,7 @@ export default function Input({ name, register, errors, rules }: InputProps) {
         {name}
       </label>
       <input
-        type={name}
+        type={showPassword ? "" : name}
         className={s.input}
         id={name}
         {...register(name, { ...rules })}
@@ -64,7 +65,9 @@ export default function Input({ name, register, errors, rules }: InputProps) {
       )}
 
       {errors[name] && (
-        <span className={`${s.inputError}`}>
+        <span
+          className={`${s.inputError} ${name === "password" ? s.moveErrorMessageAbit : ""}`}
+        >
           <FaArrowLeftLong className={s.errorArrow} /> required
         </span>
       )}

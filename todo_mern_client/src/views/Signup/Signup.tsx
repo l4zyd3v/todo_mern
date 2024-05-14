@@ -23,6 +23,7 @@ export default function () {
             name="email"
             register={register}
             rules={{
+              required: true,
               pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
             }}
             errors={errors}
@@ -40,7 +41,6 @@ export default function () {
             name="firstname"
             register={register}
             rules={{
-              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -49,7 +49,6 @@ export default function () {
             name="lastname"
             register={register}
             rules={{
-              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -58,7 +57,8 @@ export default function () {
             name="password"
             register={register}
             rules={{
-              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
+              required: true,
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i,
             }}
             errors={errors}
           />
