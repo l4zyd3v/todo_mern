@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import s from "./signin.module.css";
+import s from "./login.module.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 type Inputs = {
@@ -14,7 +14,7 @@ type FocusState = {
   password?: boolean;
 };
 
-export default function SignIn() {
+export default function Login() {
   const [usernameFocus, setUserNameFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
 

@@ -30,6 +30,12 @@ export default function Home() {
         const res = await axios.get(`http://${host}:3000/todos`);
         console.log(res.data);
         setTodos(res.data);
+
+        // Send data back to the server
+        const response = await axios.post(`http://${host}:3000/log`, {
+          message: "Home.tsx requested todos todos route",
+        });
+        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
