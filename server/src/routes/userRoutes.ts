@@ -3,77 +3,65 @@ import { Router } from "express";
 import { Db, ObjectId } from "mongodb";
 import { body, validationResult } from "express-validator";
 
+type Inputs = {
+  username: string;
+  password: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+};
+
+type UserProfile = {
+  username: string;
+  password: string;
+  profilePicture?: string;
+  credentials: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+};
+
 export function userRoutes(db: Db) {
   const router = Router();
   const collection = db.collection("users");
 
-  // Fetch a single todo by ID
-  router.get("/:id", async (req, res) => {
-    const { id } = req.params;
-
-    try {
-      const tasks = await collection.findOne({ _id: new ObjectId(id) });
-      if (tasks) {
-        res.json(tasks);
-        console.log("User requested a single tasks by ID");
-      } else {
-        res.status(404).json({ message: "Tasks not found" });
-      }
-    } catch (e: any) {
-      res.status(500).json({ message: e.message });
-    }
-  });
-
-  // Create a todo
+  // Signup
   router.post("/", async (req, res) => {
+    const { email, username, firstname, lastname, password } = req.body;
+
+    console.log(email);
+    console.log(username);
+
     try {
-      const newTasks = req.body; // Assuming the body contains the todo structure
-      const result = await collection.insertOne(newTasks);
-      if (result.acknowledged) {
-        const task = await collection.findOne({ _id: result.insertedId }); // Return the created todo
-        res.status(201).json(task); // Send the created todo back to the client
+      const userExists = await collection.findOne({
+        "credentials.email": email,
+      });
+
+      if (userExists) {
+        res
+          .status(409)
+          .json({ message: "The email is already in use by a user" });
       } else {
-        res.status(400).json({ message: "Todo could not be created" });
+        const newUser: UserProfile = {
+          username: username,
+          password: password,
+          credentials: {
+            firstName: firstname,
+            lastName: lastname,
+            email: email,
+          },
+        };
+        await collection.insertOne(newUser);
+        res.status(201).json({
+          message: "User created successfully",
+        });
       }
     } catch (e: any) {
       res.status(500).json({ message: e.message });
     }
-  });
 
-  // Update an existing todo by ID
-  router.put("/:id", async (req, res) => {
-    const { id } = req.params;
-    const updateData = req.body;
-
-    try {
-      const result = await collection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: updateData },
-      );
-      if (result.modifiedCount === 1) {
-        res.json({ message: "Tasks updated successfully." });
-      } else {
-        res.status(404).json({ message: "Tasks not found" });
-      }
-    } catch (e: any) {
-      res.status(500).json({ message: e.message });
-    }
-  });
-
-  // Delete an existing todo by ID
-  router.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-
-    try {
-      const result = await collection.deleteOne({ _id: new ObjectId(id) });
-      if (result.deletedCount === 1) {
-        res.json({ message: "Tasks deleted successfully" });
-      } else {
-        res.status(404).json({ message: "Tasks not found" });
-      }
-    } catch (e: any) {
-      res.status(500).json({ message: e.message });
-    }
+    console.log("Hello from Obi-Wan Kenobi");
   });
 
   return router;

@@ -2,17 +2,31 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import s from "./signup.module.css";
 import Input from "./components/Input";
 import { Inputs } from "./types";
+import axios from "axios";
 
-export default Signup function () {
+export default function Signup() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data.username, data.password);
+  const signup = async (data: Inputs) => {
+    const response = await axios.post("http://localhost:3000/signup", data);
+
+    console.log(response);
   };
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    signup(data);
+    console.log(data);
+  };
+
+  async function testFunction() {
+    const res = await axios.post("http://localhost:3000/signup", {
+      email: "this is a test",
+    });
+  }
 
   return (
     <main className={s.main}>
@@ -33,6 +47,7 @@ export default Signup function () {
             name="username"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -41,6 +56,7 @@ export default Signup function () {
             name="firstname"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -49,6 +65,7 @@ export default Signup function () {
             name="lastname"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -75,6 +92,13 @@ export default Signup function () {
               Already have an account?{" "}
             </span>
             <span className={s.alreadyHaveAccountBtn_secondText}> Login</span>
+          </button>
+          <button
+            className={s.alreadyHaveAccountBtn}
+            onClick={(e) => testFunction(e)}
+            style={{ width: "100px", height: "50px", backgroundColor: "red" }}
+          >
+            RIZZ!
           </button>
         </form>
       </div>
