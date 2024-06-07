@@ -4,6 +4,9 @@ import Input from "./components/Input";
 import { Inputs } from "./types";
 import axios from "axios";
 
+// just for dev purposes:
+import hostUrl from "../../hostvariabe";
+
 export default function Signup() {
   const {
     register,
@@ -12,7 +15,7 @@ export default function Signup() {
   } = useForm<Inputs>();
 
   const signup = async (data: Inputs) => {
-    const response = await axios.post("http://localhost:3000/signup", data);
+    const response = await axios.post(`http://${hostUrl}:3000/signup`, data);
 
     console.log(response);
   };
@@ -23,7 +26,7 @@ export default function Signup() {
   };
 
   async function testFunction() {
-    const res = await axios.post("http://localhost:3000/signup", {
+    const res = await axios.post(`http://${hostUrl}:3000/signup`, {
       email: "this is a test",
     });
   }
@@ -98,7 +101,7 @@ export default function Signup() {
             onClick={(e) => testFunction(e)}
             style={{ width: "100px", height: "50px", backgroundColor: "red" }}
           >
-            RIZZ!
+            TEST
           </button>
         </form>
       </div>

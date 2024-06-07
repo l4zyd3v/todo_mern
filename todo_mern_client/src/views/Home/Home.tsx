@@ -13,8 +13,8 @@ import {
   Nav,
 } from "../../components";
 
-const host = "192.168.1.207";
-// const host = "localhost";
+// just for dev purposes:
+import hostUrl from "../../hostvariabe.ts";
 
 export default function Home() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);
@@ -27,12 +27,12 @@ export default function Home() {
   useEffect(() => {
     async function getTodos() {
       try {
-        const res = await axios.get(`http://${host}:3000/todos`);
+        const res = await axios.get(`http://${hostUrl}:3000/todos`);
         console.log(res.data);
         setTodos(res.data);
 
         // Send data back to the server
-        const response = await axios.post(`http://${host}:3000/log`, {
+        const response = await axios.post(`http://${hostUrl}:3000/log`, {
           message: "Home.tsx requested todos todos route",
         });
         console.log(response.data);
@@ -47,7 +47,7 @@ export default function Home() {
   useEffect(() => {
     async function getCategories() {
       try {
-        const res = await axios.get(`http://${host}:3000/categories`);
+        const res = await axios.get(`http://${hostUrl}:3000/categories`);
         console.log(res.data);
         setCategories(res.data);
       } catch (error) {
