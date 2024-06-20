@@ -40,8 +40,8 @@ export function taskRoutes(db: Db) {
       const newTasks = req.body; // Assuming the body contains the todo structure
       const result = await collection.insertOne(newTasks);
       if (result.acknowledged) {
-        const task = await collection.findOne({ _id: result.insertedId }); // Return the created todo
-        res.status(201).json(task); // Send the created todo back to the client
+        const task = await collection.findOne({ _id: result.insertedId }); // Return the created todotasks
+        res.status(201).json(task); // Send the created todo back to the clienttasks
       } else {
         res.status(400).json({ message: "Todo could not be created" });
       }

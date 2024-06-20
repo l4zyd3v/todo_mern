@@ -3,9 +3,10 @@ import s from "./signup.module.css";
 import Input from "./components/Input";
 import { Inputs } from "./types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // just for dev purposes:
-import hostUrl from "../../hostvariabe";
+import hostUrl from "../../hostvar";
 
 export default function Signup() {
   const {
@@ -13,9 +14,16 @@ export default function Signup() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const navigate = useNavigate();
 
   const signup = async (data: Inputs) => {
-    const response = await axios.post(`http://${hostUrl}:3000/signup`, data);
+    const response = await axios
+      .post(`http://${hostUrl}:3000/signup`, data)
+      .then((res) => {
+        if (res.status === 201) {
+          navigate("/login");
+        }
+      });
 
     console.log(response);
   };
@@ -24,12 +32,6 @@ export default function Signup() {
     signup(data);
     console.log(data);
   };
-
-  async function testFunction() {
-    const res = await axios.post(`http://${hostUrl}:3000/signup`, {
-      email: "this is a test",
-    });
-  }
 
   return (
     <main className={s.main}>
@@ -95,13 +97,6 @@ export default function Signup() {
               Already have an account?{" "}
             </span>
             <span className={s.alreadyHaveAccountBtn_secondText}> Login</span>
-          </button>
-          <button
-            className={s.alreadyHaveAccountBtn}
-            onClick={(e) => testFunction(e)}
-            style={{ width: "100px", height: "50px", backgroundColor: "red" }}
-          >
-            TEST
           </button>
         </form>
       </div>

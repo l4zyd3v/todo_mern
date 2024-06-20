@@ -14,7 +14,7 @@ import {
 } from "../../components";
 
 // just for dev purposes:
-import hostUrl from "../../hostvariabe.ts";
+import hostUrl from "../../hostvar.ts";
 
 export default function Home() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);
