@@ -35,7 +35,7 @@ export function taskRoutes(db: Db) {
   });
 
   // Create a todo
-  router.post("/", async (req, res) => {
+  router.post("/signup", async (req, res) => {
     try {
       const newTasks = req.body; // Assuming the body contains the todo structure
       const result = await collection.insertOne(newTasks);

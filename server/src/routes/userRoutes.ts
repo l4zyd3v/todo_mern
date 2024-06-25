@@ -30,7 +30,7 @@ export function userRoutes(db: Db) {
   const collection = db.collection("users");
 
   // Signup
-  router.post("/", async (req, res) => {
+  router.post("/signup", async (req, res) => {
     const { email, username, firstname, lastname, password } = req.body;
 
     try {
@@ -64,18 +64,19 @@ export function userRoutes(db: Db) {
 
         const token = createSecretToken(newUser._id);
 
+        console.log(`New user created: ${username}`);
+
         res.cookie("token", token, {
           path: "/", // Cookie is accessible from all paths
           expires: new Date(Date.now() + 86400000), // Cookie expires in 1 day
-          // secure: true, // Cookie will only be sent over HTTPS
-          // httpOnly: true, // Cookie cannot be accessed via client-side scripts
+          secure: false,
+          httpOnly: false,
+          sameSite: "lax",
         });
-
-        console.log(`New user created: ${username}`);
 
         return res.status(201).json({
           message: "User created successfully",
-          token: token,
+          // token: token,
         });
       }
     } catch (e: any) {
