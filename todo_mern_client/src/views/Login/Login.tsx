@@ -32,7 +32,7 @@ export default function Login() {
     console.log(data.userNameOrEmail, data.passWord);
 
     const response = axios
-      .post(`http://${hostUrl}:3000/login`, data, {})
+      .post(`http://${hostUrl}:3000/auth/login`, data, {})
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
