@@ -28,9 +28,5 @@ export function userRoutes(db: Db) {
   const controller = userController(db);
   const router = Router();
 
-  router.post("/signup", controller.signup);
-  router.post("/login", controller.login);
-  router.post("logout", controller.logout);
-
   return router;
 }

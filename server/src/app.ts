@@ -13,7 +13,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://192.168.1.207:5173/signup",
+    origin: process.env.FRONTEND_URL,
     // origin: "process.env.FRONTEND_URL",
     optionsSuccessStatus: 200,
     credentials: true,
@@ -37,7 +37,7 @@ async function startServer() {
   const db = await connectToDatabase();
   if (db) {
     // app.use("/", userRoutes(db));
-    app.use("/", authRoutes(db));
+    app.use("/auth", authRoutes(db));
     app.use("/", taskRoutes(db));
 
     app.listen(PORT, "0.0.0.0", () => {

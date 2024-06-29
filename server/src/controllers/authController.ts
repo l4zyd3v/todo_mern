@@ -15,23 +15,21 @@ type UserProfile = {
   };
 };
 
-type ExpressParams = {
-  req: Request;
-  res: Response;
-};
-
 export default function authController(db: Db) {
   return {
-    logout: async ({ req, res }: ExpressParams) => {
+    logout: async (req: Request, res: Response) => {
       res.clearCookie("token");
       res.json({ message: "Logged out" });
     },
 
-    login: async ({ req, res }: ExpressParams) => {
+    login: async (req: Request, res: Response) => {
       const collection = db.collection("users");
-      const { userNameOrEmail, password } = req.body;
+      console.log("user is trying to login");
+      const { userNameOrEmail, passWord } = req.body;
 
-      if (!(userNameOrEmail && password)) {
+      console.log("userNameOrEmail", userNameOrEmail, "passWord", passWord);
+
+      if (!(userNameOrEmail && passWord)) {
         return res.status(400).json({ message: "All inputs are required" });
       }
 
@@ -42,9 +40,13 @@ export default function authController(db: Db) {
         ],
       });
 
-      console.log(user);
+      //testing
+      if (!user) return;
+      console.log(await bcrypt.compare(passWord, user.password));
+      //
 
-      if (!(user && (await bcrypt.compare(password, user.password)))) {
+      // the comparison is coming back as false, something isnt right
+      if (!(user && (await bcrypt.compare(passWord, user.password)))) {
         return res.status(404).json({ message: "Invalid credentials" });
       }
 
@@ -59,10 +61,10 @@ export default function authController(db: Db) {
         sameSite: "lax",
       });
 
-      res.json({ token });
+      res.status(200).json({ token });
     },
 
-    signup: async ({ req, res }: ExpressParams) => {
+    signup: async (req: Request, res: Response) => {
       const collection = db.collection("users");
       const { email, username, firstname, lastname, password } = req.body;
 

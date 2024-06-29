@@ -18,7 +18,7 @@ export default function Signup() {
 
   const signup = async (data: Inputs) => {
     const response = await axios
-      .post(`http://${hostUrl}:3000/signup`, data, {
+      .post(`http://${hostUrl}:3000/auth/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {
