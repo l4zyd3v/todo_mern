@@ -34,7 +34,15 @@ app.use((_, res, next) => {
 });
 
 async function startServer() {
-  const db = await connectToDatabase();
+  const connection = await connectToDatabase();
+
+  if (!connection) {
+    console.error("Unable to connect to database");
+    return;
+  }
+
+  const { db } = connection;
+
   if (db) {
     // app.use("/", userRoutes(db));
     app.use("/auth", authRoutes(db));

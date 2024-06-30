@@ -11,7 +11,7 @@ export async function connectToDatabase() {
     await client.connect();
     console.log("Connected to MongoDB");
     const db = client.db("todoApp");
-    return db;
+    return { db, client };
   } catch (e) {
     console.error(`Could not connect to db`, e);
   }

@@ -30,15 +30,18 @@ export default function authController(db: Db) {
       console.log("userNameOrEmail", userNameOrEmail, "passWord", passWord);
 
       if (!(userNameOrEmail && passWord)) {
+        console.log("usernameoremial/password wrong, wtf lol");
         return res.status(400).json({ message: "All inputs are required" });
       }
 
-      const user = await collection.findOne({
+      const user = (await collection.findOne({
         $or: [
           { "credentials.email": userNameOrEmail },
           { username: userNameOrEmail },
         ],
-      });
+      })) as UserProfile;
+
+      console.log(`passwordcomp: ${passWord} ${user.password}`);
 
       //testing
       if (!user) return;
