@@ -1,13 +1,48 @@
-import { Router } from "express";
+import { Router, NextFunction, Request, Response } from "express";
 import { Db, ObjectId } from "mongodb"; // import Db type for type checking
 import taskController from "../controllers/taskController";
 // import { body, validationResult } from "express-validator";
+
+// This code should be abstracted away at some point
+import { config as configEnv } from "dotenv";
+import jwt from "jsonwebtoken";
+
+configEnv();
+
+export function authenticateToken(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  // Get the token from the 'Authorization' header
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  console.log(req.cookies);
+  console.log("authHeader:", authHeader);
+  console.log("token splitted:", token);
+
+  if (token == null) {
+    return res.sendStatus(401); // if there isn't any token
+  }
+
+  if (!process.env.TOKEN_KEY) return;
+  jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    // req.user = user;
+    next(); // pass the execution off to whatever request the client intended
+  });
+}
+//---------------------------------------------------------------
 
 export function taskRoutes(db: Db) {
   const controller = taskController(db);
   const router = Router();
 
-  router.get("/tasks", controller.getAllTasks);
+  router.get("/tasks", authenticateToken, controller.getAllTasks);
 
   return router;
 }

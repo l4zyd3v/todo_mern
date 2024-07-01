@@ -25,38 +25,38 @@ export default function Home() {
   const { toggleNav } = useContext(NavToggleContext);
 
   useEffect(() => {
-    async function getTodos() {
+    async function getTasks() {
       try {
-        const res = await axios.get(`http://${hostUrl}:3000/todos`);
+        const res = await axios.get(`http://${hostUrl}:3000/tasks`);
         console.log(res.data);
         setTodos(res.data);
 
         // Send data back to the server
-        const response = await axios.post(`http://${hostUrl}:3000/log`, {
-          message: "Home.tsx requested todos todos route",
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getTodos();
-  }, []);
-
-  useEffect(() => {
-    async function getCategories() {
-      try {
-        const res = await axios.get(`http://${hostUrl}:3000/categories`);
+        // const response = await axios.post(`http://${hostUrl}:3000/log`, {
+        //   message: "Home.tsx requested todos todos route",
+        // });
         console.log(res.data);
-        setCategories(res.data);
       } catch (error) {
         console.log(error);
       }
     }
 
-    getCategories();
+    getTasks();
   }, []);
+
+  // useEffect(() => {
+  //   async function getCategories() {
+  //     try {
+  //       const res = await axios.get(`http://${hostUrl}:3000/categories`);
+  //       console.log(res.data);
+  //       setCategories(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //
+  //   getCategories();
+  // }, []);
 
   function userGreetings() {
     const greetings = ["What's up, ", "What's up"];
