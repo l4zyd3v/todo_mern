@@ -27,7 +27,9 @@ export default function Home() {
   useEffect(() => {
     async function getTasks() {
       try {
-        const res = await axios.get(`http://${hostUrl}:3000/tasks`);
+        const res = await axios.get(`http://${hostUrl}:3000/tasks`, {
+          withCredentials: true,
+        });
         console.log(res.data);
         setTodos(res.data);
 

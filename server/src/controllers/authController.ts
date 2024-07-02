@@ -24,10 +24,7 @@ export default function authController(db: Db) {
 
     login: async (req: Request, res: Response) => {
       const collection = db.collection("users");
-      console.log("user is trying to login");
       const { userNameOrEmail, passWord } = req.body;
-
-      console.log("userNameOrEmail", userNameOrEmail, "passWord", passWord);
 
       if (!(userNameOrEmail && passWord)) {
         console.log("usernameoremial/password wrong, wtf lol");
@@ -41,30 +38,32 @@ export default function authController(db: Db) {
         ],
       })) as UserProfile;
 
-      console.log(`passwordcomp: ${passWord} ${user.password}`);
+      // console.log(`passwordcomp: ${passWord} ${user.password}`);
 
-      //testing
-      if (!user) return;
-      console.log(await bcrypt.compare(passWord, user.password));
-      //
-
-      // the comparison is coming back as false, something isnt right
       if (!(user && (await bcrypt.compare(passWord, user.password)))) {
+        console.log(
+          `User tried to login with invalid credentials: Username/Email: ${userNameOrEmail}`,
+        );
         return res.status(404).json({ message: "Invalid credentials" });
       }
 
       const token = createSecretToken(user._id);
 
       res.cookie("token", token, {
-        domain: process.env.frontend_url,
+        domain: process.env.FRONTEND_URL,
         path: "/",
         expires: new Date(Date.now() + 86400000),
         secure: false,
         httpOnly: false,
-        sameSite: "lax",
+        sameSite: "none",
       });
 
-      res.status(200).json({ token });
+      console.log(`User Succesfully logged in: ${userNameOrEmail}`);
+
+      return res.status(200).json({
+        message: "User logged in successfully",
+        token: token,
+      });
     },
 
     signup: async (req: Request, res: Response) => {
@@ -111,7 +110,7 @@ export default function authController(db: Db) {
             expires: new Date(Date.now() + 86400000), // Cookie expires in 1 day
             secure: false,
             httpOnly: false,
-            sameSite: "lax",
+            sameSite: "none",
           });
 
           return res.status(201).json({

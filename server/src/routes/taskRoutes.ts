@@ -9,32 +9,23 @@ import jwt from "jsonwebtoken";
 
 configEnv();
 
-export function authenticateToken(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  // Get the token from the 'Authorization' header
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+function authenticateToken(req: Request, res: Response, next: NextFunction) {
+  const cookieString = req.headers["Cookie"];
+  // const token = cookieString.split("=")[1];
+  console.log(JSON.stringify(req.cookies, null, 2)); // Pretty-prints the cookies sent with the request
 
-  console.log(req.cookies);
-  console.log("authHeader:", authHeader);
-  console.log("token splitted:", token);
-
-  if (token == null) {
-    return res.sendStatus(401); // if there isn't any token
-  }
-
-  if (!process.env.TOKEN_KEY) return;
-  jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
-
-    // req.user = user;
-    next(); // pass the execution off to whatever request the client intended
-  });
+  // if (token == null) {
+  //   return res.sendStatus(401); // if there isn't any token
+  // }
+  // if (!process.env.TOKEN_KEY) return;
+  // jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
+  //   if (err) {
+  //     return res.sendStatus(403);
+  //   }
+  //
+  //   // req.user = user;
+  // next();
+  // });
 }
 //---------------------------------------------------------------
 
