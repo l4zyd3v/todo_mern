@@ -1,7 +1,8 @@
 import { ObjectId, Db, Document } from "mongodb";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import createSecretToken from "../tokenGeneration";
+import jwt from "jsonwebtoken";
 
 type UserProfile = {
   _id?: ObjectId;
@@ -15,6 +16,14 @@ type UserProfile = {
   };
 };
 
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string | undefined;
+    }
+  }
+}
+
 export default function authController(db: Db) {
   return {
     logout: async (req: Request, res: Response) => {
@@ -25,7 +34,6 @@ export default function authController(db: Db) {
     login: async (req: Request, res: Response) => {
       const collection = db.collection("users");
       const { userNameOrEmail, passWord } = req.body;
-
       if (!(userNameOrEmail && passWord)) {
         console.log("usernameoremial/password wrong, wtf lol");
         return res.status(400).json({ message: "All inputs are required" });
@@ -50,12 +58,12 @@ export default function authController(db: Db) {
       const token = createSecretToken(user._id);
 
       res.cookie("token", token, {
-        domain: process.env.FRONTEND_URL,
+        // domain: process.env.FRONTEND_URL,
         path: "/",
         expires: new Date(Date.now() + 86400000),
         secure: false,
         httpOnly: false,
-        sameSite: "none",
+        sameSite: "lax",
       });
 
       console.log(`User Succesfully logged in: ${userNameOrEmail}`);
@@ -110,7 +118,7 @@ export default function authController(db: Db) {
             expires: new Date(Date.now() + 86400000), // Cookie expires in 1 day
             secure: false,
             httpOnly: false,
-            sameSite: "none",
+            sameSite: "lax",
           });
 
           return res.status(201).json({
@@ -121,6 +129,51 @@ export default function authController(db: Db) {
       } catch (e: any) {
         res.status(500).json({ message: e.message });
       }
+    },
+
+    authenticateToken: async (
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ) => {
+      const cookieToken = req.cookies["token"];
+      console.log(req.cookies);
+
+      console.log("authcontrol of token: ", cookieToken);
+
+      if (!cookieToken) {
+        console.log("no token");
+        return res.sendStatus(401);
+      }
+
+      if (!process.env.TOKEN_KEY) return;
+
+      const collection = db.collection("users");
+
+      jwt.verify(
+        cookieToken,
+        process.env.TOKEN_KEY as string,
+        {},
+        async (err: jwt.VerifyErrors | null, decoded: any) => {
+          if (err) {
+            return res.sendStatus(403);
+          }
+
+          // // might not be necessary to check for specific user here.
+          // const user = await collection.findOne({
+          //   _id: decoded.id,
+          // });
+
+          console.log("userid: ", decoded.id);
+
+          // by the fucking way, dont just return without sending a message of why you are returning ffs.........
+          // if (!user) return;
+
+          req.userId = decoded.id;
+
+          next();
+        },
+      );
     },
   };
 }

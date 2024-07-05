@@ -24,7 +24,10 @@ export default function Home() {
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav } = useContext(NavToggleContext);
 
+  console.log("hello from home.tsx");
+
   useEffect(() => {
+    console.log("hello from home.tsx inside useEffect");
     async function getTasks() {
       try {
         const res = await axios.get(`http://${hostUrl}:3000/tasks`, {
@@ -32,12 +35,6 @@ export default function Home() {
         });
         console.log(res.data);
         setTodos(res.data);
-
-        // Send data back to the server
-        // const response = await axios.post(`http://${hostUrl}:3000/log`, {
-        //   message: "Home.tsx requested todos todos route",
-        // });
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }

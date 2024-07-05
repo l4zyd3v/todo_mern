@@ -1,39 +1,14 @@
-import { Router, NextFunction, Request, Response } from "express";
-import { Db, ObjectId } from "mongodb"; // import Db type for type checking
+import { Router } from "express";
+import { Db } from "mongodb"; // import Db type for type checking
 import taskController from "../controllers/taskController";
-// import { body, validationResult } from "express-validator";
-
-// This code should be abstracted away at some point
-import { config as configEnv } from "dotenv";
-import jwt from "jsonwebtoken";
-
-configEnv();
-
-function authenticateToken(req: Request, res: Response, next: NextFunction) {
-  const cookieString = req.headers["Cookie"];
-  // const token = cookieString.split("=")[1];
-  console.log(JSON.stringify(req.cookies, null, 2)); // Pretty-prints the cookies sent with the request
-
-  // if (token == null) {
-  //   return res.sendStatus(401); // if there isn't any token
-  // }
-  // if (!process.env.TOKEN_KEY) return;
-  // jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
-  //   if (err) {
-  //     return res.sendStatus(403);
-  //   }
-  //
-  //   // req.user = user;
-  // next();
-  // });
-}
-//---------------------------------------------------------------
+import authController from "../controllers/authController";
 
 export function taskRoutes(db: Db) {
   const controller = taskController(db);
+  const authControl = authController(db);
   const router = Router();
 
-  router.get("/tasks", authenticateToken, controller.getAllTasks);
+  router.get("/tasks", authControl.authenticateToken, controller.getAllTasks);
 
   return router;
 }
