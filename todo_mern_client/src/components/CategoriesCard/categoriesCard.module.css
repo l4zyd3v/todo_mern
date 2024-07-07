@@ -1,15 +1,13 @@
 .card {
-  /* height: 7rem; */
-  height: 100%;
   align-self: center;
   border-radius: 10px;
   background-color: var(--dark-blue);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  position: relative;
+  /* position: relative; */
   padding: 0 0.9rem;
-  height: 7rem;
+  /* height: 7rem; */
 }
 
 .tasksAmount {

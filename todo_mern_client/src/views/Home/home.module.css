@@ -71,26 +71,42 @@
 
 /*todo cards*/
 .cardWrapper {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  position: relative;
-  /* width: 100vw; */
+  /* position: relative; */
   overflow: hidden;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 
-  display: grid;
-  grid-template-rows: 0.5fr repeat(5, 1fr);
-  grid-row: 4/5;
-  margin-bottom: 2.6rem;
-  padding: 0 1.5rem;
-  position: relative;
-  gap: 0.3rem;
-  color: var(--text-color);
+  /* display: grid; */
+  /* grid-template-rows: 0.5fr repeat(5, 1fr); */
+  /* grid-row: 4/5; */
+  /* margin-bottom: 2.6rem; */
+  margin: 0 1.5rem;
+  /* position: relative; */
+  /* gap: 0.3rem; */
+  /* color: var(--text-color); */
+  border: 3px solid blue;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
 }
 .cardsHeading {
   color: var(--text-color2);
   font-size: 1.1rem;
-  align-self: center;
+  align-self: start;
   text-transform: capitalize;
-  /* margin-top: 2rem; */
+  margin-bottom: 1.2rem;
+}
+
+.scrollWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0.5rem;
+  overflow-x: scroll;
+  height: 100%;
+  /* border: 10px solid green; */
+  margin-bottom: 3rem;
 }

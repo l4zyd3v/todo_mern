@@ -28,6 +28,18 @@ export default function Home() {
 
   useEffect(() => {
     console.log("hello from home.tsx inside useEffect");
+    async function getUser() {
+      try {
+        const res = await axios.get(`http://${hostUrl}:3000/users/:id`, {
+          withCredentials: true,
+        });
+        console.log(res.data);
+        setTodos(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     async function getTasks() {
       try {
         const res = await axios.get(`http://${hostUrl}:3000/tasks`, {
@@ -40,6 +52,7 @@ export default function Home() {
       }
     }
 
+    getUser();
     getTasks();
   }, []);
 
@@ -96,15 +109,18 @@ export default function Home() {
 
         <div className={s.cardWrapper}>
           <h2 className={s.cardsHeading}>today's tasks</h2>
-          {todos.map((todo) => {
-            return (
-              <TodoCard
-                key={todo._id}
-                _id={todo._id}
-                description={todo.description}
-              />
-            );
-          })}
+          <div className={s.scrollWrapper}>
+            {todos.map((todo) => {
+              return (
+                <TodoCard
+                  key={todo._id}
+                  _id={todo._id}
+                  title={todo.title}
+                  description={todo.description}
+                />
+              );
+            })}
+          </div>
         </div>
         <NewTodoBtn setModal={setModalVisibility} />
         <TodoModal
