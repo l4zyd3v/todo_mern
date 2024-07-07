@@ -1,6 +1,9 @@
 import { MongoClient } from "mongodb";
+import { config as configEnv } from "dotenv";
 
-const mongoUrl = "mongodb://localhost:27017/todoApp";
+configEnv();
+
+const mongoUrl = process.env.MONGO_URL as string;
 const client = new MongoClient(mongoUrl);
 
 export async function connectToDatabase() {
@@ -8,7 +11,7 @@ export async function connectToDatabase() {
     await client.connect();
     console.log("Connected to MongoDB");
     const db = client.db("todoApp");
-    return db;
+    return { db, client };
   } catch (e) {
     console.error(`Could not connect to db`, e);
   }

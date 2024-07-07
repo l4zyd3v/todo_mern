@@ -1,21 +1,16 @@
 import { connectToDatabase } from "../src/config/db";
-import { Db } from "mongodb"; // Import the Db type
+import { Db } from "mongodb";
 import { titles, descriptions, priorities } from "./fields/taskfields";
 import { names, userNames } from "./fields/userFields";
-
-// for later use perhaps
-// function randomizeFieldValue(arrOfValues: []) {
-//   let randomValue = arrOfValues[Math.floor(Math.random() * arrOfValues.length)];
-//   return randomValue;
-// }
+import * as bcrypt from "bcrypt";
 
 async function randomizeTaskUserAssociation(db: Db) {
-  const users = await db.collection("users").find().toArray();
-  const tasks = await db.collection("tasks").find().toArray();
+  const users = await db?.collection("users").find().toArray();
+  const tasks = await db?.collection("tasks").find().toArray();
 
   for (const task of tasks) {
     const randomUser = users[Math.floor(Math.random() * users.length)];
-    await db.collection("tasks").updateOne(
+    await db?.collection("tasks").updateOne(
       { _id: task._id },
       {
         $set: {
@@ -32,9 +27,13 @@ async function randomizeTaskUserAssociation(db: Db) {
 
 async function seedUsers(db: Db) {
   for (let i = 0; i < userNames.length; i++) {
-    await db.collection("users").insertOne({
+    const password = "password";
+    const salt = 10;
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await db?.collection("users").insertOne({
       username: userNames[Math.floor(Math.random() * userNames.length)],
-      password: "password",
+      password: hashedPassword,
       profilePicture: "https://www.google.com",
       credentials: {
         firstName: names[Math.floor(Math.random() * names.length)].firstName,
@@ -51,7 +50,7 @@ async function seedUsers(db: Db) {
 
 async function seedTasks(db: Db, amountOfTasks: number) {
   for (let i = 0; i < amountOfTasks; i++) {
-    await db.collection("tasks").insertOne({
+    await db?.collection("tasks").insertOne({
       title: titles[Math.floor(Math.random() * titles.length)],
       description:
         descriptions[Math.floor(Math.random() * descriptions.length)],
@@ -67,18 +66,27 @@ async function seedTasks(db: Db, amountOfTasks: number) {
 }
 
 async function main() {
-  const db = await connectToDatabase();
+  // const { db, client } = await connectToDatabase();
+  const connection = await connectToDatabase();
 
-  if (!db) {
+  if (!connection) {
     console.error("Unable to connect to database");
     return;
   }
-  // 10 users
-  await seedUsers(db);
-  await seedTasks(db, 200);
-  await randomizeTaskUserAssociation(db);
 
-  return;
+  const { db, client } = connection;
+
+  try {
+    // 10 users
+    await seedUsers(db);
+    await seedTasks(db, 200);
+    await randomizeTaskUserAssociation(db);
+  } catch (err) {
+    console.error("An error occurred while seeding the database:", err);
+    return;
+  }
+
+  client.close();
 }
 
 main().catch((err) => {

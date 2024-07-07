@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import s from "./login.module.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import hostUrl from "../../hostvar";
 
 type Inputs = {
-  userName: string;
+  userNameOrEmail: string;
   passWord: string;
 };
 
@@ -15,18 +18,38 @@ type FocusState = {
 };
 
 export default function Login() {
-  const [usernameFocus, setUserNameFocus] = useState(false);
+  const [usernameOrEmailFocus, setUserNameOrEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) =>
-    console.log(data.userName, data.passWord);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data.userNameOrEmail, data.passWord);
+
+    const response = axios
+      .post(`http://${hostUrl}:3000/auth/login`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          console.log("Login Successful");
+          navigate("/home");
+        } else {
+          navigate("/signup");
+          alert("User not found, please sign up");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(response);
+  };
 
   return (
     <main className={s.main}>
@@ -35,18 +58,18 @@ export default function Login() {
         <form className={s.formWrapper} onSubmit={handleSubmit(onSubmit)}>
           <div className={s.inputWrapper}>
             <label
-              className={`${s.inputLabel} ${usernameFocus ? s.inputlabel_active : ""}`}
-              htmlFor="username"
+              className={`${s.inputLabel} ${usernameOrEmailFocus ? s.inputlabel_active : ""}`}
+              htmlFor="usernameOrEmail"
             >
-              username
+              username/email
             </label>
             <input
               className={s.input}
-              id="username"
-              {...register("userName", { required: true })}
-              onFocus={() => setUserNameFocus(true)}
+              id="usernameOrEmail"
+              {...register("userNameOrEmail", { required: true })}
+              onFocus={() => setUserNameOrEmailFocus(true)}
             />
-            {errors.userName && (
+            {errors.userNameOrEmail && (
               <span className={s.inputError}>
                 <FaArrowLeftLong className={s.errorArrow} /> required
               </span>

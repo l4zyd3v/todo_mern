@@ -1,7 +1,7 @@
 .card {
   background-color: var(--dark-blue);
-  border-radius: 10px;
-  position: relative;
+  border-radius: 15px;
+  /* position: relative; */
   z-index: 500;
   color: vag(--text-color);
 
@@ -9,6 +9,7 @@
   grid-template-columns: 1fr 6fr;
   align-items: center;
   /* margin: 0 1.5rem; */
+  height: 4rem;
 }
 
 .trash_icon {

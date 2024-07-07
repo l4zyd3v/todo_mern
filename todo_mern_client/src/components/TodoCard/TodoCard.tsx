@@ -4,7 +4,7 @@ import s from "./todocard.module.css";
 import { todoCardInterface } from "../../types";
 import TodoIcon from "./components/Icon/TodoIcon";
 
-const TodoCard: React.FC<todoCardInterface> = ({ _id, description }) => {
+const TodoCard: React.FC<todoCardInterface> = ({ _id, description, title }) => {
   const [startTouchPosition, setStartTouchPosition] = useState(0);
   const [currentTouchPosition, setCurrentTouchPosition] = useState(0);
   const [deletionThresholdReached, setDeletionThressHoldReached] =
@@ -67,7 +67,7 @@ const TodoCard: React.FC<todoCardInterface> = ({ _id, description }) => {
           {trashIcon}
         </span>
       )}
-      {description}
+      {title}
     </div>
   );
 };

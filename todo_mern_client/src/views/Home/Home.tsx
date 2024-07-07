@@ -13,8 +13,8 @@ import {
   Nav,
 } from "../../components";
 
-const host = "192.168.1.207";
-// const host = "localhost";
+// just for dev purposes:
+import hostUrl from "../../hostvar.ts";
 
 export default function Home() {
   const [todos, setTodos] = useState<todoCardInterface[]>([]);
@@ -24,39 +24,51 @@ export default function Home() {
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav } = useContext(NavToggleContext);
 
+  console.log("hello from home.tsx");
+
   useEffect(() => {
-    async function getTodos() {
+    console.log("hello from home.tsx inside useEffect");
+    async function getUser() {
       try {
-        const res = await axios.get(`http://${host}:3000/todos`);
+        const res = await axios.get(`http://${hostUrl}:3000/users/:id`, {
+          withCredentials: true,
+        });
         console.log(res.data);
         setTodos(res.data);
-
-        // Send data back to the server
-        const response = await axios.post(`http://${host}:3000/log`, {
-          message: "Home.tsx requested todos todos route",
-        });
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
     }
 
-    getTodos();
-  }, []);
-
-  useEffect(() => {
-    async function getCategories() {
+    async function getTasks() {
       try {
-        const res = await axios.get(`http://${host}:3000/categories`);
+        const res = await axios.get(`http://${hostUrl}:3000/tasks`, {
+          withCredentials: true,
+        });
         console.log(res.data);
-        setCategories(res.data);
+        setTodos(res.data);
       } catch (error) {
         console.log(error);
       }
     }
 
-    getCategories();
+    getUser();
+    getTasks();
   }, []);
+
+  // useEffect(() => {
+  //   async function getCategories() {
+  //     try {
+  //       const res = await axios.get(`http://${hostUrl}:3000/categories`);
+  //       console.log(res.data);
+  //       setCategories(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //
+  //   getCategories();
+  // }, []);
 
   function userGreetings() {
     const greetings = ["What's up, ", "What's up"];
@@ -97,15 +109,18 @@ export default function Home() {
 
         <div className={s.cardWrapper}>
           <h2 className={s.cardsHeading}>today's tasks</h2>
-          {todos.map((todo) => {
-            return (
-              <TodoCard
-                key={todo._id}
-                _id={todo._id}
-                description={todo.description}
-              />
-            );
-          })}
+          <div className={s.scrollWrapper}>
+            {todos.map((todo) => {
+              return (
+                <TodoCard
+                  key={todo._id}
+                  _id={todo._id}
+                  title={todo.title}
+                  description={todo.description}
+                />
+              );
+            })}
+          </div>
         </div>
         <NewTodoBtn setModal={setModalVisibility} />
         <TodoModal

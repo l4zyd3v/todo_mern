@@ -2,16 +2,37 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import s from "./signup.module.css";
 import Input from "./components/Input";
 import { Inputs } from "./types";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function () {
+// just for dev purposes:
+import hostUrl from "../../hostvar";
+
+export default function Signup() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const navigate = useNavigate();
+
+  const signup = async (data: Inputs) => {
+    const response = await axios
+      .post(`http://${hostUrl}:3000/auth/signup`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          navigate("/login");
+        }
+      });
+
+    console.log(response);
+  };
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data.username, data.password);
+    signup(data);
+    console.log(data);
   };
 
   return (
@@ -33,6 +54,7 @@ export default function () {
             name="username"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -41,6 +63,7 @@ export default function () {
             name="firstname"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
@@ -49,6 +72,7 @@ export default function () {
             name="lastname"
             register={register}
             rules={{
+              required: true,
               minLength: 3,
             }}
             errors={errors}
