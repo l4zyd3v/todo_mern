@@ -10,6 +10,7 @@
   align-items: center;
   /* margin: 0 1.5rem; */
   height: 4rem;
+  color: var(--text-color);
 }
 
 .trash_icon {
