@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
+import { swiper } from "swiper";
 import s from "./home.module.css";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
@@ -12,6 +13,11 @@ import {
   Header,
   Nav,
 } from "../../components";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
 // just for dev purposes:
 import hostUrl from "../../hostvar.ts";
@@ -28,17 +34,17 @@ export default function Home() {
 
   useEffect(() => {
     console.log("hello from home.tsx inside useEffect");
-    async function getUser() {
-      try {
-        const res = await axios.get(`http://${hostUrl}:3000/users/:id`, {
-          withCredentials: true,
-        });
-        console.log(res.data);
-        setTodos(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // async function getUser() {
+    //   try {
+    //     const res = await axios.get(`http://${hostUrl}:3000/users/:id`, {
+    //       withCredentials: true,
+    //     });
+    //     console.log(res.data);
+    //     setTodos(res.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
 
     async function getTasks() {
       try {
@@ -52,7 +58,7 @@ export default function Home() {
       }
     }
 
-    getUser();
+    // getUser();
     getTasks();
   }, []);
 
@@ -109,18 +115,28 @@ export default function Home() {
 
         <div className={s.cardWrapper}>
           <h2 className={s.cardsHeading}>today's tasks</h2>
-          <div className={s.scrollWrapper}>
+          <Swiper
+            slidesPerView={5}
+            spaceBetween={3}
+            direction={"vertical"}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Pagination]}
+            className={s.swiper}
+          >
             {todos.map((todo) => {
               return (
-                <TodoCard
-                  key={todo._id}
-                  _id={todo._id}
-                  title={todo.title}
-                  description={todo.description}
-                />
+                <SwiperSlide key={todo._id} className={s.swiperSlide}>
+                  <TodoCard
+                    _id={todo._id}
+                    title={todo.title}
+                    description={todo.description}
+                  />
+                </SwiperSlide>
               );
             })}
-          </div>
+          </Swiper>
         </div>
         <NewTodoBtn setModal={setModalVisibility} />
         <TodoModal
