@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Db, ObjectId } from "mongodb";
 // import { body, validationResult } from "express-validator";
+import authController from "../controllers/authController";
 
 import userController from "../controllers/userController";
 
@@ -12,21 +13,12 @@ type Inputs = {
   lastname: string;
 };
 
-type UserProfile = {
-  _id?: ObjectId;
-  username: string;
-  password: string;
-  profilePicture?: string;
-  credentials: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-};
-
 export function userRoutes(db: Db) {
   const controller = userController(db);
+  const authControl = authController(db);
   const router = Router();
+
+  router.get("/users", authControl.authenticateToken, controller.getSingleUser);
 
   return router;
 }
