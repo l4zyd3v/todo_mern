@@ -44,7 +44,7 @@ async function startServer() {
   const { db } = connection;
 
   if (db) {
-    // app.use("/", userRoutes(db));
+    app.use("/", userRoutes(db));
     app.use("/auth", authRoutes(db));
     app.use("/", taskRoutes(db));
 
