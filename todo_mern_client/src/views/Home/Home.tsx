@@ -3,7 +3,7 @@ import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import s from "./home.module.css";
 import axios from "axios";
 import anime, { AnimeInstance } from "animejs";
-import { todoCardInterface, categoryCardInterface } from "../../types";
+import { TodoCardInterface, CategoryCardInterface } from "../../types";
 import {
   TodoCard,
   NewTodoBtn,
@@ -22,13 +22,13 @@ import { Pagination } from "swiper/modules";
 import hostUrl from "../../hostvar.ts";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<todoCardInterface[]>([]);
+  const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
-  const [categories, setCategories] = useState<categoryCardInterface[]>([]);
+  const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
 
   const [touchMoved, setTouchMoved] = useState(0);
   const [modalVisibility, setModalVisibility] = useState(null);
-  const { toggleNav } = useContext(NavToggleContext);
+  const { toggleNav, setToggleNav } = useContext(NavToggleContext);
 
   // console.log("hello from home.tsx");
 
@@ -93,12 +93,13 @@ export default function Home() {
     });
   }
 
-  // console.log(user[0].username);
-
   return (
     <>
       <div
-        className={`${s.mainWrapper} ${toggleNav ? s.mainWrapperNavOpen : ""}`}
+        className={`${s.mainWrapper} ${toggleNav ? s.mainWrapperNavOpen : s.mainWrapperNavClosed}`}
+        onClick={() => {
+          toggleNav && setToggleNav(false);
+        }}
       >
         <Header />
         <h1 className={s.heading1}>What's up, {user[0]?.username} </h1>
@@ -142,12 +143,16 @@ export default function Home() {
           </Swiper>
         </div>
         <NewTodoBtn setModal={setModalVisibility} />
+
         <TodoModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
       </div>
-      <Nav />
+      <Nav
+        firstname={user[0]?.credentials.firstName}
+        lastname={user[0]?.credentials.lastName}
+      />
     </>
   );
 }

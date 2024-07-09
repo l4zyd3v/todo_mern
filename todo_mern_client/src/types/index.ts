@@ -1,2 +1,2 @@
-export type { todoCardInterface } from "./todoCardInterface";
-export type { categoryCardInterface } from "./categoryCardInterface";
+export type { TodoCardInterface } from "./todoCardInterface";
+export type { CategoryCardInterface } from "./categoryCardInterface";
