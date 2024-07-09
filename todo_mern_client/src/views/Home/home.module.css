@@ -1,5 +1,4 @@
 .mainWrapper {
-  height: 100%;
   display: grid;
   grid-template-rows: 1fr 1fr 2fr 5fr;
 
@@ -9,26 +8,21 @@
   overflow: hidden;
   z-index: 200;
   overflow: hidden;
-}
 
-@keyframes animateNav {
-  0% {
-    right: 0rem;
-    height: 100svh;
-  }
-  100% {
-    right: -16.5rem;
-    height: 90svh;
-  }
+  height: 100svh;
+  align-self: center;
+  justify-self: center;
+  right: 0;
+  transition:
+    height 0.3s ease-out,
+    right 0.3s ease-out;
 }
 
 .mainWrapperNavOpen {
   animation: animateNav 0.3s ease-out forwards;
   right: -16.5rem;
   height: 90svh;
-  top: 50%;
-  transform: translateY(-50%);
-  position: absolute;
+  /* position: absolute; */
   border-bottom-left-radius: 2rem;
   border-top-left-radius: 2rem;
   position: relative;

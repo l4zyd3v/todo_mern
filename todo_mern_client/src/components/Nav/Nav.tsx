@@ -3,7 +3,14 @@ import { FaTasks } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoAnalyticsSharp } from "react-icons/io5";
 
-export default function Nav() {
+type UserFirstLastName = {
+  firstname: string;
+  lastname: string;
+};
+
+export default function Nav({ firstname, lastname }: UserFirstLastName) {
+  console.log("firstname", firstname);
+
   return (
     <nav className={s.nav}>
       <div className={s.profilePicWrapper}>
@@ -14,8 +21,8 @@ export default function Nav() {
         />
       </div>
       <h4 className={s.profileName}>
-        <span className={s.profileName__top}>Morten</span>
-        <span className={s.profileName__bottom}>Nielsen</span>
+        <span className={s.profileName__top}>{firstname}</span>
+        <span className={s.profileName__bottom}>{lastname}</span>
       </h4>
       <ul className={s.listOfNavLinks}>
         <li className={s.li}>

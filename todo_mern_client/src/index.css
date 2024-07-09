@@ -9,4 +9,6 @@
 #root {
   height: 100svh;
   overflow: hidden;
+  /*display flex i for mainwrapper to center when it is transitioned to the right when showing the nav*/
+  display: flex;
 }
