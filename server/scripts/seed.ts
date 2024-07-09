@@ -1,6 +1,11 @@
 import { connectToDatabase } from "../src/config/db";
 import { Db } from "mongodb";
-import { titles, descriptions, priorities } from "./fields/taskfields";
+import {
+  titles,
+  descriptions,
+  priorities,
+  categories,
+} from "./fields/taskfields";
 import { names, userNames } from "./fields/userFields";
 import * as bcrypt from "bcrypt";
 
@@ -49,14 +54,18 @@ async function seedUsers(db: Db) {
 }
 
 async function seedTasks(db: Db, amountOfTasks: number) {
+  // aparantly the categories doesnt import correctly from the taskfields.ts file so I just add it here for now..
+  const categories = ["private", "business", "work", "hobby"];
+
   for (let i = 0; i < amountOfTasks; i++) {
     await db?.collection("tasks").insertOne({
       title: titles[Math.floor(Math.random() * titles.length)],
       description:
         descriptions[Math.floor(Math.random() * descriptions.length)],
+      category: categories[Math.floor(Math.random() * categories.length)],
       dueDate: "2021-12-12",
       priority: priorities[Math.floor(Math.random() * priorities.length)],
-      userId: "nothinh for now..",
+      userId: null,
     });
   }
 
@@ -87,6 +96,9 @@ async function main() {
   }
 
   client.close();
+  console.log(
+    "Database seeded and associated successfully - connection closed",
+  );
 }
 
 main().catch((err) => {

@@ -9,6 +9,8 @@ const titles = [
   "apply for job",
 ];
 
+const categories = ["private", "business", "work", "hobby"];
+
 const descriptions = [
   "Once upon a time, in a land where chickens were the rulers and humans were the pets, a brave chicken named Cluck Norris led a rebellion against the oppressive human pet-keepers. His battle cry? 'Bock bock bock!'",
   "In a world dominated by squirrels, one brave squirrel, Nutty McNutface, embarks on a daring mission to find the legendary Golden Acorn. Will he succeed, or will he just end up with a lot of regular acorns?",
@@ -22,4 +24,4 @@ const descriptions = [
 
 const priorities = ["low", "medium", "high"];
 
-export { titles, descriptions, priorities };
+export { titles, descriptions, priorities, categories };
