@@ -19,8 +19,6 @@ export default function taskController(db: Db) {
           .find({ userId: new ObjectId(userId) })
           .toArray();
 
-        console.log(userTasks);
-
         console.log("User requested all tasks");
         return res.status(200).json(userTasks);
       } catch (error: any) {

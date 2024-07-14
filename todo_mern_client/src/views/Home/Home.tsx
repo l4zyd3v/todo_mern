@@ -30,7 +30,7 @@ export default function Home() {
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
 
-  // console.log("hello from home.tsx");
+  console.log(user);
 
   type UserProfile = {
     _id?: string;
@@ -52,7 +52,7 @@ export default function Home() {
       const res = await axios.get(`http://${hostUrl}:3000/${endpoint}`, {
         withCredentials: true,
       });
-      console.log(res.data);
+      console.log(endpoint, res.data);
       setState(res.data);
     } catch (error) {
       console.log(error);
