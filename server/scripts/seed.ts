@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../src/config/db";
-import { Db } from "mongodb";
+import { ObjectId, Db } from "mongodb";
 import {
   titles,
   descriptions,
@@ -26,6 +26,33 @@ async function randomizeTaskUserAssociation(db: Db) {
   }
 
   console.log("task-user association randomized");
+
+  return;
+}
+
+async function randomizeTaskCategoriesAssociation(db: Db) {
+  const tasks = await db?.collection("tasks").find().toArray();
+  const categories = await db?.collection("categories").find().toArray();
+
+  for (let i = 0; i < tasks.length; i++) {
+    const taskUserId = tasks[i].userId.toString();
+
+    for (let j = 0; j < categories.length; j++) {
+      const categoryUserId = categories[j].userId.toString();
+      if (categoryUserId === taskUserId) {
+        await db?.collection("tasks").updateMany(
+          { userId: new ObjectId(categoryUserId) },
+          {
+            $set: {
+              categoryId: new ObjectId(categoryUserId),
+            },
+          },
+        );
+      }
+    }
+  }
+
+  console.log("task-category association randomized.. **TEST**");
 
   return;
 }
@@ -130,6 +157,7 @@ async function main() {
     await seedTasks(db, 200);
     await seedCategories(db);
     await randomizeTaskUserAssociation(db);
+    await randomizeTaskCategoriesAssociation(db);
   } catch (err) {
     console.error("An error occurred while seeding the database:", err);
     return;
