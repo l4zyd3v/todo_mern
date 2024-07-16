@@ -4,6 +4,7 @@ import { connectToDatabase } from "./config/db";
 import { userRoutes } from "./routes/userRoutes";
 import { authRoutes } from "./routes/authRoutes";
 import { taskRoutes } from "./routes/taskRoutes";
+import { categoryRoutes } from "./routes/categoryRoutes";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
@@ -47,6 +48,7 @@ async function startServer() {
     app.use("/", userRoutes(db));
     app.use("/auth", authRoutes(db));
     app.use("/", taskRoutes(db));
+    app.use("/", categoryRoutes(db));
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server is running at http://0.0.0.0:${PORT}`);

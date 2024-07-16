@@ -1,4 +1,8 @@
 export interface CategoryCardInterface {
+  key: string;
   _id: string;
-  description: string;
+  name: string;
+  color: string;
+  userId: string;
+  taskAmountOfCategory: number;
 }

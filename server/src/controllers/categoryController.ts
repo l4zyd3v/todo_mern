@@ -3,24 +3,24 @@ import { Request, Response } from "express";
 // import bcrypt from "bcrypt";
 // import createSecretToken from "../tokenGeneration";
 
-export default function taskController(db: Db) {
+export default function categoryController(db: Db) {
   return {
-    getAllTasks: async (req: Request, res: Response) => {
+    getAllCategories: async (req: Request, res: Response) => {
       const { userId } = req;
 
-      console.log("hello from taskController.ts");
+      console.log("hello from categoryController.ts");
 
       console.log("userId: ", userId);
 
       try {
-        const collection = db.collection("tasks");
+        const collection = db.collection("categories");
 
-        const userTasks = await collection
+        const userCategories = await collection
           .find({ userId: new ObjectId(userId) })
           .toArray();
 
-        console.log("User requested all tasks");
-        return res.status(200).json(userTasks);
+        console.log("User requested all categories");
+        return res.status(200).json(userCategories);
       } catch (error: any) {
         console.log("oops something wrong daiiim");
         res.status(500).json({ message: error.message });

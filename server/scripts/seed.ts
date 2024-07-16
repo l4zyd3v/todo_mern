@@ -1,6 +1,11 @@
 import { connectToDatabase } from "../src/config/db";
-import { Db } from "mongodb";
-import { titles, descriptions, priorities } from "./fields/taskfields";
+import { ObjectId, Db } from "mongodb";
+import {
+  titles,
+  descriptions,
+  priorities,
+  categories,
+} from "./fields/taskfields";
 import { names, userNames } from "./fields/userFields";
 import * as bcrypt from "bcrypt";
 
@@ -20,19 +25,91 @@ async function randomizeTaskUserAssociation(db: Db) {
     );
   }
 
-  console.log("Task-user association randomized");
+  console.log("task-user association randomized");
+
+  return;
+}
+
+async function randomizeTaskCategoriesAssociation(db: Db) {
+  const tasks = await db?.collection("tasks").find().toArray();
+  const categories = await db?.collection("categories").find().toArray();
+
+  for (let task of tasks) {
+    const taskUserId = task.userId.toString();
+
+    const matchingCategories = categories.filter(
+      (category) => category.userId.toString() === taskUserId,
+    );
+
+    if (matchingCategories.length > 0) {
+      const randomCategory =
+        matchingCategories[
+          Math.floor(Math.random() * matchingCategories.length)
+        ];
+
+      await db?.collection("tasks").updateOne(
+        { _id: new ObjectId(task._id) },
+        {
+          $set: {
+            categoryId: new ObjectId(randomCategory._id),
+          },
+        },
+      );
+    }
+  }
+
+  console.log("task-category association randomized");
+
+  return;
+}
+
+async function seedCategories(db: Db) {
+  const categories = [
+    {
+      name: "business",
+      color: "#ea06fe",
+      userId: null,
+    },
+    {
+      name: "personal",
+      color: "#1754bd",
+      userId: null,
+    },
+  ];
+
+  await db?.collection("categories").drop();
+  console.log("previous categories collection dropped");
+
+  for (let i = 0; i < userNames.length; i++) {
+    const user = await db
+      ?.collection("users")
+      .find({ username: `${userNames[i]}` })
+      .toArray();
+
+    await db?.collection("categories").insertMany(
+      categories.map((category) => ({
+        ...category,
+        userId: user[0]._id,
+      })),
+    );
+  }
+
+  console.log("new categories seeded");
 
   return;
 }
 
 async function seedUsers(db: Db) {
+  await db?.collection("users").drop();
+  console.log("previous users collection dropped");
+
   for (let i = 0; i < userNames.length; i++) {
     const password = "password";
     const salt = 10;
     const hashedPassword = await bcrypt.hash(password, salt);
 
     await db?.collection("users").insertOne({
-      username: userNames[Math.floor(Math.random() * userNames.length)],
+      username: userNames[i],
       password: hashedPassword,
       profilePicture: "https://www.google.com",
       credentials: {
@@ -43,12 +120,15 @@ async function seedUsers(db: Db) {
     });
   }
 
-  console.log("Users seeded");
+  console.log("new users seeded");
 
   return;
 }
 
 async function seedTasks(db: Db, amountOfTasks: number) {
+  await db?.collection("tasks").drop();
+  console.log("previous tasks collection dropped");
+
   for (let i = 0; i < amountOfTasks; i++) {
     await db?.collection("tasks").insertOne({
       title: titles[Math.floor(Math.random() * titles.length)],
@@ -56,11 +136,12 @@ async function seedTasks(db: Db, amountOfTasks: number) {
         descriptions[Math.floor(Math.random() * descriptions.length)],
       dueDate: "2021-12-12",
       priority: priorities[Math.floor(Math.random() * priorities.length)],
-      userId: "nothinh for now..",
+      userId: null,
+      categoryId: null,
     });
   }
 
-  console.log("Tasks seeded");
+  console.log("new tasks seeded");
 
   return;
 }
@@ -80,13 +161,18 @@ async function main() {
     // 10 users
     await seedUsers(db);
     await seedTasks(db, 200);
+    await seedCategories(db);
     await randomizeTaskUserAssociation(db);
+    await randomizeTaskCategoriesAssociation(db);
   } catch (err) {
     console.error("An error occurred while seeding the database:", err);
     return;
   }
 
   client.close();
+  console.log(
+    "Database seeded and associated successfully - connection closed",
+  );
 }
 
 main().catch((err) => {

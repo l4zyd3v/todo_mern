@@ -57,7 +57,7 @@ const TodoCard: React.FC<todoCardInterface> = ({ _id, description, title }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onAnimationEnd={handleAnimationEnd}
-      style={{ left: `${currentTouchPosition}px` }}
+      style={{ marginLeft: `${currentTouchPosition}px` }}
     >
       <TodoIcon />
       {deletionThresholdReached && (
