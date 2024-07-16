@@ -34,25 +34,31 @@ async function randomizeTaskCategoriesAssociation(db: Db) {
   const tasks = await db?.collection("tasks").find().toArray();
   const categories = await db?.collection("categories").find().toArray();
 
-  for (let i = 0; i < tasks.length; i++) {
-    const taskUserId = tasks[i].userId.toString();
+  for (let task of tasks) {
+    const taskUserId = task.userId.toString();
 
-    for (let j = 0; j < categories.length; j++) {
-      const categoryUserId = categories[j].userId.toString();
-      if (categoryUserId === taskUserId) {
-        await db?.collection("tasks").updateMany(
-          { userId: new ObjectId(categoryUserId) },
-          {
-            $set: {
-              categoryId: new ObjectId(categoryUserId),
-            },
+    const matchingCategories = categories.filter(
+      (category) => category.userId.toString() === taskUserId,
+    );
+
+    if (matchingCategories.length > 0) {
+      const randomCategory =
+        matchingCategories[
+          Math.floor(Math.random() * matchingCategories.length)
+        ];
+
+      await db?.collection("tasks").updateOne(
+        { _id: new ObjectId(task._id) },
+        {
+          $set: {
+            categoryId: new ObjectId(randomCategory._id),
           },
-        );
-      }
+        },
+      );
     }
   }
 
-  console.log("task-category association randomized.. **TEST**");
+  console.log("task-category association randomized");
 
   return;
 }
