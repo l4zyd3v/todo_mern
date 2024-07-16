@@ -62,21 +62,8 @@ export default function Home() {
   useEffect(() => {
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
+    fetchIt("categories", setCategories);
   }, []);
-
-  // useEffect(() => {
-  //   async function getCategories() {
-  //     try {
-  //       const res = await axios.get(`http://${hostUrl}:3000/categories`);
-  //       console.log(res.data);
-  //       setCategories(res.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //
-  //   getCategories();
-  // }, []);
 
   function userGreetings() {
     const greetings = ["What's up, ", "What's up"];
@@ -93,6 +80,19 @@ export default function Home() {
     });
   }
 
+  function getTaskAmountRelatedToCategory(categoryId: string) {
+    let taskAmount = [];
+    for (let i = 0; i < tasks.length; i++) {
+      const taskCategoryId = tasks[i].categoryId;
+
+      if (taskCategoryId === categoryId) {
+        taskAmount.push(taskCategoryId);
+      }
+    }
+
+    return taskAmount.length;
+  }
+
   return (
     <>
       <div
@@ -107,11 +107,20 @@ export default function Home() {
           <h2 className={s.categoriesHeading}>categories</h2>
           <div className={s.categoriesScrollWrapper}>
             {categories.map((category) => {
+              console.log("categoryid", category._id);
+
+              const taskAmountOfCategory = getTaskAmountRelatedToCategory(
+                category._id,
+              );
+
               return (
                 <CategoriesCard
                   key={category._id}
                   _id={category._id}
-                  description={category.description}
+                  name={category.name}
+                  color={category.color}
+                  userId={category.userId}
+                  taskAmountOfCategory={taskAmountOfCategory}
                 />
               );
             })}

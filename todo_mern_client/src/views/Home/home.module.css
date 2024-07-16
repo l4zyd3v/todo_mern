@@ -41,6 +41,7 @@
 
 /*categories*/
 .categoriesWrapper {
+  border: 1px solid green;
   grid-row: 3/4;
   /* width: 100%; */
   display: grid;
