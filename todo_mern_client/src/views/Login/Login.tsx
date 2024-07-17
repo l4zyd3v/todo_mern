@@ -4,7 +4,6 @@ import s from "./login.module.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import hostUrl from "../../hostvar";
 
 type Inputs = {
   userNameOrEmail: string;
@@ -32,7 +31,7 @@ export default function Login() {
     console.log(data.userNameOrEmail, data.passWord);
 
     const response = axios
-      .post(`http://${hostUrl}:3000/auth/login`, data, {
+      .post(`http://${import.meta.env.VITE_HOSTURL}:3000/auth/login`, data, {
         withCredentials: true,
       })
       .then((res) => {

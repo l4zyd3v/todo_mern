@@ -5,9 +5,6 @@ import { Inputs } from "./types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// just for dev purposes:
-import hostUrl from "../../hostvar";
-
 export default function Signup() {
   const {
     register,
@@ -18,7 +15,7 @@ export default function Signup() {
 
   const signup = async (data: Inputs) => {
     const response = await axios
-      .post(`http://${hostUrl}:3000/auth/signup`, data, {
+      .post(`http://${import.meta.env.VITE_HOSTURL}:3000/auth/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {

@@ -13,7 +13,7 @@ export default function CategoriesCard({
       <p className={s.tasksAmount}>{taskAmountOfCategory} tasks</p>
       <h3 className={s.heading2}>{name}</h3>
       <span className={s.progressBar}>
-        <span className={s.progess}></span>
+        <span style={{ backgroundColor: color }} className={s.progess}></span>
       </span>
     </section>
   );

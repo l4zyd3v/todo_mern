@@ -18,9 +18,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
-// just for dev purposes:
-import hostUrl from "../../hostvar.ts";
-
 export default function Home() {
   const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
@@ -49,15 +46,20 @@ export default function Home() {
     setState: React.Dispatch<React.SetStateAction<T[]>>,
   ) {
     try {
-      const res = await axios.get(`http://${hostUrl}:3000/${endpoint}`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `http://${import.meta.env.VITE_HOSTURL}:3000/${endpoint}`,
+        {
+          withCredentials: true,
+        },
+      );
       console.log(endpoint, res.data);
       setState(res.data);
     } catch (error) {
       console.log(error);
     }
   }
+
+  console.log(import.meta.env.VITE_HOSTURL);
 
   useEffect(() => {
     fetchIt("users", setUser);
@@ -78,6 +80,17 @@ export default function Home() {
       borderRadius: "0%",
       width: "90vw",
     });
+  }
+
+  function getTaskColorRelatedToCategory(
+    taskCategoryId: string | undefined,
+    categories: CategoryCardInterface[],
+  ) {
+    for (let category of categories) {
+      if (category._id === taskCategoryId) {
+        return category.color;
+      }
+    }
   }
 
   function getTaskAmountRelatedToCategory(categoryId: string) {
@@ -107,7 +120,7 @@ export default function Home() {
           <h2 className={s.categoriesHeading}>categories</h2>
           <div className={s.categoriesScrollWrapper}>
             {categories.map((category) => {
-              console.log("categoryid", category._id);
+              const { _id, name, color, userId } = category;
 
               const taskAmountOfCategory = getTaskAmountRelatedToCategory(
                 category._id,
@@ -115,11 +128,11 @@ export default function Home() {
 
               return (
                 <CategoriesCard
-                  key={category._id}
-                  _id={category._id}
-                  name={category.name}
-                  color={category.color}
-                  userId={category.userId}
+                  key={_id}
+                  _id={_id}
+                  name={name}
+                  color={color}
+                  userId={userId}
                   taskAmountOfCategory={taskAmountOfCategory}
                 />
               );
@@ -139,12 +152,20 @@ export default function Home() {
             className={s.swiper}
           >
             {tasks.map((task) => {
+              const { _id, title, description, categoryId, completed } = task;
+
+              const categoryColor = getTaskColorRelatedToCategory(
+                categoryId,
+                categories,
+              );
               return (
                 <SwiperSlide key={task._id} className={s.swiperSlide}>
                   <TodoCard
                     _id={task._id}
                     title={task.title}
                     description={task.description}
+                    color={categoryColor}
+                    completed={completed}
                   />
                 </SwiperSlide>
               );

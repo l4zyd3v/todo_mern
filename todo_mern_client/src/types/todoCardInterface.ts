@@ -3,4 +3,6 @@ export interface TodoCardInterface {
   _id: string;
   description: string;
   categoryId?: string;
+  color: string | undefined;
+  completed: boolean;
 }
