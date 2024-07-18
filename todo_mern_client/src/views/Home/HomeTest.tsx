@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import s from "./home.module.css";
 import axios from "axios";
-// import anime, { AnimeInstance } from "animejs";
+import anime, { AnimeInstance } from "animejs";
 import { TodoCardInterface, CategoryCardInterface } from "../../types";
 import {
   TodoCard,
@@ -22,8 +22,12 @@ export default function Home() {
   const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
+
+  const [touchMoved, setTouchMoved] = useState(0);
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
+
+  console.log(user);
 
   type UserProfile = {
     _id?: string;
@@ -55,64 +59,17 @@ export default function Home() {
     }
   }
 
+  console.log(import.meta.env.VITE_HOSTURL);
+
   useEffect(() => {
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);
   }, []);
 
-  // const animation = useRef<AnimeInstance | null>(null);
-
-  // function startAnimation() {
-  //   animation.current = anime({
-  //     targets: "#createNewTodoBox",
-  //     top: "25vh",
-  //     borderRadius: "0%",
-  //     width: "90vw",
-  //   });
-  // }
-
-  function getTaskColorRelatedToCategory(
-    taskCategoryId: string | undefined,
-    categories: CategoryCardInterface[],
-  ) {
-    for (let category of categories) {
-      if (category._id === taskCategoryId) {
-        return category.color;
-      }
-    }
-  }
-
-  function getTaskAmountRelatedToCategory(categoryId: string) {
-    let taskAmount = [];
-    for (let i = 0; i < tasks.length; i++) {
-      const taskCategoryId = tasks[i].categoryId;
-
-      if (taskCategoryId === categoryId) {
-        taskAmount.push(taskCategoryId);
-      }
-    }
-
-    return taskAmount.length;
-  }
-
-  // **This is for deleting a task**
-  // const handleDelete = (taskId: string) => {
-  //   setTasks(tasks.filter((task) => task._id !== taskId));
-  // };
-
-  function handleIsCompleteSingleTask(
-    changedTaskId: string,
-    changedTaskCompletion: boolean,
-  ) {
-    setTasks(
-      tasks.map((task) =>
-        task._id === changedTaskId
-          ? { ...task, completed: changedTaskCompletion }
-          : task,
-      ),
-    );
-  }
+  const handleDelete = (taskId: string) => {
+    setTasks(tasks.filter((task) => task._id !== taskId));
+  };
 
   return (
     <>
@@ -142,7 +99,6 @@ export default function Home() {
                   color={color}
                   userId={userId}
                   taskAmountOfCategory={taskAmountOfCategory}
-                  tasks={tasks}
                 />
               );
             })}
@@ -175,9 +131,7 @@ export default function Home() {
                     description={task.description}
                     color={categoryColor}
                     completed={completed}
-                    // **This is for deleting a task**
-                    // onDelete={handleDelete}
-                    onComplete={handleIsCompleteSingleTask}
+                    onDelete={handleDelete}
                   />
                 </SwiperSlide>
               );

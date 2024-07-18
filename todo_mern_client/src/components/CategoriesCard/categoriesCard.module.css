@@ -34,9 +34,9 @@
 }
 .progess {
   position: absolute;
-  width: 30%;
+  /* width 30%; */
   height: 4px;
   border-radius: 10rem;
   z-index: 200;
-  background-color: var(--pink);
+  /* background-color: var(--pink); */
 }

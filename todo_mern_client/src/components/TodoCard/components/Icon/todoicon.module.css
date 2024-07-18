@@ -5,7 +5,16 @@
 .icon {
   height: var(--icon-size);
   width: var(--icon-size);
-  border: 2px solid var(--pink);
+  /* border: 2px solid var(--pink); */
+  border: 2px solid grey;
   border-radius: 100%;
   justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkmark {
+  height: 0.8rem;
+  width: 0.8rem;
 }

@@ -9,6 +9,18 @@ export function taskRoutes(db: Db) {
   const router = Router();
 
   router.get("/tasks", authControl.authenticateToken, controller.getAllTasks);
+  router.put(
+    "/tasks/:taskId",
+    authControl.authenticateToken,
+    controller.setCompplition,
+  );
+
+  // **This is for deleting a task**
+  // router.delete(
+  //   "/tasks/:taskId",
+  //   authControl.authenticateToken,
+  //   controller.deleteTask,
+  // );
 
   return router;
 }
