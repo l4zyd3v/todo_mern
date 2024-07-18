@@ -1,3 +1,5 @@
+import { TodoCardInterface } from ".";
+
 export interface CategoryCardInterface {
   key: string;
   _id: string;
@@ -5,4 +7,5 @@ export interface CategoryCardInterface {
   color: string;
   userId: string;
   taskAmountOfCategory: number;
+  tasks: Array<TodoCardInterface>;
 }

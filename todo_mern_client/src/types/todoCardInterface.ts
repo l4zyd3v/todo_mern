@@ -5,4 +5,7 @@ export interface TodoCardInterface {
   categoryId?: string;
   color: string | undefined;
   completed: boolean;
+  // onDelete: (taskId: string) => void;
+
+  onComplete: (taskId: string, isCompleted: boolean) => void;
 }
