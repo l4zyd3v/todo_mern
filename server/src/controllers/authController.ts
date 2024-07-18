@@ -175,5 +175,31 @@ export default function authController(db: Db) {
         },
       );
     },
+    checkUserLoggedIn: async (
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ) => {
+      const cookieToken = req.cookies["token"];
+
+      if (!cookieToken) {
+        return res.json({ loggedIn: false });
+      }
+
+      if (!process.env.TOKEN_KEY) return;
+
+      jwt.verify(
+        cookieToken,
+        process.env.TOKEN_KEY,
+        (err: jwt.VerifyErrors | null, decoded: any) => {
+          if (err) {
+            return res.json({ loggedIn: false });
+          }
+
+          // If the token is valid, the user is logged in
+          return res.json({ loggedIn: true });
+        },
+      );
+    },
   };
 }

@@ -12,6 +12,7 @@ import {
   Header,
   Nav,
 } from "../../components";
+import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -24,6 +25,8 @@ export default function Home() {
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   type UserProfile = {
     _id?: string;
@@ -56,6 +59,29 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const checkUserLoggedIn = async () => {
+      try {
+        const response = await axios.get(
+          `http://${import.meta.env.VITE_HOSTURL}:3000/auth/logincheck`,
+          {
+            withCredentials: true,
+          },
+        );
+        if (!response.data.loggedIn) {
+          navigate("/login");
+        } else {
+          setUserLoggedIn(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkUserLoggedIn();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!userLoggedIn) return;
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);

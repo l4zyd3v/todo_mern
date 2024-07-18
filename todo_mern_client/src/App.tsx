@@ -1,20 +1,27 @@
-import { Home, Login, Signup } from "./views";
+import { Home, Login, Signup, Error } from "./views";
 import {
   createBrowserRouter,
-  createRoutesFromElements,
-  Route,
+  // createRoutesFromElements,
+  // Route,
   RouterProvider,
 } from "react-router-dom";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-    </>,
-  ),
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    //  Make an error component and provide a link to the home page
+    errorElement: <Error />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+]);
 
 export default function App() {
   return (
