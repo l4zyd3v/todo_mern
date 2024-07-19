@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import s from "./login.module.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 
 type Inputs = {
   userNameOrEmail: string;
@@ -20,6 +22,7 @@ export default function Login() {
   const [usernameOrEmailFocus, setUserNameOrEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const navigate = useNavigate();
+  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
 
   const {
     register,
@@ -38,7 +41,8 @@ export default function Login() {
         console.log(res);
         if (res.status === 200) {
           console.log("Login Successful");
-          navigate("/home");
+          setUserLoggedIn(true);
+          navigate("/");
         } else {
           navigate("/signup");
           alert("User not found, please sign up");
@@ -117,7 +121,10 @@ export default function Login() {
             <span className={s.registerBtn_firstText}>
               Dont have an account?{" "}
             </span>
-            <span className={s.registerBtn_secondText}> Register</span>
+            <Link to="/signup" className={s.registerBtn_secondText}>
+              {" "}
+              Register
+            </Link>
           </button>
         </form>
       </div>

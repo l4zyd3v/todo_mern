@@ -6,7 +6,7 @@ export default function Error() {
     <div className={s.wrapper}>
       <h1 className={s.heading1}>Oopsy, something went wrong</h1>
       <Link className={s.link} to="/">
-        Go back to the <span className={s.homeText}>Home</span> page
+        <span className={s.homeText}>Go back</span>
       </Link>
     </div>
   );

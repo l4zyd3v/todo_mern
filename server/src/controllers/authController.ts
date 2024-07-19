@@ -175,11 +175,7 @@ export default function authController(db: Db) {
         },
       );
     },
-    checkUserLoggedIn: async (
-      req: Request,
-      res: Response,
-      next: NextFunction,
-    ) => {
+    checkUserLoggedIn: async (req: Request, res: Response) => {
       const cookieToken = req.cookies["token"];
 
       if (!cookieToken) {
@@ -196,7 +192,6 @@ export default function authController(db: Db) {
             return res.json({ loggedIn: false });
           }
 
-          // If the token is valid, the user is logged in
           return res.json({ loggedIn: true });
         },
       );

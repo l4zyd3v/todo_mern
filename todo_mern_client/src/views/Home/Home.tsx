@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
+import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import s from "./home.module.css";
 import axios from "axios";
 // import anime, { AnimeInstance } from "animejs";
@@ -25,7 +26,7 @@ export default function Home() {
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
   const navigate = useNavigate();
 
   type UserProfile = {
@@ -68,11 +69,11 @@ export default function Home() {
           },
         );
         if (!response.data.loggedIn) {
+          setUserLoggedIn(false);
           navigate("/login");
-        } else {
-          setUserLoggedIn(true);
         }
       } catch (error) {
+        setUserLoggedIn(false);
         console.error(error);
       }
     };
@@ -81,11 +82,12 @@ export default function Home() {
   }, [navigate]);
 
   useEffect(() => {
+    console.log("userloggedin: ", userLoggedIn);
     if (!userLoggedIn) return;
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);
-  }, []);
+  }, [userLoggedIn]);
 
   // const animation = useRef<AnimeInstance | null>(null);
 
