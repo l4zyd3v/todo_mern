@@ -31,6 +31,7 @@ export function authRoutes(db: Db) {
   router.post("/signup", controller.signup);
   router.post("/login", controller.login);
   router.post("/logout", controller.logout);
+  router.get("/logincheck", controller.checkUserLoggedIn);
 
   // mabe also add this? :
   // router.post("/refresh-token", controller.refreshToken);

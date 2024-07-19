@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
+import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import s from "./home.module.css";
 import axios from "axios";
 // import anime, { AnimeInstance } from "animejs";
@@ -12,6 +13,7 @@ import {
   Header,
   Nav,
 } from "../../components";
+import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -24,6 +26,8 @@ export default function Home() {
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
   const [modalVisibility, setModalVisibility] = useState(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
+  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
+  const navigate = useNavigate();
 
   type UserProfile = {
     _id?: string;
@@ -56,10 +60,34 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const checkUserLoggedIn = async () => {
+      try {
+        const response = await axios.get(
+          `http://${import.meta.env.VITE_HOSTURL}:3000/auth/logincheck`,
+          {
+            withCredentials: true,
+          },
+        );
+        if (!response.data.loggedIn) {
+          setUserLoggedIn(false);
+          navigate("/login");
+        }
+      } catch (error) {
+        setUserLoggedIn(false);
+        console.error(error);
+      }
+    };
+
+    checkUserLoggedIn();
+  }, [navigate]);
+
+  useEffect(() => {
+    console.log("userloggedin: ", userLoggedIn);
+    if (!userLoggedIn) return;
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);
-  }, []);
+  }, [userLoggedIn]);
 
   // const animation = useRef<AnimeInstance | null>(null);
 

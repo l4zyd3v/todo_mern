@@ -1,0 +1,29 @@
+.wrapper {
+  background-color: var(--dark-blue);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.heading1 {
+  font-size: 3rem;
+  text-align: center;
+  color: var(--text-color2);
+  margin-top: -10rem;
+}
+
+.link {
+  color: var(--light-blue);
+  text-decoration: none;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.homeText {
+  color: var(--pink);
+  text-align: center;
+  text-decoration: underline;
+}

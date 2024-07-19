@@ -4,6 +4,7 @@ import Input from "./components/Input";
 import { Inputs } from "./types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
   const {
@@ -95,7 +96,10 @@ export default function Signup() {
             <span className={s.alreadyHaveAccountBtn_firstText}>
               Already have an account?{" "}
             </span>
-            <span className={s.alreadyHaveAccountBtn_secondText}> Login</span>
+            <Link to="/login" className={s.alreadyHaveAccountBtn_secondText}>
+              {" "}
+              Login
+            </Link>
           </button>
         </form>
       </div>
