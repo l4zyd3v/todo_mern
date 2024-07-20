@@ -109,9 +109,29 @@ export default function authController(db: Db) {
           const result = await collection.insertOne(newUser);
           newUser._id = result.insertedId;
 
+          // Create a category document for the new user with the default categories of personal and business
+
+          const newPersonalCategory = {
+            name: "personal",
+            color: "#1754bd",
+            userId: result.insertedId,
+          };
+
+          const newBusinessCategory = {
+            name: "business",
+            color: "#ea06fe",
+            userId: result.insertedId,
+          };
+
+          await db
+            .collection("categories")
+            .insertMany([newPersonalCategory, newBusinessCategory]);
+
           const token = createSecretToken(newUser._id);
 
-          console.log(`New user created: ${username}`);
+          console.log(
+            `New user created: ${username} with associated default categories documents`,
+          );
 
           res.cookie("token", token, {
             path: "/", // Cookie is accessible from all paths
