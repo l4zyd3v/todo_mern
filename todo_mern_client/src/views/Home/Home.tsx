@@ -3,7 +3,7 @@ import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import s from "./home.module.css";
 import axios from "axios";
-// import anime, { AnimeInstance } from "animejs";
+// importanime, { AnimeInstance } from "animejs";
 import { TodoCardInterface, CategoryCardInterface } from "../../types";
 import {
   TodoCard,
@@ -24,7 +24,7 @@ export default function Home() {
   const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
-  const [modalVisibility, setModalVisibility] = useState(null);
+  const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
   const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
   const navigate = useNavigate();
@@ -212,12 +212,19 @@ export default function Home() {
             })}
           </Swiper>
         </div>
-        <NewTodoBtn setModal={setModalVisibility} />
 
+        <NewTodoBtn setModal={setModalVisibility} />
         <TodoModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
+          categories={categories}
         />
+        {modalVisibility && (
+          <div
+            onClick={() => setModalVisibility(false)}
+            className={s.modalBackground}
+          ></div>
+        )}
       </div>
       <Nav
         firstname={user[0]?.credentials.firstName}
