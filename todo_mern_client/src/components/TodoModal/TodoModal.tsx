@@ -1,7 +1,9 @@
+import { useState } from "react";
 import s from "./todomodal.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { CategoryCardInterface } from "../../types";
+import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
@@ -15,6 +17,8 @@ export default function TodoModal({
   setVisibility,
   categories,
 }: TodoModalProps) {
+  const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -77,7 +81,7 @@ export default function TodoModal({
             className={s.input}
             id={"description"}
             {...register("description")}
-          ></textarea>
+          ></textarea>{" "}
         </div>
 
         <div className={s.inputWrapper}>
@@ -91,7 +95,7 @@ export default function TodoModal({
             {...register("dueDate")}
           />
         </div>
-        <div className={s.inputWrapper}>
+        <div className={`${s.inputWrapper} ${s.inputWrapperCategory}`}>
           <label className={s.label} htmlFor="category">
             category
           </label>
@@ -100,6 +104,24 @@ export default function TodoModal({
 
             {getCategoryOptions()}
           </select>
+          <button
+            onClick={() => setNewCategoryModalOpen(!newCategoryModalOpen)}
+            type="button"
+          >
+            new
+          </button>
+
+          <div
+            className={`${s.newCategoryModal} ${newCategoryModalOpen ? s.newCategoryModalOpen : ""}`}
+          >
+            <button
+              style={{ position: "absolute", top: "10rem", right: "5rem" }}
+              onClick={() => setNewCategoryModalOpen(false)}
+            >
+              close
+            </button>
+            <NewCategoryForm />
+          </div>
         </div>
         <div className={s.inputWrapper}>
           <label className={s.label} htmlFor="priority">
@@ -121,6 +143,12 @@ export default function TodoModal({
           Create Task
         </button>
       </form>
+      {newCategoryModalOpen ? (
+        <div
+          onClick={() => setNewCategoryModalOpen(false)}
+          className={s.hideBackgroundWhenNewCategoryIsOpen}
+        ></div>
+      ) : null}
     </div>
   );
 }

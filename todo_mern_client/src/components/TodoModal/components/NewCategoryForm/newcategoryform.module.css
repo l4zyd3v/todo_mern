@@ -1,0 +1,24 @@
+.form {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  .nameInput {
+    width: 100%;
+  }
+
+  .colorInput {
+    border-radius: 10rem;
+  }
+
+  .submitButton {
+    background: var(--pink);
+    border: 1px solid var(--light-blue);
+    border-radius: 0.5rem;
+    color: var(--text-color);
+    z-index: 100;
+    height: 2rem;
+    width: 2rem;
+  }
+}
