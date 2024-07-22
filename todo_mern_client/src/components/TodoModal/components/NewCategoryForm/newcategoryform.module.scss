@@ -4,15 +4,16 @@
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
 
-  .nameInput {
+  &__inputName {
     width: 100%;
+    background: blue;
   }
 
-  .colorInput {
+  &__inputColorPicker {
     border-radius: 10rem;
   }
 
-  .submitButton {
+  &__submitButton {
     background: var(--pink);
     border: 1px solid var(--light-blue);
     border-radius: 0.5rem;

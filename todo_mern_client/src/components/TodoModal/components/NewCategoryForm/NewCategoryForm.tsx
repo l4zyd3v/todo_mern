@@ -1,4 +1,4 @@
-import s from "./newcategoryform.module.css";
+import s from "./newcategoryform.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
@@ -31,18 +31,20 @@ export default function NewCategoryForm() {
     <form className={s.form}>
       <input
         type="text"
-        className={s.nameInput}
+        className={s.form__inputName}
         id={"name"}
         {...register("name", { required: true })}
       />
 
       <input
         type="color"
-        className={`${s.input} ${s.colorInput}`}
+        className={`${s.input} ${s.form__colorPicker}`}
         id={"color"}
         {...register("color", { required: true })}
       />
-      <button type="submit" className={s.submitButton}></button>
+      <button type="submit" className={s.form__submitButton}>
+        submit
+      </button>
     </form>
   );
 }
