@@ -2,7 +2,15 @@ import s from "./newcategoryform.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
-export default function NewCategoryForm() {
+type Props = {
+  newCategoryModalOpen: boolean;
+  setNewCategoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function NewCategoryForm({
+  newCategoryModalOpen,
+  setNewCategoryModalOpen,
+}: Props) {
   const {
     register,
     handleSubmit,
@@ -27,9 +35,21 @@ export default function NewCategoryForm() {
     console.log(data);
   };
 
+  function getVisibilityClassName() {
+    return newCategoryModalOpen ? s.formVisible : "";
+  }
+
   return (
-    <form className={s.form}>
+    <form className={`${s.form} ${getVisibilityClassName()}`}>
+      <button
+        onClick={() => setNewCategoryModalOpen(false)}
+        type="button"
+        className={s.form__closeButton}
+      >
+        &times;
+      </button>
       <input
+        placeholder="Category name"
         type="text"
         className={s.form__inputName}
         id={"name"}
@@ -42,8 +62,12 @@ export default function NewCategoryForm() {
         id={"color"}
         {...register("color", { required: true })}
       />
-      <button type="submit" className={s.form__submitButton}>
-        submit
+      <button
+        type="submit"
+        className={s.form__submitButton}
+        onClick={(e) => e.preventDefault()}
+      >
+        add
       </button>
     </form>
   );
