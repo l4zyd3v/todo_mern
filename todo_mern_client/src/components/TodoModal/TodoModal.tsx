@@ -1,20 +1,24 @@
-import s from "./todomodal.module.css";
+import { useState, useContext } from "react";
+import s from "./todomodal.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { CategoryCardInterface } from "../../types";
+import { CategoryCardInterface, CategoriesInterface } from "../../types";
+import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
+import { CategoriesContext } from "../../context/CategoriesContext";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
   visibility: boolean | null;
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
-  categories: Array<CategoryCardInterface>;
 };
 
 export default function TodoModal({
   visibility,
   setVisibility,
-  categories,
 }: TodoModalProps) {
+  const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
+  const { categories, setCategories } = useContext(CategoriesContext);
+
   const {
     register,
     handleSubmit,
@@ -28,6 +32,7 @@ export default function TodoModal({
       })
       .then((res) => {
         if (res.status === 201) {
+          console.log("test");
         }
       });
 
@@ -49,64 +54,95 @@ export default function TodoModal({
     ));
   }
 
+  function getTodoModalVisibilityClassName() {
+    return visibility
+      ? s.todoModalVisible
+      : visibility === false
+        ? s.todoModalHide
+        : "";
+  }
+
+  function getCategoryModalVisibilityClassName() {
+    return newCategoryModalOpen ? s.newCategoryModalOpen : "";
+  }
+
   return (
-    <div
-      className={`${s.todoModal} ${visibility ? s.modalVisible : visibility === false ? s.modalHide : ""}`}
-    >
-      <button className={s.exitButton} onClick={() => setVisibility(false)}>
+    <div className={`${s.todoModal} ${getTodoModalVisibilityClassName()}`}>
+      <button
+        className={s.todoModal__exitButton}
+        onClick={() => setVisibility(false)}
+      >
         &times;
       </button>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={s.inputWrapper}>
-          <label className={s.label} htmlFor="title">
+        <div className={s.form__inputWrapper}>
+          <label className={s.form__label} htmlFor="title">
             Title
           </label>
           <input
             type="text"
-            className={s.input}
+            className={s.form__input}
             id={"title"}
             {...register("title", { required: true })}
           />
         </div>
-        <div className={s.inputWrapper}>
-          <label className={s.label} htmlFor="description">
+        <div className={s.form__inputWrapper}>
+          <label className={s.form__label} htmlFor="description">
             description
           </label>
           <textarea
             style={{ resize: "none" }}
-            className={s.input}
+            className={s.form__input}
             id={"description"}
             {...register("description")}
-          ></textarea>
+          ></textarea>{" "}
         </div>
 
-        <div className={s.inputWrapper}>
-          <label className={s.label} htmlFor="dueDate">
+        <div className={s.form__inputWrapper}>
+          <label className={s.form__label} htmlFor="dueDate">
             due date
           </label>
           <input
             type="date"
-            className={s.input}
+            className={s.form__input}
             id={"dueDate"}
             {...register("dueDate")}
           />
         </div>
-        <div className={s.inputWrapper}>
-          <label className={s.label} htmlFor="category">
+        <div className={`${s.form__inputWrapper} ${s.inputWrapperCategory}`}>
+          <label
+            className={`${s.form__label} ${s.inputWrapperCategory__label}`}
+            htmlFor="category"
+          >
             category
           </label>
-          <select className={s.select} id={""} {...register("category")}>
+          <select
+            className={`${s.form__select} ${s.inputWrapperCategory__select}`}
+            id={"category"}
+            {...register("category")}
+          >
             <option>Choose category</option>
 
             {getCategoryOptions()}
           </select>
+          <button
+            onClick={() => setNewCategoryModalOpen(!newCategoryModalOpen)}
+            type="button"
+            className={`${s.form__createNewCategoryButton} ${s.inputWrapperCategory__button}`}
+          >
+            new
+          </button>
+
+          <div
+            className={`${s.newCategoryModal} ${getCategoryModalVisibilityClassName()}`}
+          ></div>
         </div>
-        <div className={s.inputWrapper}>
-          <label className={s.label} htmlFor="priority">
+        <div className={s.form__inputWrapper}>
+          <label className={s.form__label} htmlFor="priority">
             priority
           </label>
           <select
-            className={s.select}
+            className={s.form__select}
             id={"priority"}
             {...register("priority")}
           >
@@ -117,10 +153,22 @@ export default function TodoModal({
             <option value="low">low</option>
           </select>
         </div>
-        <button className={s.submit} type="submit">
+        <button className={s.form__submit} type="submit">
           Create Task
         </button>
       </form>
+
+      <NewCategoryForm
+        newCategoryModalOpen={newCategoryModalOpen}
+        setNewCategoryModalOpen={setNewCategoryModalOpen}
+      />
+
+      {newCategoryModalOpen ? (
+        <div
+          onClick={() => setNewCategoryModalOpen(false)}
+          className={s.hideBackgroundWhenNewCategoryIsOpen}
+        ></div>
+      ) : null}
     </div>
   );
 }

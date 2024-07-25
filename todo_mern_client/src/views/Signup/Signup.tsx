@@ -90,6 +90,7 @@ export default function Signup() {
           </button>
 
           <button
+            type="button"
             className={s.alreadyHaveAccountBtn}
             onClick={() => console.log("Already have an account? Login")}
           >

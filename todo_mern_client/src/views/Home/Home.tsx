@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
+import { CategoriesContext } from "../../context/CategoriesContext";
 import s from "./home.module.css";
 import axios from "axios";
 // importanime, { AnimeInstance } from "animejs";
-import { TodoCardInterface, CategoryCardInterface } from "../../types";
+import { TodoCardInterface, CategoriesInterface } from "../../types";
 import {
   TodoCard,
   NewTodoBtn,
@@ -23,10 +24,13 @@ import { Pagination } from "swiper/modules";
 export default function Home() {
   const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
-  const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
   const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
+
+  const { categories, setCategories } = useContext(CategoriesContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
-  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
+  const { userLoggedIn, setUserLoggedIn, setUserId } =
+    useContext(UserLoggedInContext);
+
   const navigate = useNavigate();
 
   type UserProfile = {
@@ -60,6 +64,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    console.log("usereffect from home checking user logged in");
     const checkUserLoggedIn = async () => {
       try {
         const response = await axios.get(
@@ -71,6 +76,9 @@ export default function Home() {
         if (!response.data.loggedIn) {
           setUserLoggedIn(false);
           navigate("/login");
+        } else {
+          setUserLoggedIn(true);
+          setUserId(response.data.userId);
         }
       } catch (error) {
         setUserLoggedIn(false);
@@ -83,7 +91,10 @@ export default function Home() {
 
   useEffect(() => {
     console.log("userloggedin: ", userLoggedIn);
-    if (!userLoggedIn) return;
+    if (!userLoggedIn) {
+      navigate("/login");
+      return;
+    }
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);
@@ -102,7 +113,7 @@ export default function Home() {
 
   function getTaskColorRelatedToCategory(
     taskCategoryId: string | undefined,
-    categories: CategoryCardInterface[],
+    categories: CategoriesInterface[],
   ) {
     for (let category of categories) {
       if (category._id === taskCategoryId) {
@@ -217,7 +228,6 @@ export default function Home() {
         <TodoModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
-          categories={categories}
         />
         {modalVisibility && (
           <div

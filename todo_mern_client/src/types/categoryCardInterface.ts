@@ -1,7 +1,7 @@
 import { TodoCardInterface } from ".";
 
 export interface CategoryCardInterface {
-  key: string;
+  key?: string;
   _id: string;
   name: string;
   color: string;

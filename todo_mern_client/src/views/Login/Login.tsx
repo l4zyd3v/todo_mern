@@ -22,7 +22,8 @@ export default function Login() {
   const [usernameOrEmailFocus, setUserNameOrEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const navigate = useNavigate();
-  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
+  const { userLoggedIn, setUserLoggedIn, setUserId } =
+    useContext(UserLoggedInContext);
 
   const {
     register,
@@ -42,6 +43,7 @@ export default function Login() {
         if (res.status === 200) {
           console.log("Login Successful");
           setUserLoggedIn(true);
+          setUserId(res.data.userId);
           navigate("/");
         } else {
           navigate("/signup");
