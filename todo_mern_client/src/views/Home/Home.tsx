@@ -26,7 +26,8 @@ export default function Home() {
   const [categories, setCategories] = useState<CategoryCardInterface[]>([]);
   const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
-  const { userLoggedIn, setUserLoggedIn } = useContext(UserLoggedInContext);
+  const { userLoggedIn, setUserLoggedIn, setUserId } =
+    useContext(UserLoggedInContext);
   const navigate = useNavigate();
 
   type UserProfile = {
@@ -60,6 +61,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    console.log("usereffect from home checking user logged in");
     const checkUserLoggedIn = async () => {
       try {
         const response = await axios.get(
@@ -71,6 +73,9 @@ export default function Home() {
         if (!response.data.loggedIn) {
           setUserLoggedIn(false);
           navigate("/login");
+        } else {
+          setUserLoggedIn(true);
+          setUserId(response.data.userId);
         }
       } catch (error) {
         setUserLoggedIn(false);
@@ -83,7 +88,10 @@ export default function Home() {
 
   useEffect(() => {
     console.log("userloggedin: ", userLoggedIn);
-    if (!userLoggedIn) return;
+    if (!userLoggedIn) {
+      navigate("/login");
+      return;
+    }
     fetchIt("users", setUser);
     fetchIt("tasks", setTasks);
     fetchIt("categories", setCategories);

@@ -13,6 +13,11 @@ export function categoryRoutes(db: Db) {
     authControl.authenticateToken,
     controller.getAllCategories,
   );
+  router.post(
+    "/categories/:userId",
+    authControl.authenticateToken,
+    controller.createCategory,
+  );
 
   return router;
 }

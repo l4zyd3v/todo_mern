@@ -32,6 +32,7 @@ export default function TodoModal({
       })
       .then((res) => {
         if (res.status === 201) {
+          console.log("test");
         }
       });
 
@@ -53,7 +54,7 @@ export default function TodoModal({
     ));
   }
 
-  function getTodoModalVisibilityClass() {
+  function getTodoModalVisibilityClassName() {
     return visibility
       ? s.todoModalVisible
       : visibility === false
@@ -61,12 +62,12 @@ export default function TodoModal({
         : "";
   }
 
-  function getCategoryModalVisibilityClass() {
+  function getCategoryModalVisibilityClassName() {
     return newCategoryModalOpen ? s.newCategoryModalOpen : "";
   }
 
   return (
-    <div className={`${s.todoModal} ${getTodoModalVisibilityClass()}`}>
+    <div className={`${s.todoModal} ${getTodoModalVisibilityClassName()}`}>
       <button
         className={s.todoModal__exitButton}
         onClick={() => setVisibility(false)}
@@ -133,15 +134,8 @@ export default function TodoModal({
           </button>
 
           <div
-            className={`${s.newCategoryModal} ${getCategoryModalVisibilityClass()}`}
-          >
-            <button
-              style={{ position: "absolute", top: "10rem", right: "5rem" }}
-              onClick={() => setNewCategoryModalOpen(false)}
-            >
-              close
-            </button>
-          </div>
+            className={`${s.newCategoryModal} ${getCategoryModalVisibilityClassName()}`}
+          ></div>
         </div>
         <div className={s.form__inputWrapper}>
           <label className={s.form__label} htmlFor="priority">
@@ -164,7 +158,10 @@ export default function TodoModal({
         </button>
       </form>
 
-      <NewCategoryForm />
+      <NewCategoryForm
+        newCategoryModalOpen={newCategoryModalOpen}
+        setNewCategoryModalOpen={setNewCategoryModalOpen}
+      />
 
       {newCategoryModalOpen ? (
         <div

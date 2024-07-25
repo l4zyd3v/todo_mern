@@ -208,11 +208,12 @@ export default function authController(db: Db) {
         cookieToken,
         process.env.TOKEN_KEY,
         (err: jwt.VerifyErrors | null, decoded: any) => {
+          console.log("usercontroll:!!!!!!!!!!!!!!!!!! ", decoded.id);
           if (err) {
             return res.json({ loggedIn: false });
           }
 
-          return res.json({ loggedIn: true });
+          return res.json({ loggedIn: true, userId: decoded.id });
         },
       );
     },

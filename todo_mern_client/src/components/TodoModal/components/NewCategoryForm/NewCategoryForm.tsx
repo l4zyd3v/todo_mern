@@ -1,3 +1,5 @@
+import React, { useEffect, useContext } from "react";
+import { UserLoggedInContext } from "../../../../context/UserLoggedInContext";
 import s from "./newcategoryform.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
@@ -7,30 +9,54 @@ type Props = {
   setNewCategoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type Inputs = {
+  name: string;
+  color: string;
+};
+
 export default function NewCategoryForm({
   newCategoryModalOpen,
   setNewCategoryModalOpen,
 }: Props) {
+  const { userId } = useContext(UserLoggedInContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm<Inputs>();
 
-  const createCategory = async (data) => {
-    const response = await axios
-      .post(``, data, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.status === 201) {
-        }
-      });
+  console.log("userId", userId);
 
-    console.log(response);
+  const createCategory = async (data: Inputs) => {
+    if (!userId) {
+      console.error("No userId id found");
+      return;
+    }
+    try {
+      // maybe not necessary to add userId as param since userID already is present in req headers
+      const response = await axios.post(
+        `http://${import.meta.env.VITE_HOSTURL}:3000/categories/${userId}`,
+        data,
+        {
+          withCredentials: true,
+        },
+      );
+
+      if (response.status === 201) {
+        console.log("Category created successfully");
+        setNewCategoryModalOpen(false);
+      } else {
+        console.log("Failed to create category: ", response.status);
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.error("An error occurred while creating the category: ", error);
+    }
   };
 
-  const onSubmit: SubmitHandler = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
     createCategory(data);
     console.log(data);
   };
@@ -39,8 +65,23 @@ export default function NewCategoryForm({
     return newCategoryModalOpen ? s.formVisible : "";
   }
 
+  function randomHexColor() {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return "#" + n.slice(0, 6);
+  }
+
+  useEffect(() => {
+    if (newCategoryModalOpen) {
+      // Reset the category name input when the modal is opened
+      reset();
+    }
+  }, [newCategoryModalOpen]);
+
   return (
-    <form className={`${s.form} ${getVisibilityClassName()}`}>
+    <form
+      className={`${s.form} ${getVisibilityClassName()}`}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <button
         onClick={() => setNewCategoryModalOpen(false)}
         type="button"
@@ -61,13 +102,10 @@ export default function NewCategoryForm({
         className={`${s.input} ${s.form__colorPicker}`}
         id={"color"}
         {...register("color", { required: true })}
+        value={randomHexColor()}
       />
-      <button
-        type="submit"
-        className={s.form__submitButton}
-        onClick={(e) => e.preventDefault()}
-      >
-        add
+      <button type="submit" className={s.form__submitButton}>
+        add new category
       </button>
     </form>
   );
