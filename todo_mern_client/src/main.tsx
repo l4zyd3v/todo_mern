@@ -5,7 +5,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { NavToggleContextProvider } from "./context/NavToggleContext.tsx";
 import { UserLoggedInContextProvider } from "./context/UserLoggedInContext.tsx";
-import { CategoriesContextProvider } from "./context/CategoriesContext.tsx";
+import { DataContextProvider } from "./context/DataContext.tsx";
 // import { Workbox } from "workbox-window";
 
 // if ("serviceWorker" in navigator) {
@@ -15,12 +15,12 @@ import { CategoriesContextProvider } from "./context/CategoriesContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-  <CategoriesContextProvider>
+  <DataContextProvider>
     <UserLoggedInContextProvider>
       <NavToggleContextProvider>
         <App />
       </NavToggleContextProvider>
     </UserLoggedInContextProvider>
-  </CategoriesContextProvider>,
+  </DataContextProvider>,
   // </React.StrictMode>,
 );

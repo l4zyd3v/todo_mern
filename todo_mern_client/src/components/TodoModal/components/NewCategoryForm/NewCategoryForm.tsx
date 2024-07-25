@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { UserLoggedInContext } from "../../../../context/UserLoggedInContext";
-import { CategoriesContext } from "../../../../context/CategoriesContext";
+import { DataContext } from "../../../../context/DataContext";
 import { CategoriesInterface } from "../../../../types";
 import s from "./newcategoryform.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -21,7 +21,7 @@ export default function NewCategoryForm({
   setNewCategoryModalOpen,
 }: Props) {
   const { userId } = useContext(UserLoggedInContext);
-  const { addCategory } = useContext(CategoriesContext);
+  const { addCategory } = useContext(DataContext);
   const {
     register,
     handleSubmit,

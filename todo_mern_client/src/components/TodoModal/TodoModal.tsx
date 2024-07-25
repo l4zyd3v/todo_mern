@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { CategoryCardInterface, CategoriesInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
-import { CategoriesContext } from "../../context/CategoriesContext";
+import { DataContext } from "../../context/DataContext";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
@@ -17,7 +17,7 @@ export default function TodoModal({
   setVisibility,
 }: TodoModalProps) {
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
-  const { categories, setCategories } = useContext(CategoriesContext);
+  const { categories, setCategories } = useContext(DataContext);
 
   const {
     register,
