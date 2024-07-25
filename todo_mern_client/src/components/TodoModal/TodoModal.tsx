@@ -1,23 +1,23 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import s from "./todomodal.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { CategoryCardInterface } from "../../types";
+import { CategoryCardInterface, CategoriesInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
+import { CategoriesContext } from "../../context/CategoriesContext";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
   visibility: boolean | null;
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
-  categories: Array<CategoryCardInterface>;
 };
 
 export default function TodoModal({
   visibility,
   setVisibility,
-  categories,
 }: TodoModalProps) {
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
+  const { categories, setCategories } = useContext(CategoriesContext);
 
   const {
     register,
