@@ -204,7 +204,7 @@ export default function Home() {
             modules={[Pagination]}
             className={s.swiper}
           >
-            {tasks.map((task) => {
+            {[...tasks].reverse().map((task) => {
               const { _id, title, description, categoryId, completed } = task;
 
               const categoryColor = getTaskColorRelatedToCategory(

@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import s from "./todomodal.module.scss";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValue } from "react-hook-form";
 import axios from "axios";
 import { CategoryCardInterface, CategoriesInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
 import { DataContext } from "../../context/DataContext";
+import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
@@ -12,34 +13,58 @@ type TodoModalProps = {
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
+type Inputs = {
+  title: string;
+  description?: string;
+  dueDate?: string;
+  category?: string;
+  priority?: string;
+};
+
 export default function TodoModal({
   visibility,
   setVisibility,
 }: TodoModalProps) {
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
-  const { categories, setCategories } = useContext(DataContext);
+  const { categories, addTask } = useContext(DataContext);
+  const { userId } = useContext(UserLoggedInContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm<Inputs>();
 
-  const createTask = async (data) => {
-    const response = await axios
-      .post(``, data, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.status === 201) {
-          console.log("test");
-        }
-      });
+  const createTask = async (data: Inputs) => {
+    if (!userId) {
+      console.error("No userId id found");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `http://${import.meta.env.VITE_HOSTURL}:3000/newtask`,
+        data,
+        {
+          withCredentials: true,
+        },
+      );
 
-    console.log(response);
+      if (response.status === 201) {
+        console.log("Task created successfully");
+        addTask(response.data);
+        setVisibility(false);
+      } else {
+        console.log("Failed to create task: ", response.status);
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.error("An error occurred while creating the task: ", error);
+    }
   };
 
-  const onSubmit: SubmitHandler = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
     createTask(data);
     console.log(data);
   };
@@ -65,6 +90,13 @@ export default function TodoModal({
   function getCategoryModalVisibilityClassName() {
     return newCategoryModalOpen ? s.newCategoryModalOpen : "";
   }
+
+  useEffect(() => {
+    if (visibility) {
+      // Reset the form when the modal is opened
+      reset();
+    }
+  }, [visibility]);
 
   return (
     <div className={`${s.todoModal} ${getTodoModalVisibilityClassName()}`}>
