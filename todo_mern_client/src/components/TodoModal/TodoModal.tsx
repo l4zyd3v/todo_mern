@@ -34,7 +34,10 @@ export default function TodoModal({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<Inputs>();
+
+  console.log("TodoModal.tsx - chosenCategoryId: ", watch("category"));
 
   const createTask = async (data: Inputs) => {
     if (!userId) {
@@ -58,7 +61,7 @@ export default function TodoModal({
         console.log("Failed to create task: ", response.status);
       }
 
-      console.log(response);
+      console.log("TodoModal.tsx - createTask/addTask: ", response);
     } catch (error) {
       console.error("An error occurred while creating the task: ", error);
     }
@@ -66,10 +69,7 @@ export default function TodoModal({
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     createTask(data);
-    console.log(data);
   };
-
-  console.log(categories);
 
   function getCategoryOptions() {
     return categories.map((category) => (

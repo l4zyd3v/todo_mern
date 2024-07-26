@@ -50,7 +50,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log("usereffect from home checking user logged in");
     const checkUserLoggedIn = async () => {
       try {
         const response = await axios.get(
@@ -86,7 +85,7 @@ export default function Home() {
           withCredentials: true,
         },
       );
-      console.log(endpoint, res.data);
+      console.log("Home.tsx - fetchIt: ", endpoint, res.data);
       setState(res.data);
     } catch (error) {
       console.log(error);
@@ -94,7 +93,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log("userloggedin: ", userLoggedIn);
     if (!userLoggedIn) {
       navigate("/login");
       return;
@@ -204,7 +202,7 @@ export default function Home() {
             modules={[Pagination]}
             className={s.swiper}
           >
-            {[...tasks].reverse().map((task) => {
+            {tasks.reverse().map((task) => {
               const { _id, title, description, categoryId, completed } = task;
 
               const categoryColor = getTaskColorRelatedToCategory(

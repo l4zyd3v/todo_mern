@@ -12,8 +12,6 @@ export default function BurgerMenu() {
   //   }
   // };
 
-  console.log(toggleNav);
-
   return (
     <div
       className={s.burgerMenu}

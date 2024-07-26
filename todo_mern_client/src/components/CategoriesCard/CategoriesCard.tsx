@@ -32,8 +32,6 @@ export default function CategoriesCard({
     return progress;
   }
 
-  console.log(`${name} progress`, getProgressPercentage(tasks, _id));
-
   return (
     <section className={s.card}>
       <p className={s.tasksAmount}>{taskAmountOfCategory} tasks</p>

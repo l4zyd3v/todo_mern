@@ -29,8 +29,6 @@ export default function NewCategoryForm({
     reset,
   } = useForm<Inputs>();
 
-  console.log("userId", userId);
-
   const createCategory = async (data: Inputs) => {
     if (!userId) {
       console.error("No userId id found");
@@ -53,8 +51,6 @@ export default function NewCategoryForm({
       } else {
         console.log("Failed to create category: ", response.status);
       }
-
-      console.log(response);
     } catch (error) {
       console.error("An error occurred while creating the category: ", error);
     }
@@ -62,7 +58,6 @@ export default function NewCategoryForm({
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     createCategory(data);
-    console.log(data);
   };
 
   function getVisibilityClassName() {
