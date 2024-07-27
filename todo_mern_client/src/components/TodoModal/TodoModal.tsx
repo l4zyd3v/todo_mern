@@ -17,7 +17,7 @@ type Inputs = {
   title: string;
   description?: string;
   dueDate?: string;
-  category?: string;
+  categoryId?: string;
   priority?: string;
 };
 
@@ -35,9 +35,11 @@ export default function TodoModal({
     formState: { errors },
     reset,
     watch,
+    // todo
+    // setValue,
   } = useForm<Inputs>();
 
-  console.log("TodoModal.tsx - chosenCategoryId: ", watch("category"));
+  console.log("TodoModal.tsx - chosenCategoryId: ", watch("categoryId"));
 
   const createTask = async (data: Inputs) => {
     console.log("data: ", data);
@@ -145,16 +147,16 @@ export default function TodoModal({
         <div className={`${s.form__inputWrapper} ${s.inputWrapperCategory}`}>
           <label
             className={`${s.form__label} ${s.inputWrapperCategory__label}`}
-            htmlFor="category"
+            htmlFor="categoryId"
           >
             category
           </label>
           <select
             className={`${s.form__select} ${s.inputWrapperCategory__select}`}
-            id={"category"}
-            {...register("category")}
+            id={"categoryId"}
+            {...register("categoryId")}
           >
-            <option>Choose category</option>
+            <option value="">Choose category</option>
 
             {getCategoryOptions()}
           </select>
@@ -179,7 +181,7 @@ export default function TodoModal({
             id={"priority"}
             {...register("priority")}
           >
-            <option>Choose priority</option>
+            <option value="">Choose priority</option>
 
             <option value="high">high</option>
             <option value="medium">medium</option>
@@ -194,6 +196,8 @@ export default function TodoModal({
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
+        // todo
+        // setNewCreatedCategoryAsSelected={setValue}
       />
 
       {newCategoryModalOpen ? (

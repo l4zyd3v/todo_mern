@@ -11,7 +11,7 @@ type TaskType = {
   priority?: string;
   completed?: boolean;
   userId: ObjectId;
-  categoryId: ObjectId;
+  categoryId?: ObjectId | "";
 };
 
 export default function taskController(db: Db) {
@@ -70,7 +70,20 @@ export default function taskController(db: Db) {
       const { userId } = req;
       const { title, description, dueDate, categoryId, priority } = req.body;
 
-      console.log(title, description, dueDate, categoryId, priority);
+      console.log(
+        "createNewTask/: CategoryId? ",
+        categoryId,
+        typeof categoryId,
+      );
+
+      console.log(
+        "Task created with fields: ",
+        title,
+        description,
+        dueDate,
+        categoryId,
+        priority,
+      );
 
       try {
         const collection = db.collection("tasks");
@@ -90,7 +103,7 @@ export default function taskController(db: Db) {
           title: title,
           description: description,
           dueDate: dueDate,
-          categoryId: new ObjectId(categoryId),
+          categoryId: categoryId,
           priority: priority,
           userId: new ObjectId(userId),
         };
