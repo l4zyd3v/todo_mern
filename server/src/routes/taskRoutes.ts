@@ -12,7 +12,12 @@ export function taskRoutes(db: Db) {
   router.put(
     "/tasks/:taskId",
     authControl.authenticateToken,
-    controller.setCompplition,
+    controller.setCompletion,
+  );
+  router.post(
+    "/newtask",
+    authControl.authenticateToken,
+    controller.createNewTask,
   );
 
   // **This is for deleting a task**

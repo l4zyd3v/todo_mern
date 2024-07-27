@@ -9,8 +9,6 @@ type UserFirstLastName = {
 };
 
 export default function Nav({ firstname, lastname }: UserFirstLastName) {
-  console.log("firstname", firstname);
-
   return (
     <nav className={s.nav}>
       <div className={s.profilePicWrapper}>

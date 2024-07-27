@@ -24,13 +24,10 @@ export default function Signup() {
           navigate("/login");
         }
       });
-
-    console.log(response);
   };
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     signup(data);
-    console.log(data);
   };
 
   return (

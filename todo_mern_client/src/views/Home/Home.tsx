@@ -1,11 +1,15 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
-import { CategoriesContext } from "../../context/CategoriesContext";
+import { DataContext } from "../../context/DataContext";
 import s from "./home.module.css";
 import axios from "axios";
 // importanime, { AnimeInstance } from "animejs";
-import { TodoCardInterface, CategoriesInterface } from "../../types";
+import {
+  TodoCardInterface,
+  CategoriesInterface,
+  TasksInterface,
+} from "../../types";
 import {
   TodoCard,
   NewTodoBtn,
@@ -22,11 +26,11 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<TodoCardInterface[]>([]);
   const [user, setUser] = useState<UserProfile[]>([]);
   const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
 
-  const { categories, setCategories } = useContext(CategoriesContext);
+  const { categories, setCategories, tasks, setTasks } =
+    useContext(DataContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
@@ -45,26 +49,7 @@ export default function Home() {
     };
   };
 
-  async function fetchIt<T>(
-    endpoint: string,
-    setState: React.Dispatch<React.SetStateAction<T[]>>,
-  ) {
-    try {
-      const res = await axios.get(
-        `http://${import.meta.env.VITE_HOSTURL}:3000/${endpoint}`,
-        {
-          withCredentials: true,
-        },
-      );
-      console.log(endpoint, res.data);
-      setState(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
-    console.log("usereffect from home checking user logged in");
     const checkUserLoggedIn = async () => {
       try {
         const response = await axios.get(
@@ -89,15 +74,33 @@ export default function Home() {
     checkUserLoggedIn();
   }, [navigate]);
 
+  async function fetchIt<T>(
+    endpoint: string,
+    setState: React.Dispatch<React.SetStateAction<T[]>>,
+  ) {
+    try {
+      const res = await axios.get(
+        `http://${import.meta.env.VITE_HOSTURL}:3000/${endpoint}`,
+        {
+          withCredentials: true,
+        },
+      );
+      console.log("Home.tsx - fetchIt: ", endpoint, res.data);
+      setState(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    console.log("userloggedin: ", userLoggedIn);
     if (!userLoggedIn) {
       navigate("/login");
       return;
     }
+
     fetchIt("users", setUser);
-    fetchIt("tasks", setTasks);
-    fetchIt("categories", setCategories);
+    fetchIt<TasksInterface>("tasks", setTasks);
+    fetchIt<CategoriesInterface>("categories", setCategories);
   }, [userLoggedIn]);
 
   // const animation = useRef<AnimeInstance | null>(null);
@@ -199,7 +202,7 @@ export default function Home() {
             modules={[Pagination]}
             className={s.swiper}
           >
-            {tasks.map((task) => {
+            {[...tasks].reverse().map((task) => {
               const { _id, title, description, categoryId, completed } = task;
 
               const categoryColor = getTaskColorRelatedToCategory(

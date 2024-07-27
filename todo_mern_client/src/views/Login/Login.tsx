@@ -32,14 +32,11 @@ export default function Login() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data.userNameOrEmail, data.passWord);
-
     const response = axios
       .post(`http://${import.meta.env.VITE_HOSTURL}:3000/auth/login`, data, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           console.log("Login Successful");
           setUserLoggedIn(true);
@@ -53,7 +50,6 @@ export default function Login() {
       .catch((err) => {
         console.log(err);
       });
-    console.log(response);
   };
 
   return (

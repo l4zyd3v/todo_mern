@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import s from "./todomodal.module.scss";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValue } from "react-hook-form";
 import axios from "axios";
 import { CategoryCardInterface, CategoriesInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
-import { CategoriesContext } from "../../context/CategoriesContext";
+import { DataContext } from "../../context/DataContext";
+import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 
 // This type should maybe be used in a separate file
 type TodoModalProps = {
@@ -12,39 +13,66 @@ type TodoModalProps = {
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
+type Inputs = {
+  title: string;
+  description?: string;
+  dueDate?: string;
+  categoryId?: string;
+  priority?: string;
+};
+
 export default function TodoModal({
   visibility,
   setVisibility,
 }: TodoModalProps) {
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
-  const { categories, setCategories } = useContext(CategoriesContext);
+  const { categories, addTask } = useContext(DataContext);
+  const { userId } = useContext(UserLoggedInContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    reset,
+    watch,
+    // todo
+    // setValue,
+  } = useForm<Inputs>();
 
-  const createTask = async (data) => {
-    const response = await axios
-      .post(``, data, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.status === 201) {
-          console.log("test");
-        }
-      });
+  console.log("TodoModal.tsx - chosenCategoryId: ", watch("categoryId"));
 
-    console.log(response);
+  const createTask = async (data: Inputs) => {
+    console.log("data: ", data);
+    if (!userId) {
+      console.error("No userId id found");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `http://${import.meta.env.VITE_HOSTURL}:3000/newtask`,
+        data,
+        {
+          withCredentials: true,
+        },
+      );
+
+      if (response.status === 201) {
+        console.log("Task created successfully");
+        addTask(response.data);
+        setVisibility(false);
+      } else {
+        console.log("Failed to create task: ", response.status);
+      }
+
+      console.log("TodoModal.tsx - createTask/addTask: ", response);
+    } catch (error) {
+      console.error("An error occurred while creating the task: ", error);
+    }
   };
 
-  const onSubmit: SubmitHandler = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
     createTask(data);
-    console.log(data);
   };
-
-  console.log(categories);
 
   function getCategoryOptions() {
     return categories.map((category) => (
@@ -65,6 +93,13 @@ export default function TodoModal({
   function getCategoryModalVisibilityClassName() {
     return newCategoryModalOpen ? s.newCategoryModalOpen : "";
   }
+
+  useEffect(() => {
+    if (visibility) {
+      // Reset the form when the modal is opened
+      reset();
+    }
+  }, [visibility]);
 
   return (
     <div className={`${s.todoModal} ${getTodoModalVisibilityClassName()}`}>
@@ -112,16 +147,16 @@ export default function TodoModal({
         <div className={`${s.form__inputWrapper} ${s.inputWrapperCategory}`}>
           <label
             className={`${s.form__label} ${s.inputWrapperCategory__label}`}
-            htmlFor="category"
+            htmlFor="categoryId"
           >
             category
           </label>
           <select
             className={`${s.form__select} ${s.inputWrapperCategory__select}`}
-            id={"category"}
-            {...register("category")}
+            id={"categoryId"}
+            {...register("categoryId")}
           >
-            <option>Choose category</option>
+            <option value="">Choose category</option>
 
             {getCategoryOptions()}
           </select>
@@ -146,7 +181,7 @@ export default function TodoModal({
             id={"priority"}
             {...register("priority")}
           >
-            <option>Choose priority</option>
+            <option value="">Choose priority</option>
 
             <option value="high">high</option>
             <option value="medium">medium</option>
@@ -161,6 +196,8 @@ export default function TodoModal({
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
+        // todo
+        // setNewCreatedCategoryAsSelected={setValue}
       />
 
       {newCategoryModalOpen ? (

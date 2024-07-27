@@ -25,12 +25,10 @@ export default function usercontroller(db: Db) {
           .find({ _id: new ObjectId(userId) })
           .toArray();
 
-        console.log(singleUser);
-
-        console.log("User requested all tasks");
+        console.log("User requested single user");
         return res.status(200).json(singleUser);
       } catch (error: any) {
-        console.log("oops something wrong daiiim");
+        console.log("Something went wrong in userController/getSingleUser");
         res.status(500).json({ message: error.message });
       }
     },
