@@ -40,6 +40,7 @@ export default function TodoModal({
   console.log("TodoModal.tsx - chosenCategoryId: ", watch("category"));
 
   const createTask = async (data: Inputs) => {
+    console.log("data: ", data);
     if (!userId) {
       console.error("No userId id found");
       return;

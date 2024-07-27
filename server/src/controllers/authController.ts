@@ -31,11 +31,11 @@ export default function authController(db: Db) {
       res.json({ message: "Logged out" });
     },
 
+    // make it try catch?
     login: async (req: Request, res: Response) => {
       const collection = db.collection("users");
       const { userNameOrEmail, passWord } = req.body;
       if (!(userNameOrEmail && passWord)) {
-        console.log("usernameoremial/password wrong, wtf lol");
         return res.status(400).json({ message: "All inputs are required" });
       }
 
@@ -45,8 +45,6 @@ export default function authController(db: Db) {
           { username: userNameOrEmail },
         ],
       })) as UserProfile;
-
-      // console.log(`passwordcomp: ${passWord} ${user.password}`);
 
       if (!(user && (await bcrypt.compare(passWord, user.password)))) {
         console.log(
@@ -93,6 +91,9 @@ export default function authController(db: Db) {
         });
 
         if (userExists) {
+          console.log(
+            `User tried to signup with an email that is already in use: ${email}`,
+          );
           return res
             .status(409)
             .json({ message: "The email is already in use by a user" });
@@ -108,6 +109,7 @@ export default function authController(db: Db) {
           };
           const result = await collection.insertOne(newUser);
           newUser._id = result.insertedId;
+          console.log(`New user created: ${username}`);
 
           // Create a category document for the new user with the default categories of personal and business
 
@@ -130,7 +132,7 @@ export default function authController(db: Db) {
           const token = createSecretToken(newUser._id);
 
           console.log(
-            `New user created: ${username} with associated default categories documents`,
+            `New user created: ${username} with associated default categories collection`,
           );
 
           res.cookie("token", token, {
@@ -147,6 +149,7 @@ export default function authController(db: Db) {
           });
         }
       } catch (e: any) {
+        console.log("Something went wrong in authcontroller/signup");
         res.status(500).json({ message: e.message });
       }
     },
@@ -157,9 +160,6 @@ export default function authController(db: Db) {
       next: NextFunction,
     ) => {
       const cookieToken = req.cookies["token"];
-      console.log(req.cookies);
-
-      console.log("authcontrol of token: ", cookieToken);
 
       if (!cookieToken) {
         console.log("no token");
@@ -184,8 +184,6 @@ export default function authController(db: Db) {
           //   _id: decoded.id,
           // });
 
-          console.log("userid: ", decoded.id);
-
           // by the fucking way, dont just return without sending a message of why you are returning ffs.........
           // if (!user) return;
 
@@ -208,11 +206,11 @@ export default function authController(db: Db) {
         cookieToken,
         process.env.TOKEN_KEY,
         (err: jwt.VerifyErrors | null, decoded: any) => {
-          console.log("usercontroll:!!!!!!!!!!!!!!!!!! ", decoded.id);
           if (err) {
             return res.json({ loggedIn: false });
           }
 
+          console.log("User loginCheck");
           return res.json({ loggedIn: true, userId: decoded.id });
         },
       );

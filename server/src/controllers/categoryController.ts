@@ -15,10 +15,6 @@ export default function categoryController(db: Db) {
     getAllCategories: async (req: Request, res: Response) => {
       const { userId } = req;
 
-      console.log("hello from categoryController.ts");
-
-      console.log("userId: ", userId);
-
       try {
         const collection = db.collection("categories");
 
@@ -29,7 +25,9 @@ export default function categoryController(db: Db) {
         console.log("User requested all categories");
         return res.status(200).json(userCategories);
       } catch (error: any) {
-        console.log("oops something wrong daiiim");
+        console.log(
+          "Something went wrong in categoryController/getAllCategories",
+        );
         res.status(500).json({ message: error.message });
       }
     },
@@ -38,8 +36,6 @@ export default function categoryController(db: Db) {
       const collection = db.collection("categories");
       const { userId } = req;
       const { name, color } = req.body;
-
-      console.log("!!!!!!!!!!!!!!!!1 userId", userId);
 
       if (!name)
         return res.status(400).json({
@@ -58,6 +54,7 @@ export default function categoryController(db: Db) {
         });
 
         if (categoryAlreadyExist) {
+          console.log("User tried to create a category that already exist");
           return res.status(409).json({
             message: "Category already exist",
           });
@@ -69,9 +66,13 @@ export default function categoryController(db: Db) {
           };
           const result = await collection.insertOne(newCategory);
           newCategory._id = result.insertedId;
+          console.log("User created a new category");
           return res.status(201).json(newCategory);
         }
       } catch (e: any) {
+        console.log(
+          "Something went wrong in categoryController/createCategory",
+        );
         res.status(500).json({ message: e.message });
       }
     },

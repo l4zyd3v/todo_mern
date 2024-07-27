@@ -19,10 +19,6 @@ export default function taskController(db: Db) {
     getAllTasks: async (req: Request, res: Response) => {
       const { userId } = req;
 
-      console.log("hello from taskController.ts");
-
-      console.log("userId: ", userId);
-
       try {
         const collection = db.collection("tasks");
 
@@ -33,7 +29,7 @@ export default function taskController(db: Db) {
         console.log("User requested all tasks");
         return res.status(200).json(userTasks);
       } catch (error: any) {
-        console.log("oops something wrong daiiim");
+        console.log("Something went wrong in taskcontroller/getAllTasks");
         res.status(500).json({ message: error.message });
       }
     },
@@ -61,6 +57,7 @@ export default function taskController(db: Db) {
               message: "Tasks updated successfully",
               completed: completed,
             });
+            console.log("User updated the status of completed");
           } else {
             res.status(404).json({ message: "Tasks not found" });
           }
@@ -70,7 +67,6 @@ export default function taskController(db: Db) {
       }
     },
     createNewTask: async (req: Request, res: Response) => {
-      console.log("hello from createnewtask");
       const { userId } = req;
       const { title, description, dueDate, categoryId, priority } = req.body;
 
@@ -102,9 +98,11 @@ export default function taskController(db: Db) {
         const result = await collection.insertOne(newTask);
         newTask._id = result.insertedId;
 
+        console.log("User created a new task");
+
         return res.status(201).json(newTask);
       } catch (error: any) {
-        console.log("oops something wrong daiiim");
+        console.log("Something went wrong in taskcontroller/createNewTask");
         res.status(500).json({ message: error.message });
       }
     },
