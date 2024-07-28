@@ -1,0 +1,85 @@
+.wrapper {
+  background-color: var(--light-blue);
+  height: 100lvh;
+  width: 100vw;
+  display: grid;
+  justify-content: center;
+  color: var(--text-color2);
+}
+
+.main {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  height: 70lvh;
+  min-height: 29rem;
+  max-height: 40rem;
+  width: 90lvw;
+  max-width: 26rem;
+  min-width: 15rem;
+  background-color: var(--dark-blue);
+  border-radius: 3px;
+  box-shadow: 0px 2px 5px 1px black;
+  /* the code below + not having align-items: center on .main is a hack to make it center on the phone, beacuse of theme_color in manifest.json - it gives the same background color to the search bar of the phone, making the wrapper look like its higher up on the screen that it acutally is   */
+  position: relative;
+  top: 7lvh;
+
+  &__heading {
+    font-size: 3rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+  }
+
+}
+
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.5rem;
+  justify-content: space-around;
+  position: relative;
+
+
+  &__submit {
+    height: 2.8rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--blue);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 1px 4px 1px black;
+    position: relative;
+    bottom: 0.25rem;
+
+    &:active {
+      box-shadow: none;
+      border: 3px solid black;
+    }
+
+  }
+
+
+  &__alreadyHaveAccountBtn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    position: relative;
+    font-size: rem;
+  }
+
+
+  &__alreadyHaveAccountBtn_secondText {
+    text-decoration: underline var(--pink);
+  }
+}
+
+
+@media screen and (max-height: 546px) {
+  .wrapper {
+    top: 0;
+    align-self: center;
+  }
+}
