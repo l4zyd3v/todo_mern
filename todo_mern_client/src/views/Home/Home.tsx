@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef, useContext, useMemo } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import { DataContext } from "../../context/DataContext";
@@ -19,11 +19,22 @@ import {
   Nav,
 } from "../../components";
 import { useNavigate } from "react-router-dom";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+
+type UserProfile = {
+  _id?: string;
+  username: string;
+  password: string;
+  profilePicture?: string;
+  credentials: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+};
 
 export default function Home() {
   const [user, setUser] = useState<UserProfile[]>([]);
@@ -36,18 +47,6 @@ export default function Home() {
     useContext(UserLoggedInContext);
 
   const navigate = useNavigate();
-
-  type UserProfile = {
-    _id?: string;
-    username: string;
-    password: string;
-    profilePicture?: string;
-    credentials: {
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
-  };
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -74,6 +73,17 @@ export default function Home() {
     checkUserLoggedIn();
   }, [navigate]);
 
+  useEffect(() => {
+    if (!userLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
+    fetchIt("users", setUser);
+    fetchIt<TasksInterface>("tasks", setTasks);
+    fetchIt<CategoriesInterface>("categories", setCategories);
+  }, [userLoggedIn]);
+
   async function fetchIt<T>(
     endpoint: string,
     setState: React.Dispatch<React.SetStateAction<T[]>>,
@@ -92,17 +102,6 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    if (!userLoggedIn) {
-      navigate("/login");
-      return;
-    }
-
-    fetchIt("users", setUser);
-    fetchIt<TasksInterface>("tasks", setTasks);
-    fetchIt<CategoriesInterface>("categories", setCategories);
-  }, [userLoggedIn]);
-
   // const animation = useRef<AnimeInstance | null>(null);
 
   // function startAnimation() {
@@ -114,15 +113,13 @@ export default function Home() {
   //   });
   // }
 
-  function getTaskColorRelatedToCategory(
-    taskCategoryId: string | undefined,
-    categories: CategoriesInterface[],
-  ) {
-    for (let category of categories) {
-      if (category._id === taskCategoryId) {
-        return category.color;
-      }
-    }
+  // **This is for deleting a task**
+  // const handleDelete = (taskId: string) => {
+  //   setTasks(tasks.filter((task) => task._id !== taskId));
+  // };
+
+  function getMainClassName(toggleNav: boolean) {
+    return `${s.main} ${toggleNav ? s.mainNavOpen : ""}`;
   }
 
   function getTaskAmountRelatedToCategory(categoryId: string) {
@@ -138,10 +135,23 @@ export default function Home() {
     return taskAmount.length;
   }
 
-  // **This is for deleting a task**
-  // const handleDelete = (taskId: string) => {
-  //   setTasks(tasks.filter((task) => task._id !== taskId));
-  // };
+  function renderCategories() {
+    return categories.map((category) => {
+      const { _id, name, color, userId } = category;
+      const taskAmountOfCategory = getTaskAmountRelatedToCategory(category._id);
+      return (
+        <CategoriesCard
+          key={_id}
+          _id={_id}
+          name={name}
+          color={color}
+          userId={userId}
+          taskAmountOfCategory={taskAmountOfCategory}
+          tasks={tasks}
+        />
+      );
+    });
+  }
 
   function handleIsCompleteSingleTask(
     changedTaskId: string,
@@ -156,10 +166,45 @@ export default function Home() {
     );
   }
 
+  function getTaskColorRelatedToCategory(
+    taskCategoryId: string | undefined,
+    categories: CategoriesInterface[],
+  ) {
+    for (let category of categories) {
+      if (category._id === taskCategoryId) {
+        return category.color;
+      }
+    }
+  }
+
+  function renderTasks() {
+    return [...tasks].reverse().map((task) => {
+      const { _id, title, description, categoryId, completed } = task;
+
+      const categoryColor = getTaskColorRelatedToCategory(
+        categoryId,
+        categories,
+      );
+
+      return (
+        <SwiperSlide key={task._id} className={s.swiperSlide}>
+          <TodoCard
+            _id={task._id}
+            title={task.title}
+            description={task.description}
+            color={categoryColor}
+            completed={completed}
+            onComplete={handleIsCompleteSingleTask}
+          />
+        </SwiperSlide>
+      );
+    });
+  }
+
   return (
     <>
       <main
-        className={`${s.main} ${toggleNav ? s.mainNavOpen : ""}`}
+        className={getMainClassName(toggleNav)}
         onClick={() => {
           toggleNav && setToggleNav(false);
         }}
@@ -169,25 +214,7 @@ export default function Home() {
         <div className={s.categoriesWrapper}>
           <h2 className={s.categoriesWrapper__Heading}>categories</h2>
           <div className={s.categoriesWrapper__ScrollWrapper}>
-            {categories.map((category) => {
-              const { _id, name, color, userId } = category;
-
-              const taskAmountOfCategory = getTaskAmountRelatedToCategory(
-                category._id,
-              );
-
-              return (
-                <CategoriesCard
-                  key={_id}
-                  _id={_id}
-                  name={name}
-                  color={color}
-                  userId={userId}
-                  taskAmountOfCategory={taskAmountOfCategory}
-                  tasks={tasks}
-                />
-              );
-            })}
+            {renderCategories()}
           </div>
         </div>
         <div className={s.cardWrapper}>
@@ -202,28 +229,7 @@ export default function Home() {
             modules={[Pagination]}
             className={s.cardWrapper__swiper}
           >
-            {[...tasks].reverse().map((task) => {
-              const { _id, title, description, categoryId, completed } = task;
-
-              const categoryColor = getTaskColorRelatedToCategory(
-                categoryId,
-                categories,
-              );
-              return (
-                <SwiperSlide key={task._id} className={s.swiperSlide}>
-                  <TodoCard
-                    _id={task._id}
-                    title={task.title}
-                    description={task.description}
-                    color={categoryColor}
-                    completed={completed}
-                    // **This is for deleting a task**
-                    // onDelete={handleDelete}
-                    onComplete={handleIsCompleteSingleTask}
-                  />
-                </SwiperSlide>
-              );
-            })}
+            {renderTasks()}
           </Swiper>
         </div>
 

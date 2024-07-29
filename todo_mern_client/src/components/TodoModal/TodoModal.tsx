@@ -82,14 +82,6 @@ export default function TodoModal({
     ));
   }
 
-  function getTodoModalVisibilityClassName() {
-    return visibility
-      ? s.todoModalVisible
-      : visibility === false
-        ? s.todoModalHide
-        : "";
-  }
-
   function getCategoryModalVisibilityClassName() {
     return newCategoryModalOpen ? s.newCategoryModalOpen : "";
   }
@@ -101,8 +93,18 @@ export default function TodoModal({
     }
   }, [visibility]);
 
+  function getTodoModalClassName() {
+    return `${s.todoModal} ${
+      visibility
+        ? s.todoModalVisible
+        : visibility === false
+          ? s.todoModalHide
+          : ""
+    }`;
+  }
+
   return (
-    <div className={`${s.todoModal} ${getTodoModalVisibilityClassName()}`}>
+    <div className={getTodoModalClassName()}>
       <button
         className={s.todoModal__exitButton}
         onClick={() => setVisibility(false)}
