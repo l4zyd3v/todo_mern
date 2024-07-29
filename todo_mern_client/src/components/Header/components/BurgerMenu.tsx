@@ -1,16 +1,9 @@
 import { useContext } from "react";
 import { NavToggleContext } from "../../../context/NavToggleContext";
-import s from "./burgerMenu.module.css";
+import s from "./burgerMenu.module.scss";
 
 export default function BurgerMenu() {
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
-
-  // const handleClick = () => {
-  //   if (toggleNav) {
-  //     console.log("lol clicked!!!!");
-  //     setToggleNav(false);
-  //   }
-  // };
 
   return (
     <div
@@ -22,10 +15,10 @@ export default function BurgerMenu() {
     >
       <span
         // onClick={handleClick}
-        className={`${s.burgerElement} ${toggleNav ? s.toggleNav : ""}`}
+        className={`${s.burgerMenu__burgerElement} ${toggleNav ? s.burgerMenu__toggleNav : ""}`}
       ></span>
-      <span className={s.burgerElement}></span>
-      <span className={s.burgerElement}></span>
+      <span className={s.burgerMenu__burgerElement}></span>
+      <span className={s.burgerMenu__burgerElement}></span>
     </div>
   );
 }

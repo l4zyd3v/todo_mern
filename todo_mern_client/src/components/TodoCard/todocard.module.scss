@@ -1,0 +1,14 @@
+.card {
+  background-color: var(--dark-blue);
+  border-radius: 15px;
+  /* position: relative; */
+  z-index: 500;
+  color: vag(--text-color);
+
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  align-items: center;
+  /* margin: 0 1.5rem; */
+  height: 100%;
+  color: var(--text-color);
+}

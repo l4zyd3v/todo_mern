@@ -1,0 +1,78 @@
+:root {
+  --burgerMenuSize: 1.5rem;
+}
+
+.burgerMenu {
+  /* border: 1px solid black; */
+  height: var(--burgerMenuSize);
+  width: var(--burgerMenuSize);
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  position: relative;
+  align-items: center;
+
+  &__burgerElement {
+    width: 100%;
+    background: var(--text-color2);
+    height: 3px;
+    position: relative;
+  }
+
+
+  &__toggleNav {
+    z-index: 300;
+    animation: tranFormBurgerElement 0.3s ease-out forwards;
+
+
+    /*this is the Ring that appears on the backarrow*/
+    &:before {
+      content: "";
+      height: 2.8rem;
+      width: 2.8rem;
+      position: absolute;
+      border-radius: 100%;
+      z-index: 500;
+      top: -1rem;
+      right: -1rem;
+      border: 2px solid #091431;
+      opacity: 0.5;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  }
+}
+
+
+
+@keyframes fadeIn {
+  from {
+    border: 2px solid transparent;
+    opacity: 0;
+  }
+
+  to {
+    border: 2px solid #091431;
+    opacity: 0.5;
+  }
+}
+
+
+
+@keyframes tranFormBurgerElement {
+  10% {
+    height: 0.8rem;
+    width: 0.8rem;
+  }
+
+  100% {
+    right: 6.5rem;
+    top: -1rem;
+    height: 0.8rem;
+    width: 0.8rem;
+    transform: rotate(45deg);
+
+    background: none;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+    border-color: var(--text-color);
+  }
+}

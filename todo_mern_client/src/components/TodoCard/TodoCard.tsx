@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import s from "./todocard.module.css";
+import s from "./todocard.module.scss";
 import { TodoCardInterface } from "../../types";
 import TodoIcon from "./components/Icon/TodoIcon";
 

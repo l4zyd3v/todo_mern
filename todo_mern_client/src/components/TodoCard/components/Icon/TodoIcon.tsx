@@ -1,4 +1,4 @@
-import s from "./todoicon.module.css";
+import s from "./todoicon.module.scss";
 import { FaCheck } from "react-icons/fa";
 
 type TodoIconProps = {
@@ -13,7 +13,7 @@ export default function TodoIcon({ color, isCompleted }: TodoIconProps) {
 
   return (
     <div style={style} className={s.icon}>
-      {isCompleted && <FaCheck className={s.checkmark} />}
+      {isCompleted && <FaCheck className={s.icon__checkmark} />}
     </div>
   );
 }
