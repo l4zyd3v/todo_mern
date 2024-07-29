@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import s from "./login.module.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios";
@@ -52,16 +52,27 @@ export default function Login() {
       });
   };
 
+  function getInputLabelClassName(state: boolean) {
+    return `${s.form__inputLabel} ${state ? s.form__inputLabelActive : ""}`;
+  }
+
+  function renderInputError(error: FieldErrors<Inputs> | undefined) {
+    return (
+      error && (
+        <span className={s.form__inputError}>
+          <FaArrowLeftLong className={s.form__inputError_arrowIcon} /> required
+        </span>
+      )
+    );
+  }
+
   return (
     <main className={s.wrapper}>
       <div className={s.main}>
         <h1 className={s.main__heading1}>Login</h1>
         <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={s.form__inputWrapper}>
-            <label
-              className={`${s.form__inputLabel} ${usernameOrEmailFocus ? s.form__inputLabelActive : ""}`}
-              htmlFor="usernameOrEmail"
-            >
+            <label className={getInputLabelClassName(usernameOrEmailFocus)}>
               username/email
             </label>
             <input
@@ -70,17 +81,12 @@ export default function Login() {
               {...register("userNameOrEmail", { required: true })}
               onFocus={() => setUserNameOrEmailFocus(true)}
             />
-            {errors.userNameOrEmail && (
-              <span className={s.form__inputError}>
-                <FaArrowLeftLong className={s.form__inputError_arrowIcon} />{" "}
-                required
-              </span>
-            )}
+            {renderInputError(errors.userNameOrEmail)}
           </div>
 
           <div className={s.form__inputWrapper}>
             <label
-              className={`${s.form__inputLabel} ${passwordFocus ? s.form__inputLabelActive : ""}`}
+              className={getInputLabelClassName(passwordFocus)}
               htmlFor="password"
             >
               password
@@ -92,12 +98,7 @@ export default function Login() {
               {...register("passWord", { required: true })}
               onFocus={() => setPasswordFocus(true)}
             />
-            {errors.passWord && (
-              <span className={s.form__inputError}>
-                <FaArrowLeftLong className={s.form__inputError_arrowIcon} />{" "}
-                required
-              </span>
-            )}
+            {renderInputError(errors.passWord)}
           </div>
           <div className={s.form__rememberMeWrapper}>
             <input

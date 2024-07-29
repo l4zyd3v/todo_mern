@@ -11,9 +11,13 @@ export default function TodoIcon({ color, isCompleted }: TodoIconProps) {
     ? { border: `2px solid ${color}`, backgroundColor: color }
     : { border: `2px solid ${color}` };
 
+  function renderIcon() {
+    return isCompleted && <FaCheck className={s.icon__checkmark} />;
+  }
+
   return (
     <div style={style} className={s.icon}>
-      {isCompleted && <FaCheck className={s.icon__checkmark} />}
+      {renderIcon()}
     </div>
   );
 }
