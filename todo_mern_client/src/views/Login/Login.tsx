@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import s from "./login.module.css";
+import s from "./login.module.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -53,73 +53,76 @@ export default function Login() {
   };
 
   return (
-    <main className={s.main}>
-      <div className={s.wrapper}>
-        <h1 className={s.heading}>Login</h1>
-        <form className={s.formWrapper} onSubmit={handleSubmit(onSubmit)}>
-          <div className={s.inputWrapper}>
+    <main className={s.wrapper}>
+      <div className={s.main}>
+        <h1 className={s.main__heading1}>Login</h1>
+        <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+          <div className={s.form__inputWrapper}>
             <label
-              className={`${s.inputLabel} ${usernameOrEmailFocus ? s.inputlabel_active : ""}`}
+              className={`${s.form__inputLabel} ${usernameOrEmailFocus ? s.form__inputLabelActive : ""}`}
               htmlFor="usernameOrEmail"
             >
               username/email
             </label>
             <input
-              className={s.input}
+              className={s.form__input}
               id="usernameOrEmail"
               {...register("userNameOrEmail", { required: true })}
               onFocus={() => setUserNameOrEmailFocus(true)}
             />
             {errors.userNameOrEmail && (
-              <span className={s.inputError}>
-                <FaArrowLeftLong className={s.errorArrow} /> required
+              <span className={s.form__inputError}>
+                <FaArrowLeftLong className={s.form__inputError_arrowIcon} />{" "}
+                required
               </span>
             )}
           </div>
 
-          <div className={s.inputWrapper}>
+          <div className={s.form__inputWrapper}>
             <label
-              className={`${s.inputLabel} ${passwordFocus ? s.inputlabel_active : ""}`}
+              className={`${s.form__inputLabel} ${passwordFocus ? s.form__inputLabelActive : ""}`}
               htmlFor="password"
             >
               password
             </label>
             <input
               type="password"
-              className={s.input}
+              className={s.form__input}
               id="password"
               {...register("passWord", { required: true })}
               onFocus={() => setPasswordFocus(true)}
             />
             {errors.passWord && (
-              <span className={s.inputError}>
-                <FaArrowLeftLong className={s.errorArrow} /> required
+              <span className={s.form__inputError}>
+                <FaArrowLeftLong className={s.form__inputError_arrowIcon} />{" "}
+                required
               </span>
             )}
           </div>
-          <div className={s.rememberMeWrapper}>
+          <div className={s.form__rememberMeWrapper}>
             <input
-              className={s.rememberMeBtn}
               id="rememberMe"
               type="checkbox"
               // checked={rememberMe}
               // onChange={handleRememberMeChange}
             />
-            <label className={s.rememberMeLabel} htmlFor="rememberMe">
+            <label className={s.form__rememberMeLabel} htmlFor="rememberMe">
               remember me
             </label>
           </div>
-          <button className={s.submit} type="submit">
+
+          <button className={s.form__submit} type="submit">
             Log In
           </button>
+
           <button
-            className={s.registerBtn}
+            className={s.form__registerBtn}
             onClick={() => console.log("Register New User")}
           >
-            <span className={s.registerBtn_firstText}>
+            <span className={s.form__registerBtn_firstText}>
               Dont have an account?{" "}
             </span>
-            <Link to="/signup" className={s.registerBtn_secondText}>
+            <Link to="/signup" className={s.form__registerBtn_secondText}>
               {" "}
               Register
             </Link>

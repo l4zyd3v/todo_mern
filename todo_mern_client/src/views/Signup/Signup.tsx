@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import s from "./signup.module.css";
+import s from "./signup.module.scss";
 import Input from "./components/Input";
 import { Inputs } from "./types";
 import axios from "axios";
@@ -31,10 +31,10 @@ export default function Signup() {
   };
 
   return (
-    <main className={s.main}>
-      <div className={s.wrapper}>
-        <h1 className={s.heading}>Signup</h1>
-        <form className={s.formWrapper} onSubmit={handleSubmit(onSubmit)}>
+    <div className={s.wrapper}>
+      <main className={s.main}>
+        <h1 className={s.main__heading}>Signup</h1>
+        <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
           <Input
             name="email"
             register={register}
@@ -82,25 +82,28 @@ export default function Signup() {
             errors={errors}
           />
 
-          <button className={s.submit} type="submit">
+          <button className={s.form__submit} type="submit">
             Create Account
           </button>
 
           <button
             type="button"
-            className={s.alreadyHaveAccountBtn}
+            className={s.form__alreadyHaveAccountBtn}
             onClick={() => console.log("Already have an account? Login")}
           >
-            <span className={s.alreadyHaveAccountBtn_firstText}>
+            <span className={s.form__alreadyHaveAccountBtn_firstText}>
               Already have an account?{" "}
             </span>
-            <Link to="/login" className={s.alreadyHaveAccountBtn_secondText}>
+            <Link
+              to="/login"
+              className={s.form__alreadyHaveAccountBtn_secondText}
+            >
               {" "}
               Login
             </Link>
           </button>
         </form>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

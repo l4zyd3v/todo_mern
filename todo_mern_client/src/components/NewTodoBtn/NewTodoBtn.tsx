@@ -1,4 +1,4 @@
-import s from "./newTodoBtn.module.css";
+import s from "./newTodoBtn.module.scss";
 
 interface TodoButtonProps {
   setModal: React.Dispatch<React.SetStateAction<boolean | null>>;

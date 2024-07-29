@@ -1,4 +1,4 @@
-import s from "./categoriesCard.module.css";
+import s from "./categoriesCard.module.scss";
 import { CategoryCardInterface } from "../../types";
 import { TodoCardInterface } from "../../types";
 import { useEffect } from "react";
@@ -34,15 +34,15 @@ export default function CategoriesCard({
 
   return (
     <section className={s.card}>
-      <p className={s.tasksAmount}>{taskAmountOfCategory} tasks</p>
-      <h3 className={s.heading2}>{name}</h3>
-      <span className={s.progressBar}>
+      <p className={s.card__tasksAmount}>{taskAmountOfCategory} tasks</p>
+      <h3 className={s.card__heading2}>{name}</h3>
+      <span className={s.card__progressBar}>
         <span
           style={{
             backgroundColor: color,
             width: getProgressPercentage(tasks, _id) + "%",
           }}
-          className={s.progess}
+          className={s.card__progess}
         ></span>
       </span>
     </section>

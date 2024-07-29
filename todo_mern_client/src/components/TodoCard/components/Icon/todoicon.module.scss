@@ -12,9 +12,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.checkmark {
-  height: 0.8rem;
-  width: 0.8rem;
+  &__checkmark {
+    height: 0.8rem;
+    width: 0.8rem;
+  }
 }

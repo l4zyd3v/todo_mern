@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import { DataContext } from "../../context/DataContext";
-import s from "./home.module.css";
+import s from "./home.module.scss";
 import axios from "axios";
 // importanime, { AnimeInstance } from "animejs";
 import {
@@ -158,17 +158,17 @@ export default function Home() {
 
   return (
     <>
-      <div
-        className={`${s.mainWrapper} ${toggleNav ? s.mainWrapperNavOpen : s.mainWrapperNavClosed}`}
+      <main
+        className={`${s.main} ${toggleNav ? s.mainNavOpen : ""}`}
         onClick={() => {
           toggleNav && setToggleNav(false);
         }}
       >
         <Header />
-        <h1 className={s.heading1}>What's up, {user[0]?.username} </h1>
+        <h1 className={s.main__heading1}>What's up, {user[0]?.username} </h1>
         <div className={s.categoriesWrapper}>
-          <h2 className={s.categoriesHeading}>categories</h2>
-          <div className={s.categoriesScrollWrapper}>
+          <h2 className={s.categoriesWrapper__Heading}>categories</h2>
+          <div className={s.categoriesWrapper__ScrollWrapper}>
             {categories.map((category) => {
               const { _id, name, color, userId } = category;
 
@@ -191,7 +191,7 @@ export default function Home() {
           </div>
         </div>
         <div className={s.cardWrapper}>
-          <h2 className={s.cardsHeading}>today's tasks</h2>
+          <h2 className={s.cardWrapper__heading}>today's tasks</h2>
           <Swiper
             slidesPerView={5}
             spaceBetween={3}
@@ -200,7 +200,7 @@ export default function Home() {
               clickable: true,
             }}
             modules={[Pagination]}
-            className={s.swiper}
+            className={s.cardWrapper__swiper}
           >
             {[...tasks].reverse().map((task) => {
               const { _id, title, description, categoryId, completed } = task;
@@ -235,10 +235,10 @@ export default function Home() {
         {modalVisibility && (
           <div
             onClick={() => setModalVisibility(false)}
-            className={s.modalBackground}
+            className={s.main__modalBackground}
           ></div>
         )}
-      </div>
+      </main>
       <Nav
         firstname={user[0]?.credentials.firstName}
         lastname={user[0]?.credentials.lastName}

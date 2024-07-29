@@ -1,5 +1,5 @@
 import { useState } from "react";
-import s from "../signup.module.css";
+import s from "./input.module.scss";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { CiLock, CiUnlock } from "react-icons/ci";
@@ -36,14 +36,14 @@ export default function Input({ name, register, errors, rules }: InputProps) {
   return (
     <div className={s.inputWrapper}>
       <label
-        className={`${s.inputLabel} ${inputFocus ? s.inputlabel_active : ""}`}
+        className={`${s.inputWrapper__Label} ${inputFocus ? s.inputWrapper__Label_active : ""}`}
         htmlFor={name}
       >
         {name}
       </label>
       <input
         type={showPassword ? "" : name}
-        className={s.input}
+        className={s.inputWrapper__input}
         id={name}
         {...register(name, { ...rules })}
         onChange={() => setInputFocus(true)}
@@ -53,7 +53,7 @@ export default function Input({ name, register, errors, rules }: InputProps) {
 
       {name === "password" && (
         <button
-          className={s.togglePasswordVisibility}
+          className={s.inputWrapper__togglePasswordVisibility}
           type="button"
           onClick={(e) => {
             e.preventDefault();
@@ -66,9 +66,10 @@ export default function Input({ name, register, errors, rules }: InputProps) {
 
       {errors[name] && (
         <span
-          className={`${s.inputError} ${name === "password" ? s.moveErrorMessageAbit : ""}`}
+          className={`${s.inputWrapper__error} ${name === "password" ? s.inputWrapper__error_moveErrorMessageAbit : ""}`}
         >
-          <FaArrowLeftLong className={s.errorArrow} /> required
+          <FaArrowLeftLong className={s.inputWrapper__error_arrowIcon} />{" "}
+          required
         </span>
       )}
     </div>
