@@ -9,14 +9,8 @@ import axios from "axios";
 type Props = {
   newCategoryModalOpen: boolean;
   setNewCategoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // todo
-  // setNewCreatedCategoryAsSelected: UseFormSetValue<NewcreatedCategoryAsSelectedType>;
+  onNewCategoryId: (newCategoryId: string) => void;
 };
-
-// todo
-// type NewcreatedCategoryAsSelectedType = {
-//   categoryId: string;
-// };
 
 export type Inputs = {
   name: string;
@@ -31,8 +25,7 @@ function randomHexColor() {
 export default function NewCategoryForm({
   newCategoryModalOpen,
   setNewCategoryModalOpen,
-  // todo
-  // setNewCreatedCategoryAsSelected,
+  onNewCategoryId,
 }: Props) {
   const { userId } = useContext(UserLoggedInContext);
   const { addCategory } = useContext(DataContext);
@@ -61,10 +54,17 @@ export default function NewCategoryForm({
 
       if (response.status === 201) {
         console.log("Category created successfully");
-        setNewCategoryModalOpen(false);
+        console.log("response.data: ", response.data);
+        console.log(
+          "response.data._id: ",
+          response.data._id,
+          typeof response.data._id,
+        );
+        const categoryId = response.data._id;
+        // setNewCreatedCategoryAsSelected("categoryId", categoryId);
         addCategory(response.data);
-        // todo
-        // setNewCreatedCategoryAsSelected("categoryId", response.data._id);
+        setNewCategoryModalOpen(false);
+        onNewCategoryId(categoryId);
       } else {
         console.log("Failed to create category: ", response.status);
       }

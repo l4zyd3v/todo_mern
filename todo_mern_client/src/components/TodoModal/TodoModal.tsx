@@ -28,6 +28,7 @@ export default function TodoModal({
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const { categories, addTask } = useContext(DataContext);
   const { userId } = useContext(UserLoggedInContext);
+  const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
 
   const {
     register,
@@ -35,8 +36,8 @@ export default function TodoModal({
     formState: { errors },
     reset,
     watch,
-    // todo
-    // setValue,
+    // todo,
+    setValue,
   } = useForm<Inputs>();
 
   console.log("TodoModal.tsx - chosenCategoryId: ", watch("categoryId"));
@@ -92,6 +93,16 @@ export default function TodoModal({
       reset();
     }
   }, [visibility]);
+
+  useEffect(() => {
+    if (newCategoryId) {
+      setValue("categoryId", newCategoryId);
+    }
+  }, [newCategoryId, setValue]);
+
+  const handleNewCategoryId = (categoryId: string) => {
+    setNewCategoryId(categoryId);
+  };
 
   function getTodoModalClassName() {
     return `${s.todoModal} ${
@@ -198,8 +209,7 @@ export default function TodoModal({
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
-        // todo
-        // setNewCreatedCategoryAsSelected={setValue}
+        onNewCategoryId={handleNewCategoryId}
       />
 
       {newCategoryModalOpen ? (
