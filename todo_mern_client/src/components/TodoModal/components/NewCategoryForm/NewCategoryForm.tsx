@@ -17,11 +17,6 @@ export type Inputs = {
   color: string;
 };
 
-function randomHexColor() {
-  let n = (Math.random() * 0xfffff * 1000000).toString(16);
-  return "#" + n.slice(0, 6);
-}
-
 export default function NewCategoryForm({
   newCategoryModalOpen,
   setNewCategoryModalOpen,
@@ -36,6 +31,10 @@ export default function NewCategoryForm({
     formState: { errors },
     reset,
   } = useForm<Inputs>();
+
+  useEffect(() => {
+    setColor(randomHexColor());
+  }, [newCategoryModalOpen]);
 
   const createCategory = async (data: Inputs) => {
     if (!userId) {
@@ -87,6 +86,11 @@ export default function NewCategoryForm({
       reset();
     }
   }, [newCategoryModalOpen]);
+
+  function randomHexColor() {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return "#" + n.slice(0, 6);
+  }
 
   return (
     <form
