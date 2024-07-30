@@ -9,30 +9,18 @@ import axios from "axios";
 type Props = {
   newCategoryModalOpen: boolean;
   setNewCategoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // todo
-  // setNewCreatedCategoryAsSelected: UseFormSetValue<NewcreatedCategoryAsSelectedType>;
+  onNewCategoryId: (newCategoryId: string) => void;
 };
-
-// todo
-// type NewcreatedCategoryAsSelectedType = {
-//   categoryId: string;
-// };
 
 export type Inputs = {
   name: string;
   color: string;
 };
 
-function randomHexColor() {
-  let n = (Math.random() * 0xfffff * 1000000).toString(16);
-  return "#" + n.slice(0, 6);
-}
-
 export default function NewCategoryForm({
   newCategoryModalOpen,
   setNewCategoryModalOpen,
-  // todo
-  // setNewCreatedCategoryAsSelected,
+  onNewCategoryId,
 }: Props) {
   const { userId } = useContext(UserLoggedInContext);
   const { addCategory } = useContext(DataContext);
@@ -43,6 +31,10 @@ export default function NewCategoryForm({
     formState: { errors },
     reset,
   } = useForm<Inputs>();
+
+  useEffect(() => {
+    setColor(randomHexColor());
+  }, [newCategoryModalOpen]);
 
   const createCategory = async (data: Inputs) => {
     if (!userId) {
@@ -61,10 +53,17 @@ export default function NewCategoryForm({
 
       if (response.status === 201) {
         console.log("Category created successfully");
-        setNewCategoryModalOpen(false);
+        console.log("response.data: ", response.data);
+        console.log(
+          "response.data._id: ",
+          response.data._id,
+          typeof response.data._id,
+        );
+        const categoryId = response.data._id;
+        // setNewCreatedCategoryAsSelected("categoryId", categoryId);
         addCategory(response.data);
-        // todo
-        // setNewCreatedCategoryAsSelected("categoryId", response.data._id);
+        setNewCategoryModalOpen(false);
+        onNewCategoryId(categoryId);
       } else {
         console.log("Failed to create category: ", response.status);
       }
@@ -87,6 +86,11 @@ export default function NewCategoryForm({
       reset();
     }
   }, [newCategoryModalOpen]);
+
+  function randomHexColor() {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return "#" + n.slice(0, 6);
+  }
 
   return (
     <form
