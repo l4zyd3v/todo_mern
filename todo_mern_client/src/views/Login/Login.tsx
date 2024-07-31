@@ -80,6 +80,7 @@ export default function Login() {
               id="usernameOrEmail"
               {...register("userNameOrEmail", { required: true })}
               onFocus={() => setUserNameOrEmailFocus(true)}
+              onChange={() => setUserNameOrEmailFocus(true)}
             />
             {renderInputError(errors.userNameOrEmail)}
           </div>
@@ -97,6 +98,7 @@ export default function Login() {
               id="password"
               {...register("passWord", { required: true })}
               onFocus={() => setPasswordFocus(true)}
+              onChange={() => setPasswordFocus(true)}
             />
             {renderInputError(errors.passWord)}
           </div>
