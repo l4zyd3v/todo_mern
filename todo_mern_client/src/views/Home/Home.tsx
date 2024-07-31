@@ -66,6 +66,7 @@ export default function Home() {
         }
       } catch (error) {
         setUserLoggedIn(false);
+        navigate("/login");
         console.error(error);
       }
     };
