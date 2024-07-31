@@ -179,13 +179,13 @@ export default function authController(db: Db) {
             return res.sendStatus(403);
           }
 
-          // // might not be necessary to check for specific user here.
-          // const user = await collection.findOne({
-          //   _id: decoded.id,
-          // });
+          const user = await collection.findOne({
+            _id: decoded.id,
+          });
 
-          // by the fucking way, dont just return without sending a message of why you are returning ffs.........
-          // if (!user) return;
+          if (!user) {
+            return res.sendStatus(403);
+          }
 
           req.userId = decoded.id;
 
@@ -196,6 +196,8 @@ export default function authController(db: Db) {
     checkUserLoggedIn: async (req: Request, res: Response) => {
       const cookieToken = req.cookies["token"];
 
+      const collection = db.collection("users");
+
       if (!cookieToken) {
         return res.json({ loggedIn: false });
       }
@@ -205,9 +207,17 @@ export default function authController(db: Db) {
       jwt.verify(
         cookieToken,
         process.env.TOKEN_KEY,
-        (err: jwt.VerifyErrors | null, decoded: any) => {
+        async (err: jwt.VerifyErrors | null, decoded: any) => {
           if (err) {
             return res.json({ loggedIn: false });
+          }
+
+          const user = await collection.findOne({
+            _id: decoded.id,
+          });
+
+          if (!user) {
+            return res.sendStatus(403);
           }
 
           console.log("User loginCheck");
