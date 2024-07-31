@@ -180,13 +180,14 @@ export default function authController(db: Db) {
           }
 
           const user = await collection.findOne({
-            _id: decoded.id,
+            _id: ObjectId.createFromHexString(decoded.id),
           });
 
           if (!user) {
             return res.sendStatus(403);
           }
 
+          // Set the userId on the request object
           req.userId = decoded.id;
 
           next();
@@ -213,7 +214,7 @@ export default function authController(db: Db) {
           }
 
           const user = await collection.findOne({
-            _id: decoded.id,
+            _id: ObjectId.createFromHexString(decoded.id),
           });
 
           if (!user) {
