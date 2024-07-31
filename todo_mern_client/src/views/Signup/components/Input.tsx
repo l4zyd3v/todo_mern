@@ -47,8 +47,6 @@ export default function Input({ name, register, errors, rules }: InputProps) {
         id={name}
         {...register(name, { ...rules })}
         onChange={() => setInputFocus(true)}
-        // onFocus={() => setInputFocus(true)}
-        // onBlur={() => setInputFocus(false)}
       />
 
       {name === "password" && (
