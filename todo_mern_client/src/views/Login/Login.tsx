@@ -10,6 +10,7 @@ import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 type Inputs = {
   userNameOrEmail: string;
   passWord: string;
+  rememberMe?: boolean;
 };
 
 // Define a type for the focus state
@@ -24,6 +25,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const {
     register,
@@ -106,8 +108,9 @@ export default function Login() {
             <input
               id="rememberMe"
               type="checkbox"
-              // checked={rememberMe}
-              // onChange={handleRememberMeChange}
+              {...register("rememberMe")}
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
             />
             <label className={s.form__rememberMeLabel} htmlFor="rememberMe">
               remember me

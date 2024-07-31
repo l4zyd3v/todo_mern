@@ -34,7 +34,7 @@ export default function authController(db: Db) {
     // make it try catch?
     login: async (req: Request, res: Response) => {
       const collection = db.collection("users");
-      const { userNameOrEmail, passWord } = req.body;
+      const { userNameOrEmail, passWord, rememberMe } = req.body;
       if (!(userNameOrEmail && passWord)) {
         return res.status(400).json({ message: "All inputs are required" });
       }
@@ -58,7 +58,7 @@ export default function authController(db: Db) {
       res.cookie("token", token, {
         // domain: process.env.FRONTEND_URL,
         path: "/",
-        expires: new Date(Date.now() + 86400000),
+        expires: rememberMe ? new Date(Date.now() + 86400000) : undefined,
         secure: false,
         httpOnly: false,
         sameSite: "lax",
@@ -137,7 +137,7 @@ export default function authController(db: Db) {
 
           res.cookie("token", token, {
             path: "/", // Cookie is accessible from all paths
-            expires: new Date(Date.now() + 86400000), // Cookie expires in 1 day
+            // expires: rememberMe ? new Date(Date.now() + 86400000) : undefined,
             secure: false,
             httpOnly: false,
             sameSite: "lax",
