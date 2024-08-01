@@ -28,6 +28,7 @@ export default function authController(db: Db) {
   return {
     logout: async (req: Request, res: Response) => {
       res.clearCookie("token");
+      console.log("user logged out");
       res.json({ message: "Logged out" });
     },
 
