@@ -25,11 +25,18 @@ export default function Login() {
   const navigate = useNavigate();
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
+
+  const [formValues, setFormValues] = useState({
+    usernameOrEmail: "",
+    password: "",
+    rememberMe: false,
+  });
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -79,10 +86,18 @@ export default function Login() {
             </label>
             <input
               className={s.form__input}
-              id="usernameOrEmail"
+              id={"userNameOrEmail"}
               {...register("userNameOrEmail", { required: true })}
+              value={formValues.usernameOrEmail}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  usernameOrEmail: e.target.value,
+                });
+                setValue("userNameOrEmail", e.target.value);
+                setUserNameOrEmailFocus(true);
+              }}
               onFocus={() => setUserNameOrEmailFocus(true)}
-              onChange={() => setUserNameOrEmailFocus(true)}
             />
             {renderInputError(errors.userNameOrEmail)}
           </div>
@@ -97,10 +112,18 @@ export default function Login() {
             <input
               type="password"
               className={s.form__input}
-              id="password"
+              id="passWord"
               {...register("passWord", { required: true })}
+              value={formValues.password}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  password: e.target.value,
+                });
+                setValue("passWord", e.target.value);
+                setPasswordFocus(true);
+              }}
               onFocus={() => setPasswordFocus(true)}
-              onChange={() => setPasswordFocus(true)}
             />
             {renderInputError(errors.passWord)}
           </div>
@@ -109,8 +132,13 @@ export default function Login() {
               id="rememberMe"
               type="checkbox"
               {...register("rememberMe")}
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
+              checked={formValues.rememberMe}
+              onChange={() =>
+                setFormValues({
+                  ...formValues,
+                  rememberMe: !formValues.rememberMe,
+                })
+              }
             />
             <label className={s.form__rememberMeLabel} htmlFor="rememberMe">
               remember me
