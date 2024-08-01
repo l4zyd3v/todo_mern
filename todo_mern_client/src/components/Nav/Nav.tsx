@@ -2,13 +2,27 @@ import s from "./nav.module.scss";
 import { FaTasks } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoAnalyticsSharp } from "react-icons/io5";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 type UserFirstLastName = {
   firstname: string;
   lastname: string;
 };
 
+function logout(navigate: NavigateFunction) {
+  fetch(`http://${import.meta.env.VITE_HOSTURL}:3000/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      navigate("/login");
+    });
+}
+
 export default function Nav({ firstname, lastname }: UserFirstLastName) {
+  const navigate = useNavigate();
+
   return (
     <nav className={s.nav}>
       <div className={s.nav__profilePicWrapper}>
@@ -43,6 +57,9 @@ export default function Nav({ firstname, lastname }: UserFirstLastName) {
         </li>
       </ul>
       <div className={s.nav__consistancyWrapper}>Graph</div>
+      <button onClick={() => logout(navigate)} className={s.nav__logoutBtn}>
+        logout
+      </button>
     </nav>
   );
 }
