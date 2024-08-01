@@ -1,27 +1,34 @@
 import s from "./nav.module.scss";
+import { useContext } from "react";
 import { FaTasks } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoAnalyticsSharp } from "react-icons/io5";
 import { useNavigate, NavigateFunction } from "react-router-dom";
+import { NavToggleContext } from "../../context/NavToggleContext";
 
 type UserFirstLastName = {
   firstname: string;
   lastname: string;
 };
 
-function logout(navigate: NavigateFunction) {
+function logout(
+  navigate: NavigateFunction,
+  setToggleNav: React.Dispatch<React.SetStateAction<boolean>>,
+) {
   fetch(`http://${import.meta.env.VITE_HOSTURL}:3000/auth/logout`, {
     method: "POST",
     credentials: "include",
   })
     .then((res) => res.json())
     .then((data) => {
+      setToggleNav(false);
       navigate("/login");
     });
 }
 
 export default function Nav({ firstname, lastname }: UserFirstLastName) {
   const navigate = useNavigate();
+  const { setToggleNav } = useContext(NavToggleContext);
 
   return (
     <nav className={s.nav}>
@@ -57,7 +64,10 @@ export default function Nav({ firstname, lastname }: UserFirstLastName) {
         </li>
       </ul>
       <div className={s.nav__consistancyWrapper}>Graph</div>
-      <button onClick={() => logout(navigate)} className={s.nav__logoutBtn}>
+      <button
+        onClick={() => logout(navigate, setToggleNav)}
+        className={s.nav__logoutBtn}
+      >
         logout
       </button>
     </nav>
