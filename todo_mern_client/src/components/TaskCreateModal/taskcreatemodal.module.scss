@@ -1,5 +1,5 @@
-  /*todoModal variables*/
-  $todoModalBorderRadius: 1rem;
+  /*TaskCreateModal variables*/
+  $taskCreateModalBorderRamius: 1rem;
 
   /*exitButton variables*/
   $exitButtonSize: 1.9rem;
@@ -47,14 +47,14 @@
     animation: showModalAnim 0.5s forwards;
   }
 
-  .todoModal {
+  .TaskCreateModal {
     position: absolute;
     background: var(--dark-blue);
     height: 90svh;
     width: 90vw;
     z-index: 1000;
     align-self: center;
-    border-radius: $todoModalBorderRadius;
+    border-radius: $taskCreateModalBorderRamius;
     /* box-shadow: 1px 2px 14px 5px black; */
     right: -100%;
     border: 2px solid var(--light-blue);
@@ -188,7 +188,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    border-radius: $todoModalBorderRadius;
+    border-radius: $taskCreateModalBorderRamius;
     background: black;
     opacity: 0.8;
     z-index: 98;

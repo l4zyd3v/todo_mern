@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import s from "./todomodal.module.scss";
+import s from "./taskcreatemodal.module.scss";
 import { useForm, SubmitHandler, FieldValue } from "react-hook-form";
 import axios from "axios";
 import { CategoryCardInterface, CategoriesInterface } from "../../types";
@@ -8,7 +8,7 @@ import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 
 // This type should maybe be used in a separate file
-type TodoModalProps = {
+type TaskCreateModalProps = {
   visibility: boolean | null;
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
@@ -21,10 +21,10 @@ type Inputs = {
   priority?: string;
 };
 
-export default function TodoModal({
+export default function TaskCreateModal({
   visibility,
   setVisibility,
-}: TodoModalProps) {
+}: TaskCreateModalProps) {
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const { categories, addTask } = useContext(DataContext);
   const { userId } = useContext(UserLoggedInContext);
@@ -40,7 +40,7 @@ export default function TodoModal({
     setValue,
   } = useForm<Inputs>();
 
-  console.log("TodoModal.tsx - chosenCategoryId: ", watch("categoryId"));
+  console.log("TaskCreateModal.tsx - chosenCategoryId: ", watch("categoryId"));
 
   const createTask = async (data: Inputs) => {
     console.log("data: ", data);
@@ -65,7 +65,7 @@ export default function TodoModal({
         console.log("Failed to create task: ", response.status);
       }
 
-      console.log("TodoModal.tsx - createTask/addTask: ", response);
+      console.log("TaskCreateModal.tsx - createTask/addTask: ", response);
     } catch (error) {
       console.error("An error occurred while creating the task: ", error);
     }
@@ -104,20 +104,20 @@ export default function TodoModal({
     setNewCategoryId(categoryId);
   };
 
-  function getTodoModalClassName() {
-    return `${s.todoModal} ${
+  function getTaskCreateModalClassName() {
+    return `${s.TaskCreateModal} ${
       visibility
-        ? s.todoModalVisible
+        ? s.TaskCreateModalVisible
         : visibility === false
-          ? s.todoModalHide
+          ? s.TaskCreateModalHide
           : ""
     }`;
   }
 
   return (
-    <div className={getTodoModalClassName()}>
+    <div className={getTaskCreateModalClassName()}>
       <button
-        className={s.todoModal__exitButton}
+        className={s.TaskCreateModal__exitButton}
         onClick={() => setVisibility(false)}
       >
         &times;

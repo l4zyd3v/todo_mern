@@ -13,7 +13,7 @@ import {
 import {
   TodoCard,
   NewTodoBtn,
-  TodoModal,
+  TaskCreateModal,
   CategoriesCard,
   Header,
   Nav,
@@ -235,7 +235,7 @@ export default function Home() {
         </div>
 
         <NewTodoBtn setModal={setModalVisibility} />
-        <TodoModal
+        <TaskCreateModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
