@@ -155,12 +155,12 @@ export default function Home() {
   }
 
   function handleIsCompleteSingleTask(
-    changedTaskId: string,
+    taskId: string,
     changedTaskCompletion: boolean,
   ) {
     setTasks(
       tasks.map((task) =>
-        task._id === changedTaskId
+        task._id === taskId
           ? { ...task, completed: changedTaskCompletion }
           : task,
       ),
