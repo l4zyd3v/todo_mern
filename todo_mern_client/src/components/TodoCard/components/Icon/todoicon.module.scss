@@ -1,5 +1,13 @@
 :root {
-  --icon-size: 1.4rem;
+  --icon-size: 1.6rem;
+}
+
+.iconClickWrapper {
+  border: 2px solid black;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .icon {

@@ -25,10 +25,11 @@ export default function TodoIcon({
   return (
     <div
       onClick={() => handleTaskCompletionClick(taskId)}
-      style={style}
-      className={s.icon}
+      className={s.iconClickWrapper}
     >
-      {renderIcon()}
+      <div style={style} className={s.icon}>
+        {renderIcon()}
+      </div>
     </div>
   );
 }

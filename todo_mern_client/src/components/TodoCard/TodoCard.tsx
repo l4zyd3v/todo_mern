@@ -59,7 +59,14 @@ const TodoCard: React.FC<TodoCardInterface> = ({
         handleTaskCompletionClick={handleClick}
         taskId={_id}
       />
-      {title}
+      <div
+        onClick={() => {
+          console.log("openModal");
+        }}
+        className={s.card__clickableTitleToOpenModal}
+      >
+        {title}
+      </div>
     </div>
   );
 };
