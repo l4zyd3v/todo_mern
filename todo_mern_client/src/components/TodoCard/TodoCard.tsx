@@ -30,7 +30,7 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   //   }
   // };
 
-  const handleDoubleClick = async (taskId: string) => {
+  const handleClick = async (taskId: string) => {
     try {
       const response = await axios.put(
         `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/${taskId}`,
@@ -52,8 +52,13 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   };
 
   return (
-    <div onDoubleClick={() => handleDoubleClick(_id)} className={s.card}>
-      <TodoIcon color={color} isCompleted={isCompleted} />
+    <div className={s.card}>
+      <TodoIcon
+        color={color}
+        isCompleted={isCompleted}
+        handleTaskCompletionClick={handleClick}
+        taskId={_id}
+      />
       {title}
     </div>
   );
