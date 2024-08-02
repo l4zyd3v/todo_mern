@@ -12,7 +12,7 @@ import {
 } from "../../types";
 import {
   TodoCard,
-  NewTodoBtn,
+  NewTaskBtn,
   TaskCreateModal,
   CategoriesCard,
   Header,
@@ -234,7 +234,7 @@ export default function Home() {
           </Swiper>
         </div>
 
-        <NewTodoBtn setModal={setModalVisibility} />
+        <NewTaskBtn setModal={setModalVisibility} />
         <TaskCreateModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
