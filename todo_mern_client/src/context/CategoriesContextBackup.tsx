@@ -12,8 +12,8 @@ interface CategoriesContextProviderProps {
 }
 
 export const CategoriesContext = createContext<CategoriesContextType>({
-  setCategories: (value: CategoriesInterface[]) => {},
-  addCategory: (newCategory: CategoriesInterface) => {},
+  setCategories: () => {},
+  addCategory: () => {},
   categories: [],
 });
 

@@ -15,11 +15,11 @@ interface DataContextProviderProps {
 }
 
 export const DataContext = createContext<DataContextType>({
-  setCategories: (value: CategoriesInterface[]) => {},
-  addCategory: (newCategory: CategoriesInterface) => {},
+  setCategories: () => {},
+  addCategory: () => {},
   categories: [],
-  setTasks: (value: TasksInterface[]) => {},
-  addTask: (newTask: TasksInterface) => {},
+  setTasks: () => {},
+  addTask: () => {},
   tasks: [],
 });
 
