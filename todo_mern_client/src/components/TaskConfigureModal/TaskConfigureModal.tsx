@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { DataContext } from "../../context/DataContext";
 import s from "./taskconfiguremodal.module.scss";
+import TaskModal from "../Modal/TaskModal";
 
 type PropTypes = {
   visibility: null | boolean;
@@ -25,9 +26,5 @@ export default function TaskConfigureModal({
 
   console.log("Task to configure", taskToConfigure);
 
-  return (
-    <div className={getWrapperClass(visibility)}>
-      <button onClick={() => setVisibility(false)}>click me</button>
-    </div>
-  );
+  return <TaskModal visibility={visibility} setVisibility={setVisibility} />;
 }
