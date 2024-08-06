@@ -12,6 +12,8 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   completed,
   // onDelete,
   onComplete,
+  setTaskConfigureVisibility,
+  setTaskToConfigure_id,
 }) => {
   const [isCompleted, setIsCompleted] = useState(completed);
 
@@ -52,22 +54,26 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   };
 
   return (
-    <div className={s.card}>
-      <TodoIcon
-        color={color}
-        isCompleted={isCompleted}
-        handleTaskCompletionClick={handleClick}
-        taskId={_id}
-      />
-      <div
-        onClick={() => {
-          console.log("openModal");
-        }}
-        className={s.card__clickableTitleToOpenModal}
-      >
-        {title}
+    <>
+      <div className={s.card}>
+        <TodoIcon
+          color={color}
+          isCompleted={isCompleted}
+          handleTaskCompletionClick={handleClick}
+          taskId={_id}
+        />
+        <div
+          onClick={() => {
+            console.log("openModal");
+            setTaskConfigureVisibility(true);
+            setTaskToConfigure_id(_id);
+          }}
+          className={s.card__clickableTitleToOpenModal}
+        >
+          {title}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
