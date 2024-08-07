@@ -47,6 +47,7 @@ export default function TaskModal({
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     createTask(data, userId, addTask, setVisibility);
+    updateTask(data, userId, taskToConfigure, setVisibility);
   };
 
   // useEffects
@@ -102,7 +103,6 @@ export default function TaskModal({
             {...register("description")}
           ></textarea>{" "}
         </div>
-
         <div className={s.form__inputWrapper}>
           <label className={s.form__label} htmlFor="dueDate">
             due date
@@ -159,7 +159,7 @@ export default function TaskModal({
           </select>
         </div>
         <button className={s.form__submit} type="submit">
-          Create Task
+          {getButtonName(modalType)}
         </button>
       </form>
 
@@ -215,6 +215,45 @@ async function createTask(
   }
 }
 
+async function updateTask(
+  data: Inputs,
+  userId: string,
+  tasktoConfigure: TasksInterface | undefined,
+  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
+) {
+  console.log("data: ", data);
+  const taskId = tasktoConfigure?._id;
+  if (!userId) {
+    console.error("No userId id found");
+    return;
+  }
+  if (!taskId) {
+    console.error("No task id found");
+    return;
+  }
+  try {
+    const response = await axios.put(
+      `http://${import.meta.env.VITE_HOSTURL}:3000/configuretask/${taskId}`,
+      data,
+      {
+        withCredentials: true,
+      },
+    );
+
+    if (response.status === 201) {
+      console.log("Task updated successfully");
+      // addTask(response.data);
+      setVisibility(false);
+    } else {
+      console.log("Failed to update task: ", response.status);
+    }
+
+    console.log("TaskConfigureModal.tsx - updatetaskk: ", response);
+  } catch (error) {
+    console.error("An error occurred while creating the task: ", error);
+  }
+}
+
 function getCategoryOptions(categories: CategoriesInterface[]) {
   return categories.map((category) => (
     <option key={category._id} value={category._id}>
@@ -242,6 +281,14 @@ function getTaskCreateModalClassName(visibility: boolean | null) {
         ? s.TaskCreateModalHide
         : ""
   }`;
+}
+
+function getButtonName(modalType: string) {
+  if (modalType === "create") {
+    return "Create Task";
+  } else if (modalType === "configure") {
+    return "Update Task";
+  }
 }
 
 // tasktoConfigure functions:

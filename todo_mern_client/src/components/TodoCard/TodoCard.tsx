@@ -35,7 +35,7 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   const handleClick = async (taskId: string) => {
     try {
       const response = await axios.put(
-        `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/${taskId}`,
+        `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/setcompleted/${taskId}`,
         {
           completed: !isCompleted,
         },
