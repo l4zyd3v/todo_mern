@@ -33,7 +33,7 @@ export default function TaskModal({
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
   // contexts
-  const { categories, addTask } = useContext(DataContext);
+  const { categories, addTask, setTasks, tasks } = useContext(DataContext);
   const { userId } = useContext(UserLoggedInContext);
   // react-hook-form
   const {
@@ -46,8 +46,11 @@ export default function TaskModal({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    createTask(data, userId, addTask, setVisibility);
-    updateTask(data, userId, taskToConfigure, setVisibility);
+    if (modalType === "configure") {
+      updateTask(data, userId, taskToConfigure, setTasks, tasks, setVisibility);
+    } else if (modalType === "create") {
+      createTask(data, userId, addTask, setVisibility);
+    }
   };
 
   // useEffects
@@ -61,10 +64,9 @@ export default function TaskModal({
   console.log("taskToConfigure: ", taskToConfigure);
 
   useEffect(() => {
-    if (modalType === "configure") {
-      setTaskToConfigureValues(taskToConfigure, setValue);
-    }
-  }, [modalType, taskToConfigure, setValue]);
+    if (modalType !== "configure") return;
+    setTaskToConfigureValues(taskToConfigure, setValue);
+  }, [visibility]);
 
   useEffect(() => {
     if (newCategoryId) {
@@ -219,10 +221,14 @@ async function updateTask(
   data: Inputs,
   userId: string,
   tasktoConfigure: TasksInterface | undefined,
+  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
+  tasks: Array<TasksInterface>,
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
 ) {
   console.log("data: ", data);
   const taskId = tasktoConfigure?._id;
+  const { title, description, dueDate, categoryId, priority } = data;
+
   if (!userId) {
     console.error("No userId id found");
     return;
@@ -233,16 +239,31 @@ async function updateTask(
   }
   try {
     const response = await axios.put(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/configuretask/${taskId}`,
+      `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/configuretask/${taskId}`,
       data,
       {
         withCredentials: true,
       },
     );
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       console.log("Task updated successfully");
-      // addTask(response.data);
+
+      setTasks(
+        tasks.map((task) =>
+          task._id === taskId
+            ? {
+                ...task,
+                title: title ? title : task.title,
+                description: description ? description : task.description,
+                duedate: dueDate ? dueDate : task.dueDate,
+                categoryid: categoryId ? categoryId : task.categoryId,
+                priority: priority ? priority : task.priority,
+              }
+            : task,
+        ),
+      );
+
       setVisibility(false);
     } else {
       console.log("Failed to update task: ", response.status);

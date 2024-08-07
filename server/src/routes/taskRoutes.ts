@@ -10,7 +10,7 @@ export function taskRoutes(db: Db) {
 
   router.get("/tasks", authControl.authenticateToken, controller.getAllTasks);
   router.put(
-    "/tasks/setcompleted:taskId",
+    "/tasks/setcompleted/:taskId",
     authControl.authenticateToken,
     controller.setCompletion,
   );
@@ -21,7 +21,7 @@ export function taskRoutes(db: Db) {
     controller.createNewTask,
   );
   router.put(
-    "/tasks/configuretask",
+    "/tasks/configuretask/:taskId",
     authControl.authenticateToken,
     controller.confiugreTask,
   );

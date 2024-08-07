@@ -119,7 +119,6 @@ export default function taskController(db: Db) {
         res.status(500).json({ message: error.message });
       }
     },
-
     confiugreTask: async (req: Request, res: Response) => {
       const { title, description, dueDate, categoryId, priority } = req.body;
 
@@ -145,10 +144,10 @@ export default function taskController(db: Db) {
           );
 
           if (result.modifiedCount === 1) {
-            res.json({
+            res.status(200).json({
               message: "Tasks updated successfully",
             });
-            console.log("User updated the status of completed");
+            console.log("User updated a task");
           } else {
             res.status(404).json({ message: "Tasks not found" });
           }
