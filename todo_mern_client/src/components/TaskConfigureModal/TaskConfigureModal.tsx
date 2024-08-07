@@ -26,5 +26,12 @@ export default function TaskConfigureModal({
 
   console.log("Task to configure", taskToConfigure);
 
-  return <TaskModal visibility={visibility} setVisibility={setVisibility} />;
+  return (
+    <TaskModal
+      visibility={visibility}
+      setVisibility={setVisibility}
+      modalType={"configure"}
+      taskToConfigure={taskToConfigure}
+    />
+  );
 }

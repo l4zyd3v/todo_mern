@@ -1,12 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import s from "./taskmodal.module.scss";
-import { useForm, SubmitHandler, FieldValue } from "react-hook-form";
+import { useForm, SubmitHandler, UseFormSetValue } from "react-hook-form";
 import axios from "axios";
-import {
-  CategoryCardInterface,
-  CategoriesInterface,
-  TasksInterface,
-} from "../../types";
+import { CategoriesInterface, TasksInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
 import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
@@ -16,10 +12,11 @@ type PropTypes = {
   visibility: boolean | null;
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
   modalType: string;
+  taskToConfigure?: TasksInterface;
 };
 
 type Inputs = {
-  title: string;
+  title: string | undefined;
   description?: string;
   dueDate?: string;
   categoryId?: string;
@@ -30,6 +27,7 @@ export default function TaskModal({
   visibility,
   setVisibility,
   modalType,
+  taskToConfigure,
 }: PropTypes) {
   // states
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
@@ -58,6 +56,14 @@ export default function TaskModal({
       reset();
     }
   }, [visibility]);
+
+  console.log("taskToConfigure: ", taskToConfigure);
+
+  useEffect(() => {
+    if (modalType === "configure") {
+      setTaskToConfigureValues(taskToConfigure, setValue);
+    }
+  }, [modalType, taskToConfigure, setValue]);
 
   useEffect(() => {
     if (newCategoryId) {
@@ -236,4 +242,19 @@ function getTaskCreateModalClassName(visibility: boolean | null) {
         ? s.TaskCreateModalHide
         : ""
   }`;
+}
+
+// tasktoConfigure functions:
+
+function setTaskToConfigureValues(
+  taskToConfigure: TasksInterface | undefined,
+  setValue: UseFormSetValue<Inputs>,
+) {
+  if (taskToConfigure) {
+    setValue("title", taskToConfigure.title);
+    setValue("description", taskToConfigure.description);
+    setValue("dueDate", taskToConfigure.dueDate);
+    setValue("categoryId", taskToConfigure.categoryId);
+    setValue("priority", taskToConfigure.priority);
+  }
 }
