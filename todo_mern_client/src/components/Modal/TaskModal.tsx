@@ -256,8 +256,8 @@ async function updateTask(
                 ...task,
                 title: title ? title : task.title,
                 description: description ? description : task.description,
-                duedate: dueDate ? dueDate : task.dueDate,
-                categoryid: categoryId ? categoryId : task.categoryId,
+                dueDate: dueDate ? dueDate : task.dueDate,
+                categoryId: categoryId ? categoryId : task.categoryId,
                 priority: priority ? priority : task.priority,
               }
             : task,
