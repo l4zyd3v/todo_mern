@@ -134,7 +134,7 @@ async function seedTasks(db: Db, amountOfTasks: number) {
       title: titles[Math.floor(Math.random() * titles.length)],
       description:
         descriptions[Math.floor(Math.random() * descriptions.length)],
-      dueDate: new Date().toLocaleDateString(`en-GB`),
+      dueDate: "2025-01-01",
       priority: priorities[Math.floor(Math.random() * priorities.length)],
       completed: false,
       userId: null,
