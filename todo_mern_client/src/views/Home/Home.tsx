@@ -249,9 +249,12 @@ export default function Home() {
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
-        {modalVisibility && (
+        {(modalVisibility || taskConfigureVisibility) && (
           <div
-            onClick={() => setModalVisibility(false)}
+            onClick={() => {
+              setModalVisibility(false);
+              setTaskConfigureVisibility(false);
+            }}
             className={s.main__modalBackground}
           ></div>
         )}
