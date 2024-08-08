@@ -300,7 +300,9 @@ function getTaskCreateModalClassName(visibility: boolean | null) {
       ? s.TaskCreateModalVisible
       : visibility === false
         ? s.TaskCreateModalHide
-        : ""
+        : visibility === null
+          ? s.defaultVisibilityHidden
+          : ""
   }`;
 }
 

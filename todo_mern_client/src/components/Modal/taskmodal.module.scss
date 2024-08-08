@@ -6,6 +6,10 @@
   $top-left-distance: 0.8rem;
 
   @keyframes showModalAnim {
+    0% {
+      visibility: visible;
+    }
+
     20% {
       right: 20%;
     }
@@ -45,6 +49,10 @@
 
   .modalVisible {
     animation: showModalAnim 0.5s forwards;
+  }
+
+  .defaultVisibilityHidden {
+    visibility: hidden;
   }
 
   .TaskCreateModal {
