@@ -6,22 +6,12 @@ import { CategoriesInterface, TasksInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
 import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
-
-// This type should maybe be used in a separate file
-type PropTypes = {
-  visibility: boolean | null;
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
-  modalType: string;
-  taskToConfigure?: TasksInterface;
-};
-
-type Inputs = {
-  title: string | undefined;
-  description?: string;
-  dueDate?: string;
-  categoryId?: string;
-  priority?: string;
-};
+import {
+  categoryUtilsHandler,
+  generalUtilsHandler,
+  taskConfigureUtilsHandler,
+} from "./utils/utils";
+import { Inputs, PropTypes } from "./types/index";
 
 export default function TaskModal({
   visibility,
@@ -29,12 +19,6 @@ export default function TaskModal({
   modalType,
   taskToConfigure,
 }: PropTypes) {
-  // states
-  const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
-  const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
-  // contexts
-  const { categories, addTask, setTasks, tasks } = useContext(DataContext);
-  const { userId } = useContext(UserLoggedInContext);
   // react-hook-form
   const {
     register,
@@ -45,6 +29,30 @@ export default function TaskModal({
     setValue,
   } = useForm<Inputs>();
 
+  // states
+  const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
+  const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
+
+  // contexts
+  const { categories, addTask, setTasks, tasks } = useContext(DataContext);
+  const { userId } = useContext(UserLoggedInContext);
+
+  // utils
+  const {
+    getCategoryOptionValues,
+    getDefaultCategoryId,
+    getCategoryModalVisibilityClassName,
+  } = categoryUtilsHandler(categories, newCategoryModalOpen, s);
+  const { getModalClassName, getButtonName } = generalUtilsHandler(
+    visibility,
+    s,
+    modalType,
+  );
+  const { getTaskToConfigureValues } = taskConfigureUtilsHandler(
+    taskToConfigure,
+    setValue,
+  );
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (modalType === "configure") {
       updateTask(data, userId, taskToConfigure, setTasks, tasks, setVisibility);
@@ -54,30 +62,38 @@ export default function TaskModal({
   };
 
   // useEffects
+
+  // Reset the form when the modal is opened
   useEffect(() => {
     if (visibility) {
-      // Reset the form when the modal is opened
       reset();
     }
   }, [visibility]);
 
-  console.log("taskToConfigure: ", taskToConfigure);
-
+  // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
   useEffect(() => {
     if (modalType !== "configure") return;
-    setTaskToConfigureValues(taskToConfigure, setValue);
+    getTaskToConfigureValues();
   }, [visibility]);
 
+  // Set the category as the newly created category if the user chooses to do that.
   useEffect(() => {
     if (newCategoryId) {
       setValue("categoryId", newCategoryId);
     }
   }, [newCategoryId, setValue]);
 
+  // set the default categoryValue to be "personal" when creating a new task
+  useEffect(() => {
+    if (getDefaultCategoryId && !newCategoryId && modalType !== "configure") {
+      setValue("categoryId", getDefaultCategoryId());
+    }
+  }, [getDefaultCategoryId, setValue]);
+
   return (
-    <div className={getTaskCreateModalClassName(visibility)}>
+    <div className={getModalClassName()}>
       <button
-        className={s.TaskCreateModal__exitButton}
+        className={s.Modal__exitButton}
         onClick={() => setVisibility(false)}
       >
         &times;
@@ -126,11 +142,13 @@ export default function TaskModal({
           <select
             className={`${s.form__select} ${s.inputWrapperCategory__select}`}
             id={"categoryId"}
-            {...register("categoryId")}
+            {...register("categoryId", { required: true })}
           >
-            <option value="">Choose category</option>
-
-            {getCategoryOptions(categories)}
+            {getCategoryOptionValues().map((option) => (
+              <option key={option.key} value={option.value}>
+                {option.name}
+              </option>
+            ))}
           </select>
           <button
             onClick={() => setNewCategoryModalOpen(!newCategoryModalOpen)}
@@ -141,7 +159,7 @@ export default function TaskModal({
           </button>
 
           <div
-            className={`${s.newCategoryModal} ${getCategoryModalVisibilityClassName(newCategoryModalOpen)}`}
+            className={`${s.newCategoryModal} ${getCategoryModalVisibilityClassName()}`}
           ></div>
         </div>
         <div className={s.form__inputWrapper}>
@@ -161,16 +179,14 @@ export default function TaskModal({
           </select>
         </div>
         <button className={s.form__submit} type="submit">
-          {getButtonName(modalType)}
+          {getButtonName()}
         </button>
       </form>
 
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
-        onNewCategoryId={(categoryId) =>
-          handleNewCategoryId(categoryId, setNewCategoryId)
-        }
+        onNewCategoryId={(categoryId) => setNewCategoryId(categoryId)}
       />
 
       {newCategoryModalOpen ? (
@@ -211,7 +227,7 @@ async function createTask(
       console.log("Failed to create task: ", response.status);
     }
 
-    console.log("TaskCreateModal.tsx - createTask/addTask: ", response);
+    console.log("Modal.tsx - createTask/addTask: ", response);
   } catch (error) {
     console.error("An error occurred while creating the task: ", error);
   }
@@ -272,59 +288,5 @@ async function updateTask(
     console.log("TaskConfigureModal.tsx - updatetaskk: ", response);
   } catch (error) {
     console.error("An error occurred while creating the task: ", error);
-  }
-}
-
-function getCategoryOptions(categories: CategoriesInterface[]) {
-  return categories.map((category) => (
-    <option key={category._id} value={category._id}>
-      {category.name}
-    </option>
-  ));
-}
-
-function getCategoryModalVisibilityClassName(newCategoryModalOpen: boolean) {
-  return newCategoryModalOpen ? s.newCategoryModalOpen : "";
-}
-
-const handleNewCategoryId = (
-  categoryId: string | null,
-  setNewCategoryId: React.Dispatch<React.SetStateAction<string | null>>,
-) => {
-  setNewCategoryId(categoryId);
-};
-
-function getTaskCreateModalClassName(visibility: boolean | null) {
-  return `${s.TaskCreateModal} ${
-    visibility
-      ? s.TaskCreateModalVisible
-      : visibility === false
-        ? s.TaskCreateModalHide
-        : visibility === null
-          ? s.defaultVisibilityHidden
-          : ""
-  }`;
-}
-
-function getButtonName(modalType: string) {
-  if (modalType === "create") {
-    return "Create Task";
-  } else if (modalType === "configure") {
-    return "Update Task";
-  }
-}
-
-// tasktoConfigure functions:
-
-function setTaskToConfigureValues(
-  taskToConfigure: TasksInterface | undefined,
-  setValue: UseFormSetValue<Inputs>,
-) {
-  if (taskToConfigure) {
-    setValue("title", taskToConfigure.title);
-    setValue("description", taskToConfigure.description);
-    setValue("dueDate", taskToConfigure.dueDate);
-    setValue("categoryId", taskToConfigure.categoryId);
-    setValue("priority", taskToConfigure.priority);
   }
 }
