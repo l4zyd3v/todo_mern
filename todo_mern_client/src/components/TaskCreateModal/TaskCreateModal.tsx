@@ -7,8 +7,6 @@ type PropTypes = {
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
-console.log("taskcreate lalalalalala");
-
 export default function TaskCreateModal({
   visibility,
   setVisibility,
