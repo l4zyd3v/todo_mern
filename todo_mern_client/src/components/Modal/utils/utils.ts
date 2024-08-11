@@ -11,7 +11,7 @@ function generalUtilsHandler(
 ) {
   return {
     getModalClassName: () => {
-      return `${s.Modal} ${
+      return `${s.Modal} ${modalType === "configure" ? s.ModalConfigureSpecific : ""} ${
         visibility
           ? s.ModalVisible
           : visibility === false
@@ -22,12 +22,20 @@ function generalUtilsHandler(
       }`;
     },
 
-    getButtonName: () => {
+    getFormClassName: () => {
+      return `${s.form} ${modalType === "create" ? s.formCreateModalSpecfic : modalType === "configure" ? s.formConfigureModalSpecfic : ""}`;
+    },
+
+    getSubmitName: () => {
       if (modalType === "create") {
         return "Create Task";
       } else if (modalType === "configure") {
         return "Update Task";
       }
+    },
+
+    getButtonClassName: () => {
+      return `${s.form__submit} ${modalType === "create" ? s.form__submitCreate : modalType === "configure" ? s.form__submitConfigure : ""}`;
     },
   };
 }

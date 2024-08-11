@@ -181,13 +181,11 @@ export default function TaskModal({
         </div>
 
         {getCompletionCheckbox(modalType, register)}
-        <div className={s.form__buttonsWrapper}>
-          {getDeleteButton(modalType)}
 
-          <button className={getButtonClassName()} type="submit">
-            {getSubmitName()}
-          </button>
-        </div>
+        <button className={getButtonClassName()} type="submit">
+          {getSubmitName()}
+        </button>
+        {getDeleteButton(modalType)}
       </form>
 
       <NewCategoryForm
@@ -215,15 +213,17 @@ function getCompletionCheckbox(
 
   return (
     <div className={s.form__completionCheckboxInputWrapper}>
-      <label className={s.form__label} htmlFor="complete">
-        mark as complete:
-      </label>
       <input
         className={s.form__completionCheckboxInputWrapper__checkboxInput}
         id={"complete"}
         type="checkbox"
         {...register("priority")}
-      />
+      >
+        test
+      </input>
+      <label className={s.form__label} htmlFor="complete">
+        mark as complete
+      </label>
     </div>
   );
 }
@@ -231,11 +231,7 @@ function getCompletionCheckbox(
 function getDeleteButton(modalType: string) {
   if (modalType !== "configure") return;
 
-  return (
-    <button type="button" className={s.form__deleteButton}>
-      Delete
-    </button>
-  );
+  return <button>Delete</button>;
 }
 
 // ----------------- API CALLS -----------------
