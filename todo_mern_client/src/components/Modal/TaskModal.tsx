@@ -182,7 +182,14 @@ export default function TaskModal({
 
         {getCompletionCheckbox(modalType, register)}
         <div className={s.form__buttonsWrapper}>
-          {getDeleteButton(modalType)}
+          {getDeleteButton(
+            modalType,
+            userId,
+            setVisibility,
+            taskToConfigure,
+            setTasks,
+            tasks,
+          )}
 
           <button className={getButtonClassName()} type="submit">
             {getSubmitName()}
@@ -228,17 +235,64 @@ function getCompletionCheckbox(
   );
 }
 
-function getDeleteButton(modalType: string) {
+function getDeleteButton(
+  modalType: string,
+  userId: string,
+  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
+  tasktoConfigure: TasksInterface | undefined,
+  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
+  tasks: Array<TasksInterface>,
+) {
   if (modalType !== "configure") return;
 
   return (
-    <button type="button" className={s.form__deleteButton}>
+    <button
+      onClick={() =>
+        deleteTask(userId, setVisibility, tasktoConfigure, setTasks, tasks)
+      }
+      type="button"
+      className={s.form__deleteButton}
+    >
       Delete
     </button>
   );
 }
 
 // ----------------- API CALLS -----------------
+
+async function deleteTask(
+  userId: string,
+  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
+  tasktoConfigure: TasksInterface | undefined,
+  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
+  tasks: Array<TasksInterface>,
+) {
+  if (!userId) {
+    console.error("No userId id found");
+    return;
+  }
+  const taskId = tasktoConfigure?._id;
+  try {
+    const response = await axios.delete(
+      `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/delete/${taskId}`,
+      {
+        withCredentials: true,
+      },
+    );
+
+    if (response.status === 200) {
+      console.log("Task deleted successfully");
+      setVisibility(false);
+      setTasks(tasks.filter((task) => task._id !== taskId));
+    } else {
+      console.log("Failed to delete task: ", response.status);
+    }
+
+    console.log("Modal.tsx - configureTask/deleteTask: ", response);
+  } catch (error) {
+    console.error("An error occurred while deleting the task: ", error);
+  }
+}
 
 async function createTask(
   data: Inputs,

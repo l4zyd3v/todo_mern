@@ -157,22 +157,22 @@ export default function taskController(db: Db) {
       }
     },
 
-    // **This is for deleting a task**
-    // deleteTask: async (req: Request, res: Response) => {
-    //   const taskId = req.params.taskId;
-    //
-    //   try {
-    //     const result = await db.collection("tasks").deleteOne({
-    //       _id: new ObjectId(taskId),
-    //     });
-    //     if (result.deletedCount === 1) {
-    //       res.json({ message: "Tasks deleted successfully" });
-    //     } else {
-    //       res.status(404).json({ message: "Tasks not found" });
-    //     }
-    //   } catch (e: any) {
-    //     res.status(500).json({ message: e.message });
-    //   }
-    // },
+    deleteTask: async (req: Request, res: Response) => {
+      const { taskId } = req.params;
+
+      try {
+        const result = await db.collection("tasks").deleteOne({
+          _id: new ObjectId(taskId),
+        });
+        if (result.deletedCount === 1) {
+          res.json({ message: "Tasks deleted successfully" });
+          console.log("User deleted a task");
+        } else {
+          res.status(404).json({ message: "Tasks not found" });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
   };
 }
