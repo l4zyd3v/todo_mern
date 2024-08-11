@@ -358,7 +358,12 @@ async function updateTask(
     );
 
     if (response.status === 200) {
-      console.log("Task updated successfully");
+      console.log(response.data.message);
+
+      if (response.data.modified === false) {
+        console.log("No changes were made");
+        return;
+      }
 
       setTasks(
         tasks.map((task) =>

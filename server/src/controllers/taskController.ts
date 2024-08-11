@@ -146,8 +146,14 @@ export default function taskController(db: Db) {
           if (result.modifiedCount === 1) {
             res.status(200).json({
               message: "Tasks updated successfully",
+              modified: true,
             });
             console.log("User updated a task");
+          } else if (result.modifiedCount === 0) {
+            res.status(200).json({
+              message: "No changes were made",
+              modified: false,
+            });
           } else {
             res.status(404).json({ message: "Tasks not found" });
           }
