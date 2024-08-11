@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import { useEffect, useState, useRef, useContext, useMemo } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
@@ -12,17 +13,19 @@ import {
 } from "../../types";
 import {
   TodoCard,
-  NewTodoBtn,
-  TodoModal,
+  NewTaskBtn,
+  TaskCreateModal,
   CategoriesCard,
   Header,
   Nav,
 } from "../../components";
+
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import TaskConfigureModal from "../../components/TaskConfigureModal/TaskConfigureModal.tsx";
 
 type UserProfile = {
   _id?: string;
@@ -39,7 +42,12 @@ type UserProfile = {
 export default function Home() {
   const [user, setUser] = useState<UserProfile[]>([]);
   const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
-
+  const [taskConfigureVisibility, setTaskConfigureVisibility] = useState<
+    null | boolean
+  >(null);
+  const [taskToConfigure_id, setTaskToConfigure_id] = useState<string | null>(
+    null,
+  );
   const { categories, setCategories, tasks, setTasks } =
     useContext(DataContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
@@ -155,12 +163,12 @@ export default function Home() {
   }
 
   function handleIsCompleteSingleTask(
-    changedTaskId: string,
+    taskId: string,
     changedTaskCompletion: boolean,
   ) {
     setTasks(
       tasks.map((task) =>
-        task._id === changedTaskId
+        task._id === taskId
           ? { ...task, completed: changedTaskCompletion }
           : task,
       ),
@@ -188,7 +196,7 @@ export default function Home() {
       );
 
       return (
-        <SwiperSlide key={task._id} className={s.swiperSlide}>
+        <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
           <TodoCard
             _id={task._id}
             title={task.title}
@@ -196,6 +204,8 @@ export default function Home() {
             color={categoryColor}
             completed={completed}
             onComplete={handleIsCompleteSingleTask}
+            setTaskConfigureVisibility={setTaskConfigureVisibility}
+            setTaskToConfigure_id={setTaskToConfigure_id}
           />
         </SwiperSlide>
       );
@@ -234,17 +244,25 @@ export default function Home() {
           </Swiper>
         </div>
 
-        <NewTodoBtn setModal={setModalVisibility} />
-        <TodoModal
+        <NewTaskBtn setModal={setModalVisibility} />
+        <TaskCreateModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
-        {modalVisibility && (
+        {(modalVisibility || taskConfigureVisibility) && (
           <div
-            onClick={() => setModalVisibility(false)}
+            onClick={() => {
+              setModalVisibility(false);
+              setTaskConfigureVisibility(false);
+            }}
             className={s.main__modalBackground}
           ></div>
         )}
+        <TaskConfigureModal
+          visibility={taskConfigureVisibility}
+          setVisibility={setTaskConfigureVisibility}
+          taskToConfigure_id={taskToConfigure_id}
+        />
       </main>
       <Nav
         firstname={user[0]?.credentials.firstName}

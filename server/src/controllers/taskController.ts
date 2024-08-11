@@ -119,6 +119,43 @@ export default function taskController(db: Db) {
         res.status(500).json({ message: error.message });
       }
     },
+    confiugreTask: async (req: Request, res: Response) => {
+      const { title, description, dueDate, categoryId, priority } = req.body;
+
+      try {
+        const { userId } = req;
+        const { taskId } = req.params;
+        const collection = db.collection("tasks");
+
+        const task = await collection.findOne({ _id: new ObjectId(taskId) });
+
+        if (task) {
+          const result = await collection.updateOne(
+            { _id: new ObjectId(taskId) },
+            {
+              $set: {
+                title: title,
+                description: description,
+                dueDate: dueDate,
+                categoryId: categoryId,
+                priority: priority,
+              },
+            },
+          );
+
+          if (result.modifiedCount === 1) {
+            res.status(200).json({
+              message: "Tasks updated successfully",
+            });
+            console.log("User updated a task");
+          } else {
+            res.status(404).json({ message: "Tasks not found" });
+          }
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
 
     // **This is for deleting a task**
     // deleteTask: async (req: Request, res: Response) => {

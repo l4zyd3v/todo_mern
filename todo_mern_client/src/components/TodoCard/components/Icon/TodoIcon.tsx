@@ -4,9 +4,16 @@ import { FaCheck } from "react-icons/fa";
 type TodoIconProps = {
   color: string | undefined;
   isCompleted: boolean;
+  handleTaskCompletionClick: (taskId: string) => void;
+  taskId: string;
 };
 
-export default function TodoIcon({ color, isCompleted }: TodoIconProps) {
+export default function TodoIcon({
+  color,
+  isCompleted,
+  handleTaskCompletionClick,
+  taskId,
+}: TodoIconProps) {
   const style = isCompleted
     ? { border: `2px solid ${color}`, backgroundColor: color }
     : { border: `2px solid ${color}` };
@@ -16,8 +23,13 @@ export default function TodoIcon({ color, isCompleted }: TodoIconProps) {
   }
 
   return (
-    <div style={style} className={s.icon}>
-      {renderIcon()}
+    <div
+      onClick={() => handleTaskCompletionClick(taskId)}
+      className={s.iconClickWrapper}
+    >
+      <div style={style} className={s.icon}>
+        {renderIcon()}
+      </div>
     </div>
   );
 }

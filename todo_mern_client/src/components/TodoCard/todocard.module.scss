@@ -1,14 +1,22 @@
 .card {
   background-color: var(--dark-blue);
   border-radius: 15px;
-  /* position: relative; */
+  position: relative;
   z-index: 500;
   color: vag(--text-color);
 
   display: grid;
-  grid-template-columns: 1fr 6fr;
+  grid-template-columns: 2fr 10fr;
   align-items: center;
   /* margin: 0 1.5rem; */
   height: 100%;
   color: var(--text-color);
+
+  &__clickableTitleToOpenModal {
+    border: 2px solid green;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+  }
 }

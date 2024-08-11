@@ -12,6 +12,8 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   completed,
   // onDelete,
   onComplete,
+  setTaskConfigureVisibility,
+  setTaskToConfigure_id,
 }) => {
   const [isCompleted, setIsCompleted] = useState(completed);
 
@@ -30,10 +32,10 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   //   }
   // };
 
-  const handleDoubleClick = async (taskId: string) => {
+  const handleClick = async (taskId: string) => {
     try {
       const response = await axios.put(
-        `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/${taskId}`,
+        `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/setcompleted/${taskId}`,
         {
           completed: !isCompleted,
         },
@@ -52,10 +54,26 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   };
 
   return (
-    <div onDoubleClick={() => handleDoubleClick(_id)} className={s.card}>
-      <TodoIcon color={color} isCompleted={isCompleted} />
-      {title}
-    </div>
+    <>
+      <div className={s.card}>
+        <TodoIcon
+          color={color}
+          isCompleted={isCompleted}
+          handleTaskCompletionClick={handleClick}
+          taskId={_id}
+        />
+        <div
+          onClick={() => {
+            console.log("openModal");
+            setTaskConfigureVisibility(true);
+            setTaskToConfigure_id(_id);
+          }}
+          className={s.card__clickableTitleToOpenModal}
+        >
+          {title}
+        </div>
+      </div>
+    </>
   );
 };
 

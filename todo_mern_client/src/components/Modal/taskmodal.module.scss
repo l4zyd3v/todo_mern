@@ -1,11 +1,15 @@
-  /*todoModal variables*/
-  $todoModalBorderRadius: 1rem;
+  /*TaskeModal variables*/
+  $taskModalBorderRamius: 1rem;
 
   /*exitButton variables*/
   $exitButtonSize: 1.9rem;
   $top-left-distance: 0.8rem;
 
   @keyframes showModalAnim {
+    0% {
+      visibility: visible;
+    }
+
     20% {
       right: 20%;
     }
@@ -47,19 +51,25 @@
     animation: showModalAnim 0.5s forwards;
   }
 
-  .todoModal {
+  .defaultVisibilityHidden {
+    visibility: hidden;
+  }
+
+  .Modal {
     position: absolute;
     background: var(--dark-blue);
     height: 90svh;
     width: 90vw;
     z-index: 1000;
     align-self: center;
-    border-radius: $todoModalBorderRadius;
+    border-radius: $taskModalBorderRamius;
     /* box-shadow: 1px 2px 14px 5px black; */
     right: -100%;
     border: 2px solid var(--light-blue);
     display: grid;
     grid-template-rows: repeat(20, 1fr);
+
+    &ConfigureSpecific {}
 
     &Hide {
       animation: hideModalAnim 0.5s forwards;
@@ -95,16 +105,35 @@
 
   .form {
     display: grid;
-    grid-template-rows: 1fr 3fr 1fr 1fr 1fr;
     gap: 0.5rem;
     padding: 1rem;
     grid-row: 2/21;
     position: relative;
 
+    &CreateModalSpecfic {
+      grid-template-rows: 1fr 3fr 1fr 1fr 1fr 1fr;
+    }
+
+    &ConfigureModalSpecfic {
+      grid-template-rows: 1fr 6fr 1fr 1fr 0.5fr 1fr 1.5fr;
+    }
+
     &__inputWrapper {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+    }
+
+    &__completionCheckboxInputWrapper {
+      display: flex;
+      justify-content: center;
+      gap: 1.8rem;
+
+      margin: 0.3rem 0;
+
+      &__checkboxInput {
+        width: 1.5rem;
+      }
     }
 
     &__label {
@@ -143,18 +172,46 @@
       z-index: 100;
     }
 
+    &__buttonsWrapper {
+      display: grid;
+      margin-top: 0.1rem;
+      gap: 1rem;
+    }
+
     &__submit {
       background: var(--pink);
-      color: white;
       border: none;
       border-radius: 0.5rem;
-      padding: 0.5rem;
-      font-size: 1.2rem;
-      height: 3.4rem;
-      align-self: center;
+      color: white;
       cursor: pointer;
-      margin-top: 1rem;
+
+      &Create {
+        height: 3.4rem;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        align-self: center;
+        margin-top: 1rem;
+        width: 100%;
+        grid-column: 1/2;
+        grid-row: 1/2;
+      }
+
+      &Configure {
+        grid-column: 2/8;
+
+      }
+
     }
+
+    &__deleteButton {
+      grid-column: 1/1;
+      background: red;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+    }
+
+
   }
 
 
@@ -188,7 +245,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    border-radius: $todoModalBorderRadius;
+    border-radius: $taskModalBorderRamius;
     background: black;
     opacity: 0.8;
     z-index: 98;
