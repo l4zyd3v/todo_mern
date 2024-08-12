@@ -1,4 +1,4 @@
-export type Inputs = {
+export type DataFormInputTypes = {
   title: string | undefined;
   description?: string;
   dueDate?: string;

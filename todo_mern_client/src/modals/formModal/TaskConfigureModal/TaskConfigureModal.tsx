@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { DataContext } from "../../context/DataContext";
+import { DataContext } from "../../../context/DataContext";
 import s from "./taskconfiguremodal.module.scss";
-import TaskModal from "../Modal/TaskModal";
+import TaskModal from "../components/Modal/TaskModal";
 
 type PropTypes = {
   visibility: null | boolean;

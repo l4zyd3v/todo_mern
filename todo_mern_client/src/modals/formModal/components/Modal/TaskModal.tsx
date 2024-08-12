@@ -1,24 +1,28 @@
 import { useState, useContext, useEffect } from "react";
 import s from "./taskmodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
-import axios from "axios";
-import { TasksInterface } from "../../types";
-import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
-import { DataContext } from "../../context/DataContext";
-import { UserLoggedInContext } from "../../context/UserLoggedInContext";
+import {
+  DeleteButton,
+  NewCategoryForm,
+  DeleteConfirmModal,
+} from "./components/index";
+import { DataContext } from "../../../../context/DataContext";
 import {
   categoryUtilsHandler,
   generalUtilsHandler,
   taskConfigureUtilsHandler,
 } from "./utils/utils";
-import { Inputs, PropTypes } from "./types/index";
+import { ModalPropTypes } from "./types/index";
+import { DataFormInputTypes } from "../../../../types";
+import useCreateTask from "../../../../hooks/api/useCreateTask";
+import useUpdateTask from "../../../../hooks/api/useUpdateTask";
 
 export default function TaskModal({
   visibility,
   setVisibility,
   modalType,
   taskToConfigure,
-}: PropTypes) {
+}: ModalPropTypes) {
   // react-hook-form
   const {
     register,
@@ -27,15 +31,21 @@ export default function TaskModal({
     reset,
     watch,
     setValue,
-  } = useForm<Inputs>();
+  } = useForm<DataFormInputTypes>();
 
   // states
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
+  const [deleteTaskConfirm, setDeleteTaskConfirm] = useState<boolean | null>(
+    null,
+  );
+
+  // api calls - custom hooks
+  const createTask = useCreateTask();
+  const updateTask = useUpdateTask();
 
   // contexts
-  const { categories, addTask, setTasks, tasks } = useContext(DataContext);
-  const { userId } = useContext(UserLoggedInContext);
+  const { categories } = useContext(DataContext);
 
   // utils
   const {
@@ -54,25 +64,25 @@ export default function TaskModal({
     setValue,
   );
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<DataFormInputTypes> = (data) => {
     if (modalType === "configure") {
-      updateTask(data, userId, taskToConfigure, setTasks, tasks, setVisibility);
+      updateTask(data, taskToConfigure, setVisibility);
     } else if (modalType === "create") {
-      createTask(data, userId, addTask, setVisibility);
+      createTask(data, setVisibility);
     }
   };
 
   // useEffects
 
-  // Reset the form when the modal is opened
   useEffect(() => {
+    setDeleteTaskConfirm(null);
+    setNewCategoryModalOpen(false);
+    // Reset the form when the modal is opened
     if (visibility) {
       reset();
     }
-  }, [visibility]);
 
-  // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
-  useEffect(() => {
+    // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
     if (modalType !== "configure") return;
     getTaskToConfigureValues();
   }, [visibility]);
@@ -182,7 +192,11 @@ export default function TaskModal({
 
         {getCompletionCheckbox(modalType, register)}
         <div className={s.form__buttonsWrapper}>
-          {getDeleteButton(modalType)}
+          <DeleteButton
+            modalType={modalType}
+            s={s}
+            setDeleteTaskConfirm={setDeleteTaskConfirm}
+          />
 
           <button className={getButtonClassName()} type="submit">
             {getSubmitName()}
@@ -190,15 +204,26 @@ export default function TaskModal({
         </div>
       </form>
 
+      <DeleteConfirmModal
+        deleteTaskConfirm={deleteTaskConfirm}
+        setDeleteTaskConfirm={setDeleteTaskConfirm}
+        modalType={modalType}
+        taskToConfigure={taskToConfigure}
+        setVisibility={setVisibility}
+      />
+
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
         onNewCategoryId={(categoryId) => setNewCategoryId(categoryId)}
       />
 
-      {newCategoryModalOpen ? (
+      {newCategoryModalOpen || deleteTaskConfirm ? (
         <div
-          onClick={() => setNewCategoryModalOpen(false)}
+          onClick={() => {
+            setNewCategoryModalOpen(false);
+            setDeleteTaskConfirm(false);
+          }}
           className={s.hideBackgroundWhenNewCategoryIsOpen}
         ></div>
       ) : null}
@@ -209,7 +234,7 @@ export default function TaskModal({
 // utils function returning JSX,  might need to put this into a seperate compoent..
 function getCompletionCheckbox(
   modalType: string,
-  register: UseFormRegister<Inputs>,
+  register: UseFormRegister<DataFormInputTypes>,
 ) {
   if (modalType !== "configure") return;
 
@@ -226,108 +251,4 @@ function getCompletionCheckbox(
       />
     </div>
   );
-}
-
-function getDeleteButton(modalType: string) {
-  if (modalType !== "configure") return;
-
-  return (
-    <button type="button" className={s.form__deleteButton}>
-      Delete
-    </button>
-  );
-}
-
-// ----------------- API CALLS -----------------
-
-async function createTask(
-  data: Inputs,
-  userId: string,
-  addTask: (newTask: TasksInterface) => void,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-) {
-  console.log("data: ", data);
-  if (!userId) {
-    console.error("No userId id found");
-    return;
-  }
-  try {
-    const response = await axios.post(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/newtask`,
-      data,
-      {
-        withCredentials: true,
-      },
-    );
-
-    if (response.status === 201) {
-      console.log("Task created successfully");
-      addTask(response.data);
-      setVisibility(false);
-    } else {
-      console.log("Failed to create task: ", response.status);
-    }
-
-    console.log("Modal.tsx - createTask/addTask: ", response);
-  } catch (error) {
-    console.error("An error occurred while creating the task: ", error);
-  }
-}
-
-async function updateTask(
-  data: Inputs,
-  userId: string,
-  tasktoConfigure: TasksInterface | undefined,
-  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
-  tasks: Array<TasksInterface>,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-) {
-  console.log("data: ", data);
-  const taskId = tasktoConfigure?._id;
-  const { title, description, dueDate, categoryId, priority } = data;
-
-  if (!userId) {
-    console.error("No userId id found");
-    return;
-  }
-  if (!taskId) {
-    console.error("No task id found");
-    return;
-  }
-  try {
-    const response = await axios.put(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/configuretask/${taskId}`,
-      data,
-      {
-        withCredentials: true,
-      },
-    );
-
-    if (response.status === 200) {
-      console.log("Task updated successfully");
-
-      setTasks(
-        tasks.map((task) =>
-          task._id === taskId
-            ? {
-                ...task,
-                title: title ? title : task.title,
-                description: description ? description : task.description,
-                dueDate: dueDate ? dueDate : task.dueDate,
-                categoryId: categoryId ? categoryId : task.categoryId,
-                priority: priority ? priority : task.priority,
-              }
-            : task,
-        ),
-      );
-
-      setVisibility(false);
-    } else {
-      console.log("Failed to update task: ", response.status);
-    }
-
-    console.log("TaskConfigureModal.tsx - updatetaskk: ", response);
-  } catch (error) {
-    console.error("An error occurred while creating the task: ", error);
-  }
 }
