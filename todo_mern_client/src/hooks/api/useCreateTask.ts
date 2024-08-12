@@ -2,14 +2,14 @@ import { useContext } from "react";
 import axios from "axios";
 import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
-import { Inputs } from "../../../src/components/Modal/types/index";
+import { DataFormInputTypes } from "../../types/index";
 
 const useCreateTask = () => {
   const { addTask } = useContext(DataContext);
   const { userId } = useContext(UserLoggedInContext);
 
   async function createTask(
-    data: Inputs,
+    data: DataFormInputTypes,
     setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
   ) {
     console.log("data: ", data);

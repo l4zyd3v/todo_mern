@@ -9,7 +9,8 @@ import {
   generalUtilsHandler,
   taskConfigureUtilsHandler,
 } from "./utils/utils";
-import { Inputs, PropTypes as ModalPropTypes } from "./types/index";
+import { ModalPropTypes } from "./types/index";
+import { DataFormInputTypes } from "../../types";
 import useCreateTask from "../../hooks/api/useCreateTask";
 import useUpdateTask from "../../hooks/api/useUpdateTask";
 
@@ -27,7 +28,7 @@ export default function TaskModal({
     reset,
     watch,
     setValue,
-  } = useForm<Inputs>();
+  } = useForm<DataFormInputTypes>();
 
   // states
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function TaskModal({
     setValue,
   );
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<DataFormInputs> = (data) => {
     if (modalType === "configure") {
       updateTask(data, taskToConfigure, setVisibility);
     } else if (modalType === "create") {
@@ -217,7 +218,7 @@ export default function TaskModal({
 // utils function returning JSX,  might need to put this into a seperate compoent..
 function getCompletionCheckbox(
   modalType: string,
-  register: UseFormRegister<Inputs>,
+  register: UseFormRegister<DataFormInputs>,
 ) {
   if (modalType !== "configure") return;
 

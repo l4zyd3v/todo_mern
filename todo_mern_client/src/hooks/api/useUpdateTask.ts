@@ -2,7 +2,7 @@ import { useContext } from "react";
 import axios from "axios";
 import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
-import { Inputs } from "../../../src/components/Modal/types/index";
+import { DataFormInputTypes } from "../../types/index";
 import { TasksInterface } from "../../types";
 
 const useUpdateTask = () => {
@@ -10,7 +10,7 @@ const useUpdateTask = () => {
   const { userId } = useContext(UserLoggedInContext);
 
   async function updateTask(
-    data: Inputs,
+    data: DataFormInputTypes,
     tasktoConfigure: TasksInterface | undefined,
     setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
   ) {
