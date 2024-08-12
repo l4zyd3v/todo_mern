@@ -76,6 +76,7 @@ export default function TaskModal({
 
   useEffect(() => {
     setDeleteTaskConfirm(null);
+    setNewCategoryModalOpen(false);
     // Reset the form when the modal is opened
     if (visibility) {
       reset();
