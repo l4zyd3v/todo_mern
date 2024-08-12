@@ -58,7 +58,7 @@ export default function TaskModal({
     setValue,
   );
 
-  const onSubmit: SubmitHandler<DataFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<DataFormInputTypes> = (data) => {
     if (modalType === "configure") {
       updateTask(data, taskToConfigure, setVisibility);
     } else if (modalType === "create") {
@@ -218,7 +218,7 @@ export default function TaskModal({
 // utils function returning JSX,  might need to put this into a seperate compoent..
 function getCompletionCheckbox(
   modalType: string,
-  register: UseFormRegister<DataFormInputs>,
+  register: UseFormRegister<DataFormInputTypes>,
 ) {
   if (modalType !== "configure") return;
 
