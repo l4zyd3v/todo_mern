@@ -14,7 +14,6 @@ import {
 import {
   TodoCard,
   NewTaskBtn,
-  TaskCreateModal,
   CategoriesCard,
   Header,
   Nav,
@@ -25,7 +24,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import TaskConfigureModal from "../../components/TaskConfigureModal/TaskConfigureModal.tsx";
+import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
+import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
 
 type UserProfile = {
   _id?: string;

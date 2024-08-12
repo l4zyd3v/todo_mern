@@ -1,5 +1,5 @@
 import { TasksInterface } from "../../../../types";
-import useDeleteTask from "../../../../hooks/api/useDeleteTask";
+import useDeleteTask from "../../../../../../hooks/api/useDeleteTask";
 
 interface DeleteButtonProps {
   modalType: string;

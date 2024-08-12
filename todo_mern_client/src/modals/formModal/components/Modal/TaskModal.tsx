@@ -3,16 +3,16 @@ import s from "./taskmodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
 import DeleteButton from "./components/DeleteButton/DeleteButton";
-import { DataContext } from "../../context/DataContext";
+import { DataContext } from "../../../../context/DataContext";
 import {
   categoryUtilsHandler,
   generalUtilsHandler,
   taskConfigureUtilsHandler,
 } from "./utils/utils";
 import { ModalPropTypes } from "./types/index";
-import { DataFormInputTypes } from "../../types";
-import useCreateTask from "../../hooks/api/useCreateTask";
-import useUpdateTask from "../../hooks/api/useUpdateTask";
+import { DataFormInputTypes } from "../../../../types";
+import useCreateTask from "../../../../hooks/api/useCreateTask";
+import useUpdateTask from "../../../../hooks/api/useUpdateTask";
 
 export default function TaskModal({
   visibility,

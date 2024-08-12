@@ -1,5 +1,5 @@
 // import s from "./taskcreatemodal.module.scss";
-import TaskModal from "../Modal/TaskModal";
+import TaskModal from "../components/Modal/TaskModal";
 
 // This type should maybe be used in a separate file
 type PropTypes = {

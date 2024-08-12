@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
-import { UserLoggedInContext } from "../../../../context/UserLoggedInContext";
-import { DataContext } from "../../../../context/DataContext";
+import { UserLoggedInContext } from "../../../../../../context/UserLoggedInContext";
+import { DataContext } from "../../../../../../context/DataContext";
 import { CategoriesInterface } from "../../../../types";
 import s from "./newcategoryform.module.scss";
 import { useForm, SubmitHandler, UseFormSetValue } from "react-hook-form";
