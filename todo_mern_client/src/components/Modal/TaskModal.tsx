@@ -1,24 +1,24 @@
 import { useState, useContext, useEffect } from "react";
 import s from "./taskmodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
-import axios from "axios";
-import { TasksInterface } from "../../types";
 import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
+import DeleteButton from "./components/DeleteButton/DeleteButton";
 import { DataContext } from "../../context/DataContext";
-import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import {
   categoryUtilsHandler,
   generalUtilsHandler,
   taskConfigureUtilsHandler,
 } from "./utils/utils";
-import { Inputs, PropTypes } from "./types/index";
+import { Inputs, PropTypes as ModalPropTypes } from "./types/index";
+import useCreateTask from "../../hooks/api/useCreateTask";
+import useUpdateTask from "../../hooks/api/useUpdateTask";
 
 export default function TaskModal({
   visibility,
   setVisibility,
   modalType,
   taskToConfigure,
-}: PropTypes) {
+}: ModalPropTypes) {
   // react-hook-form
   const {
     register,
@@ -33,9 +33,12 @@ export default function TaskModal({
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
 
+  // api calls - custom hooks
+  const createTask = useCreateTask();
+  const updateTask = useUpdateTask();
+
   // contexts
-  const { categories, addTask, setTasks, tasks } = useContext(DataContext);
-  const { userId } = useContext(UserLoggedInContext);
+  const { categories } = useContext(DataContext);
 
   // utils
   const {
@@ -56,9 +59,9 @@ export default function TaskModal({
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (modalType === "configure") {
-      updateTask(data, userId, taskToConfigure, setTasks, tasks, setVisibility);
+      updateTask(data, taskToConfigure, setVisibility);
     } else if (modalType === "create") {
-      createTask(data, userId, addTask, setVisibility);
+      createTask(data, setVisibility);
     }
   };
 
@@ -182,14 +185,12 @@ export default function TaskModal({
 
         {getCompletionCheckbox(modalType, register)}
         <div className={s.form__buttonsWrapper}>
-          {getDeleteButton(
-            modalType,
-            userId,
-            setVisibility,
-            taskToConfigure,
-            setTasks,
-            tasks,
-          )}
+          <DeleteButton
+            modalType={modalType}
+            setVisibility={setVisibility}
+            taskToConfigure={taskToConfigure}
+            s={s}
+          />
 
           <button className={getButtonClassName()} type="submit">
             {getSubmitName()}
@@ -233,160 +234,4 @@ function getCompletionCheckbox(
       />
     </div>
   );
-}
-
-function getDeleteButton(
-  modalType: string,
-  userId: string,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-  tasktoConfigure: TasksInterface | undefined,
-  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
-  tasks: Array<TasksInterface>,
-) {
-  if (modalType !== "configure") return;
-
-  return (
-    <button
-      onClick={() =>
-        deleteTask(userId, setVisibility, tasktoConfigure, setTasks, tasks)
-      }
-      type="button"
-      className={s.form__deleteButton}
-    >
-      Delete
-    </button>
-  );
-}
-
-// ----------------- API CALLS -----------------
-
-async function deleteTask(
-  userId: string,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-  tasktoConfigure: TasksInterface | undefined,
-  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
-  tasks: Array<TasksInterface>,
-) {
-  if (!userId) {
-    console.error("No userId id found");
-    return;
-  }
-  const taskId = tasktoConfigure?._id;
-  try {
-    const response = await axios.delete(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/delete/${taskId}`,
-      {
-        withCredentials: true,
-      },
-    );
-
-    if (response.status === 200) {
-      console.log("Task deleted successfully");
-      setVisibility(false);
-      setTasks(tasks.filter((task) => task._id !== taskId));
-    } else {
-      console.log("Failed to delete task: ", response.status);
-    }
-
-    console.log("Modal.tsx - configureTask/deleteTask: ", response);
-  } catch (error) {
-    console.error("An error occurred while deleting the task: ", error);
-  }
-}
-
-async function createTask(
-  data: Inputs,
-  userId: string,
-  addTask: (newTask: TasksInterface) => void,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-) {
-  console.log("data: ", data);
-  if (!userId) {
-    console.error("No userId id found");
-    return;
-  }
-  try {
-    const response = await axios.post(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/newtask`,
-      data,
-      {
-        withCredentials: true,
-      },
-    );
-
-    if (response.status === 201) {
-      console.log("Task created successfully");
-      addTask(response.data);
-      setVisibility(false);
-    } else {
-      console.log("Failed to create task: ", response.status);
-    }
-
-    console.log("Modal.tsx - createTask/addTask: ", response);
-  } catch (error) {
-    console.error("An error occurred while creating the task: ", error);
-  }
-}
-
-async function updateTask(
-  data: Inputs,
-  userId: string,
-  tasktoConfigure: TasksInterface | undefined,
-  setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>,
-  tasks: Array<TasksInterface>,
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-) {
-  console.log("data: ", data);
-  const taskId = tasktoConfigure?._id;
-  const { title, description, dueDate, categoryId, priority } = data;
-
-  if (!userId) {
-    console.error("No userId id found");
-    return;
-  }
-  if (!taskId) {
-    console.error("No task id found");
-    return;
-  }
-  try {
-    const response = await axios.put(
-      `http://${import.meta.env.VITE_HOSTURL}:3000/tasks/configuretask/${taskId}`,
-      data,
-      {
-        withCredentials: true,
-      },
-    );
-
-    if (response.status === 200) {
-      console.log(response.data.message);
-
-      if (response.data.modified === false) {
-        console.log("No changes were made");
-        return;
-      }
-
-      setTasks(
-        tasks.map((task) =>
-          task._id === taskId
-            ? {
-                ...task,
-                title: title ? title : task.title,
-                description: description ? description : task.description,
-                dueDate: dueDate ? dueDate : task.dueDate,
-                categoryId: categoryId ? categoryId : task.categoryId,
-                priority: priority ? priority : task.priority,
-              }
-            : task,
-        ),
-      );
-
-      setVisibility(false);
-    } else {
-      console.log("Failed to update task: ", response.status);
-    }
-
-    console.log("TaskConfigureModal.tsx - updatetaskk: ", response);
-  } catch (error) {
-    console.error("An error occurred while creating the task: ", error);
-  }
 }

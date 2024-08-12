@@ -1,6 +1,6 @@
 import { TasksInterface } from "../../../types/tasksInterface";
 
-export type PropTypes = {
+export type ModalPropTypes = {
   visibility: boolean | null;
   setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
   modalType: string;
