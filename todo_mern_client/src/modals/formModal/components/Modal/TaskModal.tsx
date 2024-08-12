@@ -1,8 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import s from "./taskmodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
-import NewCategoryForm from "./components/NewCategoryForm/NewCategoryForm";
-import DeleteButton from "./components/DeleteButton/DeleteButton";
+import {
+  DeleteButton,
+  NewCategoryForm,
+  DeleteConfirmModal,
+} from "./components/index";
 import { DataContext } from "../../../../context/DataContext";
 import {
   categoryUtilsHandler,
@@ -33,6 +36,9 @@ export default function TaskModal({
   // states
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const [newCategoryId, setNewCategoryId] = useState<string | null>(null);
+  const [deleteTaskConfirm, setDeleteTaskConfirm] = useState<boolean | null>(
+    null,
+  );
 
   // api calls - custom hooks
   const createTask = useCreateTask();
@@ -68,15 +74,14 @@ export default function TaskModal({
 
   // useEffects
 
-  // Reset the form when the modal is opened
   useEffect(() => {
+    setDeleteTaskConfirm(null);
+    // Reset the form when the modal is opened
     if (visibility) {
       reset();
     }
-  }, [visibility]);
 
-  // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
-  useEffect(() => {
+    // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
     if (modalType !== "configure") return;
     getTaskToConfigureValues();
   }, [visibility]);
@@ -188,9 +193,8 @@ export default function TaskModal({
         <div className={s.form__buttonsWrapper}>
           <DeleteButton
             modalType={modalType}
-            setVisibility={setVisibility}
-            taskToConfigure={taskToConfigure}
             s={s}
+            setDeleteTaskConfirm={setDeleteTaskConfirm}
           />
 
           <button className={getButtonClassName()} type="submit">
@@ -199,15 +203,26 @@ export default function TaskModal({
         </div>
       </form>
 
+      <DeleteConfirmModal
+        deleteTaskConfirm={deleteTaskConfirm}
+        setDeleteTaskConfirm={setDeleteTaskConfirm}
+        modalType={modalType}
+        taskToConfigure={taskToConfigure}
+        setVisibility={setVisibility}
+      />
+
       <NewCategoryForm
         newCategoryModalOpen={newCategoryModalOpen}
         setNewCategoryModalOpen={setNewCategoryModalOpen}
         onNewCategoryId={(categoryId) => setNewCategoryId(categoryId)}
       />
 
-      {newCategoryModalOpen ? (
+      {newCategoryModalOpen || deleteTaskConfirm ? (
         <div
-          onClick={() => setNewCategoryModalOpen(false)}
+          onClick={() => {
+            setNewCategoryModalOpen(false);
+            setDeleteTaskConfirm(false);
+          }}
           className={s.hideBackgroundWhenNewCategoryIsOpen}
         ></div>
       ) : null}

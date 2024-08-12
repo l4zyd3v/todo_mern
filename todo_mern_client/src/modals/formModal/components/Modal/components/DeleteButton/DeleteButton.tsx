@@ -1,26 +1,18 @@
-import { TasksInterface } from "../../../../types";
-import useDeleteTask from "../../../../../../hooks/api/useDeleteTask";
-
 interface DeleteButtonProps {
   modalType: string;
-  setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>;
-  taskToConfigure: TasksInterface | undefined;
   s: CSSModuleClasses;
+  setDeleteTaskConfirm: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 export default function DeleteButton({
   modalType,
-  setVisibility,
-  taskToConfigure,
   s,
+  setDeleteTaskConfirm,
 }: DeleteButtonProps) {
-  // contexts
-  const deleteTask = useDeleteTask();
-
   if (modalType !== "configure") return null;
   return (
     <button
-      onClick={() => deleteTask(taskToConfigure, setVisibility)}
+      onClick={() => setDeleteTaskConfirm(true)}
       type="button"
       className={s.form__deleteButton}
     >
