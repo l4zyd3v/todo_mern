@@ -5,6 +5,7 @@ import {
   DeleteButton,
   NewCategoryForm,
   DeleteConfirmModal,
+  CompletionCheckbox,
 } from "./components/index";
 import { DataContext } from "../../../../context/DataContext";
 import {
@@ -190,7 +191,8 @@ export default function TaskModal({
           </select>
         </div>
 
-        {getCompletionCheckbox(modalType, register)}
+        <CompletionCheckbox modalType={modalType} register={register} s={s} />
+
         <div className={s.form__buttonsWrapper}>
           <DeleteButton
             modalType={modalType}
@@ -227,28 +229,6 @@ export default function TaskModal({
           className={s.hideBackgroundWhenNewCategoryIsOpen}
         ></div>
       ) : null}
-    </div>
-  );
-}
-
-// utils function returning JSX,  might need to put this into a seperate compoent..
-function getCompletionCheckbox(
-  modalType: string,
-  register: UseFormRegister<DataFormInputTypes>,
-) {
-  if (modalType !== "configure") return;
-
-  return (
-    <div className={s.form__completionCheckboxInputWrapper}>
-      <label className={s.form__label} htmlFor="complete">
-        mark as complete:
-      </label>
-      <input
-        className={s.form__completionCheckboxInputWrapper__checkboxInput}
-        id={"complete"}
-        type="checkbox"
-        {...register("priority")}
-      />
     </div>
   );
 }
