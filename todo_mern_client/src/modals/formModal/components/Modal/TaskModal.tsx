@@ -90,9 +90,8 @@ export default function TaskModal({
 
   // Set the category as the newly created category if the user chooses to do that.
   useEffect(() => {
-    if (newCategoryId) {
-      setValue("categoryId", newCategoryId);
-    }
+    if (!newCategoryId) return;
+    setValue("categoryId", newCategoryId);
   }, [newCategoryId, setValue]);
 
   // set the default categoryValue to be "personal" when creating a new task
