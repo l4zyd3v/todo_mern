@@ -13,5 +13,5 @@ export interface TodoCardInterface {
     React.SetStateAction<null | boolean>
   >;
 
-  setTaskToConfigure_id: React.Dispatch<React.SetStateAction<string>>;
+  setTaskToConfigure_id: React.Dispatch<React.SetStateAction<string | null>>;
 }
