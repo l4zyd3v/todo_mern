@@ -4,4 +4,5 @@ export type DataFormInputTypes = {
   dueDate?: string;
   categoryId?: string;
   priority?: string;
+  completed?: boolean;
 };

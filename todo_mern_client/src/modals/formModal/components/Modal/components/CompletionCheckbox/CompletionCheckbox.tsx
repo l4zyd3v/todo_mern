@@ -16,14 +16,14 @@ export default function CompletionCheckbox({
 
   return (
     <div className={s.form__completionCheckboxInputWrapper}>
-      <label className={s.form__label} htmlFor="complete">
+      <label className={s.form__label} htmlFor="completed">
         mark as complete:
       </label>
       <input
         className={s.form__completionCheckboxInputWrapper__checkboxInput}
-        id={"complete"}
+        id={"completed"}
         type="checkbox"
-        {...register("priority")}
+        {...register("completed")}
       />
     </div>
   );
