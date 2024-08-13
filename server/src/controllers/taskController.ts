@@ -120,7 +120,8 @@ export default function taskController(db: Db) {
       }
     },
     confiugreTask: async (req: Request, res: Response) => {
-      const { title, description, dueDate, categoryId, priority } = req.body;
+      const { title, description, dueDate, categoryId, priority, completed } =
+        req.body;
 
       try {
         const { userId } = req;
@@ -139,6 +140,7 @@ export default function taskController(db: Db) {
                 dueDate: dueDate,
                 categoryId: categoryId,
                 priority: priority,
+                completed: completed,
               },
             },
           );
