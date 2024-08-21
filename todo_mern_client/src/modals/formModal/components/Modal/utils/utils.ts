@@ -1,7 +1,7 @@
-import { CategoriesInterface } from "../../../types";
 import { UseFormSetValue } from "react-hook-form";
-import { TasksInterface } from "../../../types/tasksInterface";
-import { Inputs } from "../types/index";
+import { CategoriesInterface } from "../../../../../types";
+import { TasksInterface } from "../../../../../types";
+import { DataFormInputTypes } from "../../../../../types";
 
 // general
 function generalUtilsHandler(
@@ -42,8 +42,8 @@ function generalUtilsHandler(
 
 // TaskConfigure specific
 function taskConfigureUtilsHandler(
-  taskToConfigure: TasksInterface | undefined,
-  setValue: UseFormSetValue<Inputs>,
+  taskToConfigure: TasksInterface | undefined | null,
+  setValue: UseFormSetValue<DataFormInputTypes>,
 ) {
   return {
     getTaskToConfigureValues: () => {
@@ -53,6 +53,7 @@ function taskConfigureUtilsHandler(
         setValue("dueDate", taskToConfigure.dueDate);
         setValue("categoryId", taskToConfigure.categoryId);
         setValue("priority", taskToConfigure.priority);
+        setValue("completed", taskToConfigure.completed);
       }
     },
   };

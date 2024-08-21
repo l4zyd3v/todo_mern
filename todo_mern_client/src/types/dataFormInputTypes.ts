@@ -1,7 +1,8 @@
 export type DataFormInputTypes = {
-  title: string | undefined;
+  title?: string | undefined;
   description?: string;
   dueDate?: string;
   categoryId?: string;
   priority?: string;
+  completed?: boolean | null;
 };

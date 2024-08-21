@@ -45,16 +45,15 @@ export default function Home() {
   const [taskConfigureVisibility, setTaskConfigureVisibility] = useState<
     null | boolean
   >(null);
-  const [taskToConfigure_id, setTaskToConfigure_id] = useState<string | null>(
-    null,
-  );
-  const { categories, setCategories, tasks, setTasks } =
+  const { categories, setCategories, tasks, setTasks, selectedTask } =
     useContext(DataContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
 
   const navigate = useNavigate();
+
+  // console.log("!!!!!!!!! selectedTask, completed: ", selectedTask?.completed);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -104,7 +103,6 @@ export default function Home() {
           withCredentials: true,
         },
       );
-      console.log("Home.tsx - fetchIt: ", endpoint, res.data);
       setState(res.data);
     } catch (error) {
       console.log(error);
@@ -162,19 +160,6 @@ export default function Home() {
     });
   }
 
-  function handleIsCompleteSingleTask(
-    taskId: string,
-    changedTaskCompletion: boolean,
-  ) {
-    setTasks(
-      tasks.map((task) =>
-        task._id === taskId
-          ? { ...task, completed: changedTaskCompletion }
-          : task,
-      ),
-    );
-  }
-
   function getTaskColorRelatedToCategory(
     taskCategoryId: string | undefined,
     categories: CategoriesInterface[],
@@ -198,14 +183,13 @@ export default function Home() {
       return (
         <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
           <TodoCard
-            _id={task._id}
-            title={task.title}
-            description={task.description}
+            _id={_id}
+            title={title}
+            description={description}
             color={categoryColor}
             completed={completed}
-            onComplete={handleIsCompleteSingleTask}
             setTaskConfigureVisibility={setTaskConfigureVisibility}
-            setTaskToConfigure_id={setTaskToConfigure_id}
+            taskConfigureVisibility={taskConfigureVisibility}
           />
         </SwiperSlide>
       );
@@ -261,7 +245,6 @@ export default function Home() {
         <TaskConfigureModal
           visibility={taskConfigureVisibility}
           setVisibility={setTaskConfigureVisibility}
-          taskToConfigure_id={taskToConfigure_id}
         />
       </main>
       <Nav

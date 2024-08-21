@@ -2,21 +2,17 @@ import { useContext } from "react";
 import axios from "axios";
 import { DataContext } from "../../context/DataContext";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
-import { DataFormInputTypes } from "../../types/index";
-import { TasksInterface } from "../../types";
+import { UpdateTaskProps } from "../../types/index";
 
 const useUpdateTask = () => {
-  const { setTasks, tasks } = useContext(DataContext);
+  const { setTasks, tasks, selectedTask, setSelectedTask } =
+    useContext(DataContext);
   const { userId } = useContext(UserLoggedInContext);
 
-  async function updateTask(
-    data: DataFormInputTypes,
-    tasktoConfigure: TasksInterface | undefined,
-    setVisibility: React.Dispatch<React.SetStateAction<boolean | null>>,
-  ) {
-    console.log("data: ", data);
-    const taskId = tasktoConfigure?._id;
-    const { title, description, dueDate, categoryId, priority } = data;
+  async function updateTask({ data, setVisibility, id }: UpdateTaskProps) {
+    const taskId = id ? id : selectedTask?._id;
+    const { title, description, dueDate, categoryId, priority, completed } =
+      data;
 
     if (!userId) {
       console.error("No userId id found");
@@ -53,12 +49,13 @@ const useUpdateTask = () => {
                   dueDate: dueDate ? dueDate : task.dueDate,
                   categoryId: categoryId ? categoryId : task.categoryId,
                   priority: priority ? priority : task.priority,
+                  completed: completed,
                 }
               : task,
           ),
         );
 
-        setVisibility(false);
+        setVisibility && setVisibility(false);
       } else {
         console.log("Failed to update task: ", response.status);
       }

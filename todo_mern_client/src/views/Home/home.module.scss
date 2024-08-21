@@ -98,6 +98,8 @@
   position: relative;
 
 
+
+
   &__heading {
     color: var(--text-color2);
     font-size: 1.1rem;
@@ -111,6 +113,9 @@
     width: 100%;
     margin-bottom: 2.5rem;
     position: relative;
+
+    /* delete here  */
+    /* min-height: 100%; */
   }
 
   &__swiperSlide {

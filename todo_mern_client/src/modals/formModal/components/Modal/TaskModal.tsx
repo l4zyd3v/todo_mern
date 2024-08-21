@@ -14,7 +14,7 @@ import {
   taskConfigureUtilsHandler,
 } from "./utils/utils";
 import { ModalPropTypes } from "./types/index";
-import { DataFormInputTypes } from "../../../../types";
+import { DataFormInputTypes, UpdateTaskProps } from "../../../../types";
 import useCreateTask from "../../../../hooks/api/useCreateTask";
 import useUpdateTask from "../../../../hooks/api/useUpdateTask";
 
@@ -22,7 +22,6 @@ export default function TaskModal({
   visibility,
   setVisibility,
   modalType,
-  taskToConfigure,
 }: ModalPropTypes) {
   // react-hook-form
   const {
@@ -46,7 +45,7 @@ export default function TaskModal({
   const updateTask = useUpdateTask();
 
   // contexts
-  const { categories } = useContext(DataContext);
+  const { categories, selectedTask } = useContext(DataContext);
 
   // utils
   const {
@@ -61,13 +60,14 @@ export default function TaskModal({
     getButtonClassName,
   } = generalUtilsHandler(visibility, s, modalType);
   const { getTaskToConfigureValues } = taskConfigureUtilsHandler(
-    taskToConfigure,
+    selectedTask,
     setValue,
   );
 
   const onSubmit: SubmitHandler<DataFormInputTypes> = (data) => {
     if (modalType === "configure") {
-      updateTask(data, taskToConfigure, setVisibility);
+      console.log(data);
+      updateTask({ data, setVisibility });
     } else if (modalType === "create") {
       createTask(data, setVisibility);
     }
@@ -84,7 +84,7 @@ export default function TaskModal({
     }
 
     // the modal is used for both when the user want to configure an exisiting task and to create a new task. Here the form inputs are set when the user want to configre an exisiting task
-    if (modalType !== "configure") return;
+    if (modalType !== "configure" || !selectedTask) return;
     getTaskToConfigureValues();
   }, [visibility]);
 
@@ -209,7 +209,6 @@ export default function TaskModal({
         deleteTaskConfirm={deleteTaskConfirm}
         setDeleteTaskConfirm={setDeleteTaskConfirm}
         modalType={modalType}
-        taskToConfigure={taskToConfigure}
         setVisibility={setVisibility}
       />
 

@@ -1,5 +1,7 @@
+import { useContext, useState, useEffect } from "react";
 import { UseFormRegister } from "react-hook-form";
-import { DataFormInputTypes } from "../../../../../../types";
+import { DataFormInputTypes, TasksInterface } from "../../../../../../types";
+import { DataContext } from "../../../../../../context/DataContext";
 
 interface CompletionCheckboxProps {
   modalType: string;
@@ -12,18 +14,27 @@ export default function CompletionCheckbox({
   register,
   s,
 }: CompletionCheckboxProps) {
-  if (modalType !== "configure") return;
+  const { selectedTask } = useContext(DataContext);
+  const [defaultCheckedValue, setDefaultCheckedValue] =
+    useState<boolean>(false);
 
+  useEffect(() => {
+    if (!selectedTask) return;
+    setDefaultCheckedValue(selectedTask.completed);
+  }, [selectedTask, setDefaultCheckedValue]);
+
+  if (modalType !== "configure") return null;
   return (
     <div className={s.form__completionCheckboxInputWrapper}>
-      <label className={s.form__label} htmlFor="complete">
+      <label className={s.form__label} htmlFor="completed">
         mark as complete:
       </label>
       <input
         className={s.form__completionCheckboxInputWrapper__checkboxInput}
-        id={"complete"}
+        id={"completed"}
         type="checkbox"
-        {...register("priority")}
+        {...register("completed")}
+        defaultChecked={defaultCheckedValue}
       />
     </div>
   );

@@ -8,6 +8,11 @@ interface DataContextType {
   setTasks: React.Dispatch<React.SetStateAction<TasksInterface[]>>;
   addTask: (newTask: TasksInterface) => void;
   tasks: Array<TasksInterface>;
+
+  selectedTask: TasksInterface | null;
+  setSelectedTask: (id: string) => void;
+
+  setTaskCompletion?: (taskId: string) => void;
 }
 
 interface DataContextProviderProps {
@@ -21,11 +26,20 @@ export const DataContext = createContext<DataContextType>({
   setTasks: () => {},
   addTask: () => {},
   tasks: [],
+  selectedTask: null,
+  setSelectedTask: () => {},
+
+  setTaskCompletion: () => {},
 });
 
 export function DataContextProvider({ children }: DataContextProviderProps) {
   const [categories, setCategories] = useState<CategoriesInterface[]>([]);
   const [tasks, setTasks] = useState<TasksInterface[]>([]);
+  const [selectedTask, setCurrentTask] = useState<TasksInterface | null>(null);
+
+  const setSelectedTask = (taskId: string) => {
+    setCurrentTask(tasks.find((task) => task._id === taskId) || null);
+  };
 
   const addCategory = (newCategory: CategoriesInterface) => {
     setCategories((prevCategories) => [...prevCategories, newCategory]);
@@ -35,6 +49,14 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
+  const setTaskCompletion = (taskId: string) => {
+    setTasks(
+      tasks.map((task) =>
+        task._id === taskId ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  };
+
   const value = {
     categories,
     setCategories,
@@ -42,6 +64,9 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     tasks,
     setTasks,
     addTask,
+    setTaskCompletion,
+    selectedTask,
+    setSelectedTask,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
