@@ -106,6 +106,7 @@ export default function taskController(db: Db) {
           categoryId: categoryId,
           priority: priority,
           userId: new ObjectId(userId),
+          completed: false,
         };
 
         const result = await collection.insertOne(newTask);
@@ -131,18 +132,18 @@ export default function taskController(db: Db) {
         const task = await collection.findOne({ _id: new ObjectId(taskId) });
 
         if (task) {
+          let updatedTask: Partial<TaskType> = {};
+
+          if (title !== undefined) updatedTask.title = title;
+          if (description !== undefined) updatedTask.description = description;
+          if (dueDate !== undefined) updatedTask.dueDate = dueDate;
+          if (categoryId !== undefined) updatedTask.categoryId = categoryId;
+          if (priority !== undefined) updatedTask.priority = priority;
+          if (completed !== undefined) updatedTask.completed = completed;
+
           const result = await collection.updateOne(
             { _id: new ObjectId(taskId) },
-            {
-              $set: {
-                title: title,
-                description: description,
-                dueDate: dueDate,
-                categoryId: categoryId,
-                priority: priority,
-                completed: completed,
-              },
-            },
+            { $set: updatedTask },
           );
 
           if (result.modifiedCount === 1) {

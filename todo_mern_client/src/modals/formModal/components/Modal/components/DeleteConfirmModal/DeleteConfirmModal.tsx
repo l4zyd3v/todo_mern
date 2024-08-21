@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import s from "./deleteconfirmmodal.module.scss";
 import useDeleteTask from "../../../../../../hooks/api/useDeleteTask";
 import { TasksInterface } from "../../../../../../types";
+import { DataContext } from "../../../../../../context/DataContext";
 
 type DeleteConformModalTypes = {
   deleteTaskConfirm: boolean | null;
@@ -14,10 +16,10 @@ export default function DeleteConfirmModal({
   deleteTaskConfirm,
   setDeleteTaskConfirm,
   modalType,
-  taskToConfigure,
   setVisibility,
 }: DeleteConformModalTypes) {
   const deleteTask = useDeleteTask();
+  const { selectedTask } = useContext(DataContext);
 
   if (modalType !== "configure") return null;
   if (!deleteTaskConfirm) return null;
@@ -36,7 +38,7 @@ export default function DeleteConfirmModal({
         </button>
         <button
           className={`${s.deleteConfirmModal__Button} ${s.deleteConfirmModal__ButtonDelete}`}
-          onClick={() => deleteTask(taskToConfigure, setVisibility)}
+          onClick={() => deleteTask(selectedTask, setVisibility)}
         >
           Delete
         </button>
