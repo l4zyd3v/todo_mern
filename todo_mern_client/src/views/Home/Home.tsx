@@ -26,6 +26,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
 import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
+import CategoryModal from "../../modals/formModal/categoryModal/CategoryModal.tsx";
 
 type UserProfile = {
   _id?: string;
@@ -212,6 +213,7 @@ export default function Home() {
             {renderCategories()}
           </div>
         </div>
+
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
           <Swiper
@@ -229,10 +231,19 @@ export default function Home() {
         </div>
 
         <NewTaskBtn setModal={setModalVisibility} />
+
         <TaskCreateModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
+
+        <TaskConfigureModal
+          visibility={taskConfigureVisibility}
+          setVisibility={setTaskConfigureVisibility}
+        />
+
+        <CategoryModal />
+
         {(modalVisibility || taskConfigureVisibility) && (
           <div
             onClick={() => {
@@ -242,11 +253,8 @@ export default function Home() {
             className={s.main__modalBackground}
           ></div>
         )}
-        <TaskConfigureModal
-          visibility={taskConfigureVisibility}
-          setVisibility={setTaskConfigureVisibility}
-        />
       </main>
+
       <Nav
         firstname={user[0]?.credentials.firstName}
         lastname={user[0]?.credentials.lastName}

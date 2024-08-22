@@ -1,0 +1,18 @@
+.categoryModal {
+  position: absolute;
+
+  position: absolute;
+  background: var(--dark-blue);
+  height: 90svh;
+  width: 90vw;
+  z-index: 1000;
+  align-self: center;
+
+  justify-self: center;
+
+  &__heading {
+    color: var(--text-color)
+  }
+
+  &__progressBar {}
+}
