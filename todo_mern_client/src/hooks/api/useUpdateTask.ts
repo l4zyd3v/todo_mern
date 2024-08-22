@@ -49,7 +49,8 @@ const useUpdateTask = () => {
                   dueDate: dueDate ? dueDate : task.dueDate,
                   categoryId: categoryId ? categoryId : task.categoryId,
                   priority: priority ? priority : task.priority,
-                  completed: completed,
+                  completed:
+                    completed !== undefined ? completed : task.completed,
                 }
               : task,
           ),
