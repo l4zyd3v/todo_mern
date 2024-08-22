@@ -27,6 +27,7 @@ import { Pagination } from "swiper/modules";
 import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
 import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
 import CategoryModal from "../../modals/formModal/categoryModal/CategoryModal.tsx";
+import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides.tsx";
 
 type UserProfile = {
   _id?: string;
@@ -161,41 +162,41 @@ export default function Home() {
     });
   }
 
-  function getTaskColorRelatedToCategory(
-    taskCategoryId: string | undefined,
-    categories: CategoriesInterface[],
-  ) {
-    for (let category of categories) {
-      if (category._id === taskCategoryId) {
-        return category.color;
-      }
-    }
-  }
+  // function getTaskColorRelatedToCategory(
+  //   taskCategoryId: string | undefined,
+  //   categories: CategoriesInterface[],
+  // ) {
+  //   for (let category of categories) {
+  //     if (category._id === taskCategoryId) {
+  //       return category.color;
+  //     }
+  //   }
+  // }
 
-  function renderTasks() {
-    return [...tasks].reverse().map((task) => {
-      const { _id, title, description, categoryId, completed } = task;
-
-      const categoryColor = getTaskColorRelatedToCategory(
-        categoryId,
-        categories,
-      );
-
-      return (
-        <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
-          <TodoCard
-            _id={_id}
-            title={title}
-            description={description}
-            color={categoryColor}
-            completed={completed}
-            setTaskConfigureVisibility={setTaskConfigureVisibility}
-            taskConfigureVisibility={taskConfigureVisibility}
-          />
-        </SwiperSlide>
-      );
-    });
-  }
+  // function renderTasks() {
+  //   return [...tasks].reverse().map((task) => {
+  //     const { _id, title, description, categoryId, completed } = task;
+  //
+  //     const categoryColor = getTaskColorRelatedToCategory(
+  //       categoryId,
+  //       categories,
+  //     );
+  //
+  //     return (
+  //       <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
+  //         <TodoCard
+  //           _id={_id}
+  //           title={title}
+  //           description={description}
+  //           color={categoryColor}
+  //           completed={completed}
+  //           setTaskConfigureVisibility={setTaskConfigureVisibility}
+  //           taskConfigureVisibility={taskConfigureVisibility}
+  //         />
+  //       </SwiperSlide>
+  //     );
+  //   });
+  // }
 
   return (
     <>
@@ -216,18 +217,11 @@ export default function Home() {
 
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
-          <Swiper
-            slidesPerView={5}
-            spaceBetween={3}
-            direction={"vertical"}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Pagination]}
-            className={s.cardWrapper__swiper}
-          >
-            {renderTasks()}
-          </Swiper>
+          <SwiperTasksSlides
+            setTaskConfigureVisibility={setTaskConfigureVisibility}
+            taskConfigureVisibility={taskConfigureVisibility}
+            s={s}
+          />
         </div>
 
         <NewTaskBtn setModal={setModalVisibility} />
@@ -241,8 +235,6 @@ export default function Home() {
           visibility={taskConfigureVisibility}
           setVisibility={setTaskConfigureVisibility}
         />
-
-        <CategoryModal />
 
         {(modalVisibility || taskConfigureVisibility) && (
           <div
