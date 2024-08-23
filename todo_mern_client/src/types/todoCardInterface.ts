@@ -6,9 +6,9 @@ export interface TodoCardInterface {
   color: string | undefined;
   completed: boolean;
 
-  setTaskConfigureVisibility: React.Dispatch<
+  setTaskConfigureVisibility?: React.Dispatch<
     React.SetStateAction<null | boolean>
   >;
 
-  taskConfigureVisibility: null | boolean;
+  taskConfigureVisibility?: null | boolean;
 }
