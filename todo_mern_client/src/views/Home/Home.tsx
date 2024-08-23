@@ -43,7 +43,9 @@ type UserProfile = {
 
 export default function Home() {
   const [user, setUser] = useState<UserProfile[]>([]);
+  // rename this useState to someting like taskCreateModal
   const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
+
   const [taskConfigureVisibility, setTaskConfigureVisibility] = useState<
     null | boolean
   >(null);
