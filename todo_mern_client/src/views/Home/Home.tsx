@@ -236,6 +236,8 @@ export default function Home() {
           setVisibility={setTaskConfigureVisibility}
         />
 
+        <CategoryModal />
+
         {(modalVisibility || taskConfigureVisibility) && (
           <div
             onClick={() => {

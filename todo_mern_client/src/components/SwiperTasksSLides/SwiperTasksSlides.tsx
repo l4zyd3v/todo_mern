@@ -11,10 +11,10 @@ import TodoCard from "../TodoCard/TodoCard";
 import { CategoriesInterface } from "../../types";
 
 type SwiperTasksSlidesTypes = {
-  setTaskConfigureVisibility: React.Dispatch<
+  setTaskConfigureVisibility?: React.Dispatch<
     React.SetStateAction<boolean | null>
   >;
-  taskConfigureVisibility: boolean | null;
+  taskConfigureVisibility?: boolean | null;
   s: CSSModuleClasses;
 };
 
