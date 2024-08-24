@@ -19,18 +19,9 @@ interface DataContextProviderProps {
   children: React.ReactNode;
 }
 
-export const DataContext = createContext<DataContextType>({
-  setCategories: () => {},
-  addCategory: () => {},
-  categories: [],
-  setTasks: () => {},
-  addTask: () => {},
-  tasks: [],
-  selectedTask: null,
-  setSelectedTask: () => {},
-
-  setTaskCompletion: () => {},
-});
+export const DataContext = createContext<DataContextType | undefined>(
+  undefined,
+);
 
 export function DataContextProvider({ children }: DataContextProviderProps) {
   const [categories, setCategories] = useState<CategoriesInterface[]>([]);
