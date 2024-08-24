@@ -216,23 +216,21 @@ export default function Home() {
             {renderCategories()}
           </div>
         </div>
-
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
           <SwiperTasksSlides
             setTaskConfigureVisibility={setTaskConfigureVisibility}
             taskConfigureVisibility={taskConfigureVisibility}
             s={s}
+            parentComponent={"Home"}
+            numberOfSlides={5}
           />
         </div>
-
         <NewTaskBtn setModal={setModalVisibility} />
-
         <TaskCreateModal
           visibility={modalVisibility}
           setVisibility={setModalVisibility}
         />
-
         <TaskConfigureModal
           visibility={taskConfigureVisibility}
           setVisibility={setTaskConfigureVisibility}

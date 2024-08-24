@@ -9,11 +9,19 @@
   align-self: center;
 
   justify-self: center;
+  display: grid;
+  grid-template-rows: 1fr 6fr;
 
   &__heading {
     color: var(--text-color)
   }
 
   &__progressBar {}
+
+  &__swiper {
+    border: 2px solid pink;
+    height: 100%;
+    width: 100%;
+  }
 
 }
