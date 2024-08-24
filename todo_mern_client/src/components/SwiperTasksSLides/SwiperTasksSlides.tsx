@@ -8,7 +8,7 @@ import { Pagination } from "swiper/modules";
 
 import TodoCard from "../TodoCard/TodoCard";
 
-import { CategoriesInterface } from "../../types";
+import { CategoriesInterface, TasksInterface } from "../../types";
 
 type SwiperTasksSlidesTypes = {
   setTaskConfigureVisibility?: React.Dispatch<
@@ -16,14 +16,29 @@ type SwiperTasksSlidesTypes = {
   >;
   taskConfigureVisibility?: boolean | null;
   s: CSSModuleClasses;
+  parentComponent: string;
+  numberOfSlides: number;
 };
 
 export default function SwiperTasksSlides({
   setTaskConfigureVisibility,
   taskConfigureVisibility,
   s,
+  parentComponent,
+  numberOfSlides,
 }: SwiperTasksSlidesTypes) {
   const { tasks, categories } = useContext(DataContext);
+
+  function getSwiperClassName(parentType: string) {
+    switch (parentType) {
+      case "Home":
+        return s.cardWrapper__swiper;
+      case "CategoryModal":
+        return s.categoryModal__swiper;
+      default:
+        return "";
+    }
+  }
 
   function getTaskColorRelatedToCategory(
     taskCategoryId: string | undefined,
@@ -34,6 +49,39 @@ export default function SwiperTasksSlides({
         return category.color;
       }
     }
+  }
+
+  function renderCategorySpecficTasks() {
+    const categorySpecficTasks = [] as TasksInterface[];
+
+    tasks.filter((task) => {
+      if (task.categoryId === "category._id") {
+        categorySpecficTasks.push(task);
+      }
+    });
+
+    return [...categorySpecficTasks].reverse().map((task) => {
+      const { _id, title, description, categoryId, completed } = task;
+
+      const categoryColor = getTaskColorRelatedToCategory(
+        categoryId,
+        categories,
+      );
+
+      return (
+        <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
+          <TodoCard
+            _id={_id}
+            title={title}
+            description={description}
+            color={categoryColor}
+            completed={completed}
+            setTaskConfigureVisibility={setTaskConfigureVisibility}
+            taskConfigureVisibility={taskConfigureVisibility}
+          />
+        </SwiperSlide>
+      );
+    });
   }
 
   function renderTasks() {
@@ -63,14 +111,14 @@ export default function SwiperTasksSlides({
 
   return (
     <Swiper
-      slidesPerView={5}
+      slidesPerView={numberOfSlides}
       spaceBetween={3}
       direction={"vertical"}
       pagination={{
         clickable: true,
       }}
       modules={[Pagination]}
-      className={s.cardWrapper__swiper}
+      className={getSwiperClassName(parentComponent)}
     >
       {renderTasks()}
     </Swiper>
