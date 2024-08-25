@@ -11,18 +11,12 @@ import TodoCard from "../TodoCard/TodoCard";
 import { CategoriesInterface, TasksInterface } from "../../types";
 
 type SwiperTasksSlidesTypes = {
-  setTaskConfigureVisibility?: React.Dispatch<
-    React.SetStateAction<boolean | null>
-  >;
-  taskConfigureVisibility?: boolean | null;
   s: CSSModuleClasses;
   parentComponent: string;
   numberOfSlides: number;
 };
 
 export default function SwiperTasksSlides({
-  setTaskConfigureVisibility,
-  taskConfigureVisibility,
   s,
   parentComponent,
   numberOfSlides,
@@ -76,8 +70,6 @@ export default function SwiperTasksSlides({
             description={description}
             color={categoryColor}
             completed={completed}
-            setTaskConfigureVisibility={setTaskConfigureVisibility}
-            taskConfigureVisibility={taskConfigureVisibility}
           />
         </SwiperSlide>
       );
@@ -101,8 +93,6 @@ export default function SwiperTasksSlides({
             description={description}
             color={categoryColor}
             completed={completed}
-            setTaskConfigureVisibility={setTaskConfigureVisibility}
-            taskConfigureVisibility={taskConfigureVisibility}
           />
         </SwiperSlide>
       );

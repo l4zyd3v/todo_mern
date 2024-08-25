@@ -4,6 +4,7 @@ import s from "./todocard.module.scss";
 import { TodoCardInterface } from "../../types";
 import TodoIcon from "./components/Icon/TodoIcon";
 import { DataContext } from "../../context/DataContext";
+import { ModalVisibilityContext } from "../../context/ModalVisibilityContext";
 import useUpdateTask from "../../hooks/api/useUpdateTask";
 
 const TodoCard: React.FC<TodoCardInterface> = ({
@@ -11,20 +12,16 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   title,
   color,
   completed,
-  setTaskConfigureVisibility,
-  taskConfigureVisibility,
 }) => {
   const updateTask = useUpdateTask();
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
-  const { setSelectedTask, tasks, selectedTask } = useContext(DataContext);
-
-  // useEffect(() => {
-  //   setIsCompleted(completed);
-  // }, [completed, setIsCompleted, taskConfigureVisibility]);
+  const { setSelectedTask, selectedTask } = useContext(DataContext);
+  const { taskConfigureModalVisibility, setTaskConfigureModalVisibility } =
+    useContext(ModalVisibilityContext);
 
   useEffect(() => {
     setIsCompleted(completed);
-  }, [taskConfigureVisibility]);
+  }, [taskConfigureModalVisibility]);
 
   return (
     <>
@@ -40,7 +37,7 @@ const TodoCard: React.FC<TodoCardInterface> = ({
         <div
           onClick={() => {
             setSelectedTask(_id);
-            setTaskConfigureVisibility(true);
+            setTaskConfigureModalVisibility(true);
           }}
           className={s.card__clickableTitleToOpenModal}
         >

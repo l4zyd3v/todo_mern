@@ -221,8 +221,6 @@ export default function Home() {
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
           <SwiperTasksSlides
-            setTaskConfigureVisibility={setTaskConfigureModalVisibility}
-            taskConfigureVisibility={taskConfigureModalVisibility}
             s={s}
             parentComponent={"Home"}
             numberOfSlides={5}
