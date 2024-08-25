@@ -1,7 +1,5 @@
 import s from "./categoriesCard.module.scss";
-import { CategoryCardInterface } from "../../types";
-import { TodoCardInterface } from "../../types";
-import { useEffect } from "react";
+import { CategoryCardInterface, TasksInterface } from "../../types";
 
 export default function CategoriesCard({
   _id,
@@ -12,7 +10,7 @@ export default function CategoriesCard({
   tasks,
 }: CategoryCardInterface) {
   function getProgressPercentage(
-    tasks: Array<TodoCardInterface>,
+    tasks: Array<TasksInterface>,
     categoryId: string,
   ) {
     let completedTasks = 0;
