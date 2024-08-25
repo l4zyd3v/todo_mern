@@ -19,9 +19,14 @@ interface ModalVisibilityProps {
   children: React.ReactNode;
 }
 
-export const ModalVisibilityContext = createContext<
-  ModalVisibilityType | undefined
->(undefined);
+export const ModalVisibilityContext = createContext<ModalVisibilityType>({
+  taskConfigureModalVisibility: null,
+  setTaskConfigureModalVisibility: () => null,
+  taskCreateModalVisibility: null,
+  setTaskCreateModalVisibility: () => null,
+  categoryModalVisibility: null,
+  setCategoryModalVisibility: () => null,
+});
 
 export function ModalVisibilityProvider({ children }: ModalVisibilityProps) {
   const [taskConfigureModalVisibility, setTaskConfigureModalVisibility] =
