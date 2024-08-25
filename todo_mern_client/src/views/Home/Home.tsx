@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useContext, useMemo } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import { DataContext } from "../../context/DataContext";
+import { ModalVisibilityContext } from "../../context/ModalVisibilityContext.tsx";
 import s from "./home.module.scss";
 import axios from "axios";
 // importanime, { AnimeInstance } from "animejs";
@@ -42,22 +43,23 @@ type UserProfile = {
 };
 
 export default function Home() {
+  // states
   const [user, setUser] = useState<UserProfile[]>([]);
-  // rename this useState to someting like taskCreateModal
-  const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
 
-  const [taskConfigureVisibility, setTaskConfigureVisibility] = useState<
-    null | boolean
-  >(null);
+  // Contexts
   const { categories, setCategories, tasks, setTasks, selectedTask } =
     useContext(DataContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
+  const {
+    taskConfigureModalVisibility,
+    setTaskConfigureModalVisibility,
+    taskCreateModalVisibility,
+    setTaskCreateModalVisibility,
+  } = useContext(ModalVisibilityContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
 
   const navigate = useNavigate();
-
-  // console.log("!!!!!!!!! selectedTask, completed: ", selectedTask?.completed);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -219,30 +221,26 @@ export default function Home() {
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
           <SwiperTasksSlides
-            setTaskConfigureVisibility={setTaskConfigureVisibility}
-            taskConfigureVisibility={taskConfigureVisibility}
+            setTaskConfigureVisibility={setTaskConfigureModalVisibility}
+            taskConfigureVisibility={taskConfigureModalVisibility}
             s={s}
             parentComponent={"Home"}
             numberOfSlides={5}
           />
         </div>
-        <NewTaskBtn setModal={setModalVisibility} />
-        <TaskCreateModal
-          visibility={modalVisibility}
-          setVisibility={setModalVisibility}
-        />
-        <TaskConfigureModal
-          visibility={taskConfigureVisibility}
-          setVisibility={setTaskConfigureVisibility}
-        />
+        <NewTaskBtn setModal={setTaskCreateModalVisibility} />
+
+        <TaskCreateModal />
+
+        <TaskConfigureModal />
 
         <CategoryModal />
 
-        {(modalVisibility || taskConfigureVisibility) && (
+        {(taskCreateModalVisibility || taskConfigureModalVisibility) && (
           <div
             onClick={() => {
-              setModalVisibility(false);
-              setTaskConfigureVisibility(false);
+              setTaskCreateModalVisibility(false);
+              setTaskConfigureModalVisibility(false);
             }}
             className={s.main__modalBackground}
           ></div>
