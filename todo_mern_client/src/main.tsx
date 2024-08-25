@@ -6,6 +6,7 @@ import "./index.css";
 import { NavToggleContextProvider } from "./context/NavToggleContext.tsx";
 import { UserLoggedInContextProvider } from "./context/UserLoggedInContext.tsx";
 import { DataContextProvider } from "./context/DataContext.tsx";
+import { ModalVisibilityProvider } from "./context/ModalVisibilityContext.tsx";
 // import { Workbox } from "workbox-window";
 
 // if ("serviceWorker" in navigator) {
@@ -17,9 +18,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
   <DataContextProvider>
     <UserLoggedInContextProvider>
-      <NavToggleContextProvider>
-        <App />
-      </NavToggleContextProvider>
+      <ModalVisibilityProvider>
+        <NavToggleContextProvider>
+          <App />
+        </NavToggleContextProvider>
+      </ModalVisibilityProvider>
     </UserLoggedInContextProvider>
   </DataContextProvider>,
   // </React.StrictMode>,
