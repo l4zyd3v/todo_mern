@@ -55,6 +55,8 @@ export default function Home() {
     setTaskConfigureModalVisibility,
     taskCreateModalVisibility,
     setTaskCreateModalVisibility,
+    categoryModalVisibility,
+    setCategoryModalVisibility,
   } = useContext(ModalVisibilityContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
@@ -234,11 +236,15 @@ export default function Home() {
 
         <CategoryModal />
 
-        {(taskCreateModalVisibility || taskConfigureModalVisibility) && (
+        {(taskCreateModalVisibility ||
+          taskConfigureModalVisibility ||
+          categoryModalVisibility) && (
           <div
             onClick={() => {
-              setTaskCreateModalVisibility(false);
-              setTaskConfigureModalVisibility(false);
+              taskCreateModalVisibility && setTaskCreateModalVisibility(false);
+              taskConfigureModalVisibility &&
+                setTaskConfigureModalVisibility(false);
+              categoryModalVisibility && setCategoryModalVisibility(false);
             }}
             className={s.main__modalBackground}
           ></div>
