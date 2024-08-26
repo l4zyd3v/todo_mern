@@ -6,5 +6,6 @@
   --blue: #1754bd;
   --text-color: #fefffe;
   --text-color2: #96b5ff;
-  /* Add more variables as needed */
+
+  --modalBorderRadius: 1rem;
 }

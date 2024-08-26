@@ -2,7 +2,8 @@
 
   .categoryModal {
     position: absolute;
-
+    border-radius: var(--modalBorderRadius);
+    border: 2px solid var(--light-blue);
     position: absolute;
     background: var(--dark-blue);
     height: 90svh;
@@ -30,13 +31,11 @@
     }
 
     &__progressBar {
-      transition: width 0.5s ease-out;
+      transition: width 0.8s ease-out;
       height: 1rem;
-      width: 100%;
     }
 
     &__swiper {
-      border: 2px solid pink;
       height: 100%;
       width: 100%;
     }

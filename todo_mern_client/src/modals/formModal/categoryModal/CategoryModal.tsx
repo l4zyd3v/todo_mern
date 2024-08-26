@@ -23,13 +23,18 @@ export default function CategoryModal() {
     }`;
   }
 
+  // To make sure the width rule is 0 when the modal is opened to see the progressBar width transion from 0 to it respective state.
+  const percentageWidth = !categoryModalVisibility
+    ? 0
+    : getProgressPercentage(tasks, selectedCategory?._id) + "%";
+
   return (
     <div className={getCategoryModalClassName()}>
-      <h1 className={s.categoryModal__heading}>category name</h1>
+      <h1 className={s.categoryModal__heading}>{selectedCategory?.name}</h1>
       <span
         style={{
           backgroundColor: selectedCategory?.color,
-          width: getProgressPercentage(tasks, selectedCategory?._id) + "%",
+          width: percentageWidth,
         }}
         className={s.categoryModal__progressBar}
       ></span>

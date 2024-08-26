@@ -16,8 +16,11 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   const updateTask = useUpdateTask();
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
   const { setSelectedTask, selectedTask } = useContext(DataContext);
-  const { taskConfigureModalVisibility, setTaskConfigureModalVisibility } =
-    useContext(ModalVisibilityContext);
+  const {
+    taskConfigureModalVisibility,
+    setTaskConfigureModalVisibility,
+    categoryModalVisibility,
+  } = useContext(ModalVisibilityContext);
 
   useEffect(() => {
     setIsCompleted(completed);
