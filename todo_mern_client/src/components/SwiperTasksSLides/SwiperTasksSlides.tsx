@@ -21,7 +21,7 @@ export default function SwiperTasksSlides({
   parentComponent,
   numberOfSlides,
 }: SwiperTasksSlidesTypes) {
-  const { tasks, categories } = useContext(DataContext);
+  const { tasks, categories, selectedCategory } = useContext(DataContext);
 
   function getSwiperClassName(parentType: string) {
     switch (parentType) {
@@ -49,7 +49,7 @@ export default function SwiperTasksSlides({
     const categorySpecficTasks = [] as TasksInterface[];
 
     tasks.filter((task) => {
-      if (task.categoryId === "category._id") {
+      if (task.categoryId === selectedCategory?._id) {
         categorySpecficTasks.push(task);
       }
     });
@@ -110,7 +110,11 @@ export default function SwiperTasksSlides({
       modules={[Pagination]}
       className={getSwiperClassName(parentComponent)}
     >
-      {renderTasks()}
+      {parentComponent === "CategoryModal"
+        ? renderCategorySpecficTasks()
+        : parentComponent === "Home"
+          ? renderTasks()
+          : null}
     </Swiper>
   );
 }
