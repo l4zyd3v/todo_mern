@@ -1,27 +1,89 @@
-.categoryModal {
-  position: absolute;
+  $taskModalBorderRamius: 1rem;
 
-  position: absolute;
-  background: var(--dark-blue);
-  height: 90svh;
-  width: 90vw;
-  z-index: 999;
-  align-self: center;
+  .categoryModal {
+    position: absolute;
 
-  justify-self: center;
-  display: grid;
-  grid-template-rows: 1fr 6fr;
+    position: absolute;
+    background: var(--dark-blue);
+    height: 90svh;
+    width: 90vw;
+    z-index: 999;
+    border-radius: $taskModalBorderRamius;
+    padding: 1rem 1rem;
 
-  &__heading {
-    color: var(--text-color)
+    align-self: center;
+
+    right: -100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 10fr;
+
+    &Hide {
+      animation: hideModalAnim 0.5s forwards;
+    }
+
+    &Visible {
+      animation: showModalAnim 0.5s forwards;
+    }
+
+    &__heading {
+      color: var(--text-color)
+    }
+
+    &__progressBar {
+      transition: width 0.5s ease-out;
+      height: 1rem;
+      width: 100%;
+    }
+
+    &__swiper {
+      border: 2px solid pink;
+      height: 100%;
+      width: 100%;
+    }
+
   }
 
-  &__progressBar {}
 
-  &__swiper {
-    border: 2px solid pink;
-    height: 100%;
-    width: 100%;
+
+  @keyframes showModalAnim {
+    0% {
+      visibility: visible;
+    }
+
+    20% {
+      right: 20%;
+    }
+
+    60% {
+      right: -1%;
+    }
+
+    100% {
+      /*5% to land in the middle(corresponding to its width)*/
+      right: 5%;
+    }
   }
 
-}
+  @keyframes hideModalAnim {
+    0% {
+      right: 0;
+    }
+
+    20% {
+      right: 30%;
+    }
+
+    99% {
+      right: -100%;
+    }
+
+    100% {
+      visibility: hidden;
+    }
+
+  }
+
+
+  .defaultVisibilityHidden {
+    visibility: hidden;
+  }
