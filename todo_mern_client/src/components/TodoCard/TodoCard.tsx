@@ -12,6 +12,7 @@ const TodoCard: React.FC<TodoCardInterface> = ({
   title,
   color,
   completed,
+  parentComponent,
 }) => {
   const updateTask = useUpdateTask();
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
@@ -26,9 +27,15 @@ const TodoCard: React.FC<TodoCardInterface> = ({
     setIsCompleted(completed);
   }, [taskConfigureModalVisibility]);
 
+  function getCardClassname() {
+    return `
+${s.card} ${parentComponent === "CategoryModal" ? s.categoryModal__card : ""}
+`;
+  }
+
   return (
     <>
-      <div className={s.card}>
+      <div className={getCardClassname()}>
         <TodoIcon
           color={color}
           isCompleted={isCompleted}

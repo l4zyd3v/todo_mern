@@ -70,6 +70,7 @@ export default function SwiperTasksSlides({
             description={description}
             color={categoryColor}
             completed={completed}
+            parentComponent={parentComponent}
           />
         </SwiperSlide>
       );

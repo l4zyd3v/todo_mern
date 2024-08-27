@@ -5,4 +5,5 @@ export interface TodoCardInterface {
   categoryId?: string;
   color: string | undefined;
   completed: boolean;
+  parentComponent: string;
 }
