@@ -6,6 +6,7 @@ import { ModalVisibilityContext } from "../../../context/ModalVisibilityContext"
 import SwiperTasksSlides from "../../../components/SwiperTasksSLides/SwiperTasksSlides";
 import { categoryUtilsHandler } from "../../../utilsGlobal/utils";
 import { IoMdSettings } from "react-icons/io";
+import SettingsCategoryModal from "./components/SettingsCategoryModal/SettingsCategoryModal";
 
 export default function CategoryModal() {
   const { selectedCategory, tasks } = useContext(DataContext);
@@ -34,6 +35,7 @@ export default function CategoryModal() {
   return (
     <div className={getCategoryModalClassName()}>
       <IoMdSettings className={s.categoryModal__settingsButton} />
+      <SettingsCategoryModal />
       <h1 className={s.categoryModal__heading}>{selectedCategory?.name}</h1>
       <div className={s.progressBar}>
         <span

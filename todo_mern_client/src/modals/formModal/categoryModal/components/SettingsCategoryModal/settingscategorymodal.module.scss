@@ -1,0 +1,21 @@
+.settingsCategoryModal {
+  position: absolute;
+  height: 30%;
+  width: 80%;
+  justify-self: center;
+  top: 5rem;
+  background: var(--light-blue);
+  border: 2px solid var(--dark-blue);
+  z-index: 2000;
+}
+
+.form {
+
+  &__inputWrapper {}
+
+  &__label {}
+
+  &__input {}
+
+
+}
