@@ -25,9 +25,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
-import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
-import CategoryModal from "../../modals/formModal/categoryModal/CategoryModal.tsx";
+// import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
+// import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
+// import CategoryModal from "../../modals/formModal/categoryModal/CategoryModal.tsx";
+import TaskCreateModal from "../../modals/taskModals/TaskCreateModal/TaskCreateModal";
+import TaskConfigureModal from "../../modals/taskModals/TaskConfigureModal/TaskConfigureModal";
+import CategoryModal from "../../modals/categoryModal/CategoryModal.tsx";
+
 import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides.tsx";
 
 type UserProfile = {

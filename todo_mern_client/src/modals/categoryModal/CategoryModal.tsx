@@ -1,10 +1,10 @@
 import s from "./categorymodal.module.scss";
 
 import { useContext } from "react";
-import { DataContext } from "../../../context/DataContext";
-import { ModalVisibilityContext } from "../../../context/ModalVisibilityContext";
-import SwiperTasksSlides from "../../../components/SwiperTasksSLides/SwiperTasksSlides";
-import { categoryUtilsHandler } from "../../../utilsGlobal/utils";
+import { DataContext } from "../../context/DataContext";
+import { ModalVisibilityContext } from "../../context/ModalVisibilityContext";
+import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides";
+import { categoryUtilsHandler } from "../../utilsGlobal/utils";
 import { IoMdSettings } from "react-icons/io";
 import SettingsCategoryModal from "./components/SettingsCategoryModal/SettingsCategoryModal";
 

@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
-import { DataContext } from "../../../../../context/DataContext";
-import { ModalVisibilityContext } from "../../../../../context/ModalVisibilityContext";
+import { useContext, useEffect, useState } from "react";
+import { ModalVisibilityContext } from "../../../../context/ModalVisibilityContext";
 import s from "./settingscategorymodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
+import { DataContext } from "../../../../context/DataContext";
 
 export default function SettingsCategoryModal() {
   const { selectedCategory } = useContext(DataContext);
