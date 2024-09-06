@@ -76,5 +76,69 @@ export default function categoryController(db: Db) {
         res.status(500).json({ message: e.message });
       }
     },
+
+    checkCategoryTasks: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
+        const tasks = await db
+          .collection("tasks")
+          .find({
+            categoryId: new ObjectId(categoryId),
+          })
+          .toArray();
+
+        if (tasks.length > 0) {
+          res.status(200).json({ hasTasks: true });
+        } else {
+          res.status(200).json({ hasTasks: false });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
+
+    deleteCategory: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
+        // Check if there are tasks associated with the category
+        const tasks = await db
+          .collection("tasks")
+          .find({
+            categoryId: new ObjectId(categoryId),
+          })
+          .toArray();
+
+        // If there are tasks, delete them
+        if (tasks.length > 0) {
+          const taskDeletionResult = await db.collection("tasks").deleteMany({
+            categoryId: new ObjectId(categoryId),
+          });
+
+          if (taskDeletionResult.deletedCount > 0) {
+            res.status(200).json({
+              message: "All tasks associated with category have been deleted",
+            });
+          }
+        }
+
+        // Proceed to delete the category
+        const categoryDeletedResult = await db
+          .collection("categories")
+          .deleteOne({
+            _id: new ObjectId(categoryId),
+          });
+
+        if (categoryDeletedResult.deletedCount === 1) {
+          res.json({ message: "category deleted successfully" });
+          console.log("User deleted a category");
+        } else {
+          res.status(404).json({ message: "Category not found" });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
   };
 }
