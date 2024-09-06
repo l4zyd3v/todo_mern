@@ -3,8 +3,17 @@ import { ModalVisibilityContext } from "../../../../context/ModalVisibilityConte
 import s from "./settingscategorymodal.module.scss";
 import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
 import { DataContext } from "../../../../context/DataContext";
+import { IoIosCloseCircle } from "react-icons/io";
 
-export default function SettingsCategoryModal() {
+type SettingsCategoryTypes = {
+  settingsVisibility: boolean;
+  setSettingsVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function SettingsCategoryModal({
+  settingsVisibility,
+  setSettingsVisibility,
+}: SettingsCategoryTypes) {
   const { selectedCategory } = useContext(DataContext);
   const { categoryModalVisibility } = useContext(ModalVisibilityContext);
 
@@ -24,35 +33,45 @@ export default function SettingsCategoryModal() {
     setValue("color", selectedCategory?.color);
   }, [categoryModalVisibility]);
 
+  if (!settingsVisibility) return null;
+
   return (
     <div className={s.settingsCategoryModal}>
+      <IoIosCloseCircle
+        onClick={() => setSettingsVisibility(false)}
+        className={s.settingsCategoryModal__exitBtn}
+      />
+      <h3 className={s.settingsCategoryModal__heading}>configure</h3>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={s.form__inputWrapper}>
-          <label className={s.form__label} htmlFor="name">
-            name
-          </label>
+        <div className={s.form__inputsWrapper}>
           <input
             type="name"
-            className={s.form__input}
+            className={`${s.form__inputs} ${s.form__nameInput}`}
             id={"name"}
             {...register("name", { required: true })}
           />
-        </div>
-        <div className={s.form__inputWrapper}>
-          <label className={s.form__label} htmlFor="color">
-            color
-          </label>
           <input
             type="color"
-            className={s.form__input}
+            className={`${s.form__inputs} ${s.form__colorInput}`}
             id={"color"}
             {...register("color", { required: true })}
           />
         </div>
-
-        <button type="submit">submit</button>
+        <div className={s.buttonWrapper}>
+          <button
+            className={`${s.buttonWrapper__deleteBtn} ${s.buttonWrapper__buttons}`}
+          >
+            delete category
+          </button>
+          <button
+            className={`${s.buttonWrapper__submitBtn} ${s.buttonWrapper__buttons}`}
+            type="submit"
+          >
+            done
+          </button>
+        </div>
       </form>
-      <button>delete category</button>
+      <div className={s.settingsCategoryModal__forGroundOverlay}></div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import s from "./categorymodal.module.scss";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { ModalVisibilityContext } from "../../context/ModalVisibilityContext";
 import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides";
@@ -9,6 +9,8 @@ import { IoMdSettings } from "react-icons/io";
 import SettingsCategoryModal from "./components/SettingsCategoryModal/SettingsCategoryModal";
 
 export default function CategoryModal() {
+  const [settingsVisibility, setSettingsVisibility] = useState(false);
+
   const { selectedCategory, tasks } = useContext(DataContext);
   const { categoryModalVisibility, setCategoryModalVisibility } = useContext(
     ModalVisibilityContext,
@@ -34,9 +36,15 @@ export default function CategoryModal() {
 
   return (
     <div className={getCategoryModalClassName()}>
-      <IoMdSettings className={s.categoryModal__settingsButton} />
-      <SettingsCategoryModal />
-      <h1 className={s.categoryModal__heading}>{selectedCategory?.name}</h1>
+      <IoMdSettings
+        className={s.categoryModal__settingsButton}
+        onClick={() => setSettingsVisibility(true)}
+      />
+      <SettingsCategoryModal
+        settingsVisibility={settingsVisibility}
+        setSettingsVisibility={setSettingsVisibility}
+      />
+      <h2 className={s.categoryModal__heading}>{selectedCategory?.name}</h2>
       <div className={s.progressBar}>
         <span
           style={{
@@ -58,6 +66,12 @@ export default function CategoryModal() {
       >
         Done
       </button>
+      {settingsVisibility ? (
+        <div
+          onClick={() => setSettingsVisibility(false)}
+          className={s.forGroundOverlay}
+        ></div>
+      ) : null}
     </div>
   );
 }

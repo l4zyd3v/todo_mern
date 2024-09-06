@@ -130,3 +130,15 @@
   .defaultVisibilityHidden {
     visibility: hidden;
   }
+
+  .forGroundOverlay {
+    position: absolute;
+    background: #000000d4;
+    z-index: 199;
+    height: 90svh;
+    width: 90vw;
+    border-radius: $taskModalBorderRamius;
+    justify-self: center;
+    align-self: center;
+    border: 2px solid var(--light-blue);
+  }
