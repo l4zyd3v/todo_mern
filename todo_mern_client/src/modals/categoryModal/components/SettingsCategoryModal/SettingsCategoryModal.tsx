@@ -16,7 +16,7 @@ export default function SettingsCategoryModal() {
     categorySettingsVisibility,
     setCategorySettingsVisibility,
   } = useContext(ModalVisibilityContext);
-  const [deleteCatWidthTasks, setDeleteCatWithTasks] = useState(false);
+  const [deleteCatWithTasks, setDeleteCatWithTasks] = useState(false);
   const [deleteCatNoTasks, setDeleteCatNoTasks] = useState(false);
 
   const deleteCategory = useDeleteCategory();
@@ -37,7 +37,9 @@ export default function SettingsCategoryModal() {
 
   const onSubmit: SubmitHandler = async (data) => {
     if (deleteCatNoTasks) {
-      deleteCategory(setCategorySettingsVisibility);
+      deleteCategory(setCategorySettingsVisibility, "deleteCatNoTasks");
+    } else if (deleteCatWithTasks) {
+      deleteCategory(setCategorySettingsVisibility, "deleteCatWithTasks");
     }
   };
 
@@ -105,7 +107,7 @@ export default function SettingsCategoryModal() {
             done
           </button>
         </div>
-        {deleteCatWidthTasks ? (
+        {deleteCatWithTasks ? (
           <ConfirmDeletionWithTasks />
         ) : deleteCatNoTasks ? (
           <ConfirmDeletionNoTasks
@@ -114,7 +116,7 @@ export default function SettingsCategoryModal() {
           />
         ) : null}
       </form>
-      {deleteCatNoTasks || deleteCatWidthTasks ? (
+      {deleteCatNoTasks || deleteCatWithTasks ? (
         <div className={s.settingsCategoryModal__forGroundOverlay}></div>
       ) : null}
     </div>
