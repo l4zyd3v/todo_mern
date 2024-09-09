@@ -7,22 +7,19 @@ import { DataContext } from "../../../../context/DataContext";
 import { IoIosCloseCircle } from "react-icons/io";
 import ConfirmDeletionWithTasks from "./components/ConfirmDeletionWithTasks/ConfirmDeletionWithTasks";
 import ConfirmDeletionNoTasks from "./components/ConfirmDeletionNoTasks/ConfirmDeletionNoTasks";
+import useDeleteCategory from "../../../../hooks/api/useDeleteCategory";
 
-type SettingsCategoryTypes = {
-  settingsVisibility: boolean;
-  setSettingsVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export default function SettingsCategoryModal({
-  settingsVisibility,
-  setSettingsVisibility,
-}: SettingsCategoryTypes) {
+export default function SettingsCategoryModal() {
   const { selectedCategory } = useContext(DataContext);
-  const { categoryModalVisibility, setCategoryModalVisibility } = useContext(
-    ModalVisibilityContext,
-  );
-  const [deleteCatWidthTasks, setDeleteCatWidthTasks] = useState(false);
+  const {
+    categoryModalVisibility,
+    categorySettingsVisibility,
+    setCategorySettingsVisibility,
+  } = useContext(ModalVisibilityContext);
+  const [deleteCatWidthTasks, setDeleteCatWithTasks] = useState(false);
   const [deleteCatNoTasks, setDeleteCatNoTasks] = useState(false);
+
+  const deleteCategory = useDeleteCategory();
 
   const {
     register,
@@ -35,27 +32,12 @@ export default function SettingsCategoryModal({
 
   useEffect(() => {
     setDeleteCatNoTasks(false);
-    setDeleteCatWidthTasks(false);
-  }, [settingsVisibility, setSettingsVisibility]);
+    setDeleteCatWithTasks(false);
+  }, [categorySettingsVisibility, setCategorySettingsVisibility]);
 
   const onSubmit: SubmitHandler = async (data) => {
     if (deleteCatNoTasks) {
-      try {
-        const response = await axios.delete(
-          `http://${import.meta.env.VITE_HOSTURL}:3000/deletecategory/${selectedCategory?._id}`,
-          {
-            withCredentials: true,
-          },
-        );
-        console.log(response);
-
-        setSettingsVisibility(false);
-        setCategoryModalVisibility(false);
-      } catch (error) {
-        console.error("An error occurred while deleting tasks: ", error);
-      }
-    } else {
-      console.log("the category has tasks");
+      deleteCategory(setCategorySettingsVisibility);
     }
   };
 
@@ -63,14 +45,6 @@ export default function SettingsCategoryModal({
     setValue("name", selectedCategory?.name);
     setValue("color", selectedCategory?.color);
   }, [categoryModalVisibility]);
-
-  function confirmDeletionWithTasks() {
-    setDeleteCatWidthTasks(true);
-  }
-
-  function confirmDeletionNoTasks() {
-    setDeleteCatNoTasks(true);
-  }
 
   async function checkTasks() {
     try {
@@ -80,26 +54,24 @@ export default function SettingsCategoryModal({
           withCredentials: true,
         },
       );
-      console.log("has tasks: ", response.data.hasTasks);
-
       const hasTasks = response.data.hasTasks;
 
       if (hasTasks) {
-        confirmDeletionWithTasks();
+        setDeleteCatWithTasks(true);
       } else {
-        confirmDeletionNoTasks();
+        setDeleteCatNoTasks(true);
       }
     } catch (error) {
       console.error("An error occurred while checking for tasks: ", error);
     }
   }
 
-  if (!settingsVisibility) return null;
+  if (!categorySettingsVisibility) return null;
 
   return (
     <div className={s.settingsCategoryModal}>
       <IoIosCloseCircle
-        onClick={() => setSettingsVisibility(false)}
+        onClick={() => setCategorySettingsVisibility(false)}
         className={s.settingsCategoryModal__exitBtn}
       />
       <h3 className={s.settingsCategoryModal__heading}>configure</h3>
@@ -142,7 +114,9 @@ export default function SettingsCategoryModal({
           />
         ) : null}
       </form>
-      <div className={s.settingsCategoryModal__forGroundOverlay}></div>
+      {deleteCatNoTasks || deleteCatWidthTasks ? (
+        <div className={s.settingsCategoryModal__forGroundOverlay}></div>
+      ) : null}
     </div>
   );
 }

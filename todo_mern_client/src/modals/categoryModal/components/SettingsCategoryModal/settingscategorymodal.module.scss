@@ -37,6 +37,16 @@ $boxShadow: 1px 5px 11px -3px black;
     font-size: 1.5rem;
     justify-self: center;
   }
+
+  &__forGroundOverlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #000000d9;
+    border: 2px solid var(--dark-blue);
+    border-radius: $borderRadius;
+    z-index: 1999;
+  }
 }
 
 
@@ -72,12 +82,6 @@ $boxShadow: 1px 5px 11px -3px black;
     justify-self: flex-end;
   }
 
-  &__forGroundOverlay {
-    position: absolute;
-    height: 11rem;
-    width: 90%;
-    background: black;
-  }
 }
 
 .buttonWrapper {

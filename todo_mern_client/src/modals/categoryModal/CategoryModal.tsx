@@ -9,12 +9,13 @@ import { IoMdSettings } from "react-icons/io";
 import SettingsCategoryModal from "./components/SettingsCategoryModal/SettingsCategoryModal";
 
 export default function CategoryModal() {
-  const [settingsVisibility, setSettingsVisibility] = useState(false);
-
   const { selectedCategory, tasks } = useContext(DataContext);
-  const { categoryModalVisibility, setCategoryModalVisibility } = useContext(
-    ModalVisibilityContext,
-  );
+  const {
+    categoryModalVisibility,
+    setCategoryModalVisibility,
+    categorySettingsVisibility,
+    setCategorySettingsVisibility,
+  } = useContext(ModalVisibilityContext);
   const { getProgressPercentage } = categoryUtilsHandler();
 
   function getCategoryModalClassName() {
@@ -38,12 +39,9 @@ export default function CategoryModal() {
     <div className={getCategoryModalClassName()}>
       <IoMdSettings
         className={s.categoryModal__settingsButton}
-        onClick={() => setSettingsVisibility(true)}
+        onClick={() => setCategorySettingsVisibility(true)}
       />
-      <SettingsCategoryModal
-        settingsVisibility={settingsVisibility}
-        setSettingsVisibility={setSettingsVisibility}
-      />
+      <SettingsCategoryModal />
       <h2 className={s.categoryModal__heading}>{selectedCategory?.name}</h2>
       <div className={s.progressBar}>
         <span
@@ -66,9 +64,9 @@ export default function CategoryModal() {
       >
         Done
       </button>
-      {settingsVisibility ? (
+      {categorySettingsVisibility ? (
         <div
-          onClick={() => setSettingsVisibility(false)}
+          onClick={() => setCategorySettingsVisibility(false)}
           className={s.forGroundOverlay}
         ></div>
       ) : null}

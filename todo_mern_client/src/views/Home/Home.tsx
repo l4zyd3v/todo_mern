@@ -61,6 +61,8 @@ export default function Home() {
     setTaskCreateModalVisibility,
     categoryModalVisibility,
     setCategoryModalVisibility,
+    categorySettingsVisibility,
+    setCategorySettingsVisibility,
   } = useContext(ModalVisibilityContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
@@ -249,6 +251,8 @@ export default function Home() {
               taskConfigureModalVisibility &&
                 setTaskConfigureModalVisibility(false);
               categoryModalVisibility && setCategoryModalVisibility(false);
+              categorySettingsVisibility &&
+                setCategorySettingsVisibility(false);
             }}
             className={s.main__modalBackground}
           ></div>

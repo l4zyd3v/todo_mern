@@ -13,6 +13,10 @@ interface ModalVisibilityType {
   setCategoryModalVisibility: React.Dispatch<
     React.SetStateAction<boolean | null>
   >;
+  categorySettingsVisibility: boolean | null;
+  setCategorySettingsVisibility: React.Dispatch<
+    React.SetStateAction<boolean | null>
+  >;
 }
 
 interface ModalVisibilityProps {
@@ -26,6 +30,8 @@ export const ModalVisibilityContext = createContext<ModalVisibilityType>({
   setTaskCreateModalVisibility: () => null,
   categoryModalVisibility: null,
   setCategoryModalVisibility: () => null,
+  categorySettingsVisibility: null,
+  setCategorySettingsVisibility: () => null,
 });
 
 export function ModalVisibilityProvider({ children }: ModalVisibilityProps) {
@@ -37,6 +43,9 @@ export function ModalVisibilityProvider({ children }: ModalVisibilityProps) {
   const [categoryModalVisibility, setCategoryModalVisibility] = useState<
     null | boolean
   >(null);
+  const [categorySettingsVisibility, setCategorySettingsVisibility] = useState<
+    null | boolean
+  >(null);
 
   const value = {
     taskConfigureModalVisibility,
@@ -45,6 +54,8 @@ export function ModalVisibilityProvider({ children }: ModalVisibilityProps) {
     setTaskCreateModalVisibility,
     categoryModalVisibility,
     setCategoryModalVisibility,
+    categorySettingsVisibility,
+    setCategorySettingsVisibility,
   };
 
   return (
