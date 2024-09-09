@@ -18,10 +18,20 @@ export function categoryRoutes(db: Db) {
     authControl.authenticateToken,
     controller.createCategory,
   );
+  router.get(
+    "/categories/:categoryId/checktasks",
+    authControl.authenticateToken,
+    controller.checkCategoryTasks,
+  );
   router.delete(
-    "/categories/:categoryId",
+    "/deletecategory/:categoryId",
     authControl.authenticateToken,
     controller.deleteCategory,
+  );
+  router.delete(
+    "/deletecategory-tasks/:categoryId",
+    authControl.authenticateToken,
+    controller.deleteCategoryAndTasks,
   );
 
   return router;

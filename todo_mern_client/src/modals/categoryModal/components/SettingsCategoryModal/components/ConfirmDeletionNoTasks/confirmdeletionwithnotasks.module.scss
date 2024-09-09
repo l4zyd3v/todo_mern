@@ -1,0 +1,43 @@
+.wrapper {
+  position: absolute;
+  width: 70%;
+  height: 100%;
+  border: 2px solid var(--light-blue);
+  border-radius: 10px;
+  justify-self: center;
+  background: var(--dark-blue);
+  top: 80px;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.text {
+  color: var(--text-color);
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 1.3rem .8rem 0 .8rem;
+}
+
+.buttonWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 1.2rem;
+
+  &__cancel {
+    border-radius: 10px;
+    border: none;
+    background: var(--light-blue);
+    color: var(--text-color);
+  }
+
+  &__delete {
+    border-radius: 10px;
+    border: none;
+    background: red;
+    color: var(--text-color);
+  }
+}

@@ -102,6 +102,27 @@ export default function categoryController(db: Db) {
       const { categoryId } = req.params;
 
       try {
+        const categoryDeletedResult = await db
+          .collection("categories")
+          .deleteOne({
+            _id: new ObjectId(categoryId),
+          });
+
+        if (categoryDeletedResult.deletedCount === 1) {
+          res.json({ message: "category deleted successfully" });
+          console.log("User deleted a category");
+        } else {
+          res.status(404).json({ message: "Category not found" });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
+
+    deleteCategoryAndTasks: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
         // Check if there are tasks associated with the category
         const tasks = await db
           .collection("tasks")
@@ -115,12 +136,6 @@ export default function categoryController(db: Db) {
           const taskDeletionResult = await db.collection("tasks").deleteMany({
             categoryId: new ObjectId(categoryId),
           });
-
-          if (taskDeletionResult.deletedCount > 0) {
-            res.status(200).json({
-              message: "All tasks associated with category have been deleted",
-            });
-          }
         }
 
         // Proceed to delete the category
@@ -131,10 +146,10 @@ export default function categoryController(db: Db) {
           });
 
         if (categoryDeletedResult.deletedCount === 1) {
-          res.json({ message: "category deleted successfully" });
-          console.log("User deleted a category");
+          res.json({ message: "category and its tasks deleted successfully" });
+          console.log("User deleted a category and its tasks");
         } else {
-          res.status(404).json({ message: "Category not found" });
+          res.status(404).json({ message: "Category and/or tasks not found" });
         }
       } catch (e: any) {
         res.status(500).json({ message: e.message });
