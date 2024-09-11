@@ -18,6 +18,11 @@ export function categoryRoutes(db: Db) {
     authControl.authenticateToken,
     controller.createCategory,
   );
+  router.put(
+    "/categories/configurecategories/:categoryId",
+    authControl.authenticateToken,
+    controller.configureCategory,
+  );
   router.get(
     "/categories/:categoryId/checktasks",
     authControl.authenticateToken,

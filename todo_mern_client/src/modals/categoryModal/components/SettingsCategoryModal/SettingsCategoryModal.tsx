@@ -8,6 +8,7 @@ import { IoIosCloseCircle } from "react-icons/io";
 import ConfirmDeletionWithTasks from "./components/ConfirmDeletionWithTasks/ConfirmDeletionWithTasks";
 import ConfirmDeletionNoTasks from "./components/ConfirmDeletionNoTasks/ConfirmDeletionNoTasks";
 import useDeleteCategory from "../../../../hooks/api/useDeleteCategory";
+import useUpdateCategory from "../../../../hooks/api/useUpdateCategory";
 
 export default function SettingsCategoryModal() {
   const { selectedCategory } = useContext(DataContext);
@@ -16,10 +17,11 @@ export default function SettingsCategoryModal() {
     categorySettingsVisibility,
     setCategorySettingsVisibility,
   } = useContext(ModalVisibilityContext);
-  const [deleteCatWithTasks, setDeleteCatWithTasks] = useState(false);
-  const [deleteCatNoTasks, setDeleteCatNoTasks] = useState(false);
+  const [deleteCatWithTasksModal, setDeleteCatWithTasksModal] = useState(false);
+  const [deleteCatNoTasksModal, setDeleteCatNoTasksModal] = useState(false);
 
   const deleteCategory = useDeleteCategory();
+  const updateCategory = useUpdateCategory();
 
   const {
     register,
@@ -31,15 +33,17 @@ export default function SettingsCategoryModal() {
   } = useForm();
 
   useEffect(() => {
-    setDeleteCatNoTasks(false);
-    setDeleteCatWithTasks(false);
+    setDeleteCatNoTasksModal(false);
+    setDeleteCatWithTasksModal(false);
   }, [categorySettingsVisibility, setCategorySettingsVisibility]);
 
   const onSubmit: SubmitHandler = async (data) => {
-    if (deleteCatNoTasks) {
+    if (deleteCatNoTasksModal) {
       deleteCategory(setCategorySettingsVisibility, "deleteCatNoTasks");
-    } else if (deleteCatWithTasks) {
+    } else if (deleteCatWithTasksModal) {
       deleteCategory(setCategorySettingsVisibility, "deleteCatWithTasks");
+    } else {
+      updateCategory(data, setCategorySettingsVisibility);
     }
   };
 
@@ -59,9 +63,9 @@ export default function SettingsCategoryModal() {
       const hasTasks = response.data.hasTasks;
 
       if (hasTasks) {
-        setDeleteCatWithTasks(true);
+        setDeleteCatWithTasksModal(true);
       } else {
-        setDeleteCatNoTasks(true);
+        setDeleteCatNoTasksModal(true);
       }
     } catch (error) {
       console.error("An error occurred while checking for tasks: ", error);
@@ -102,21 +106,23 @@ export default function SettingsCategoryModal() {
           </button>
           <button
             className={`${s.buttonWrapper__submitBtn} ${s.buttonWrapper__buttons}`}
-            type="button"
+            // onClick={() => setCategorySettingsVisibility(false)}
           >
             done
           </button>
         </div>
-        {deleteCatWithTasks ? (
-          <ConfirmDeletionWithTasks />
-        ) : deleteCatNoTasks ? (
+        {deleteCatWithTasksModal ? (
+          <ConfirmDeletionWithTasks
+            setDeleteCatWithTasksModal={setDeleteCatWithTasksModal}
+          />
+        ) : deleteCatNoTasksModal ? (
           <ConfirmDeletionNoTasks
-            deleteCatNoTasks={deleteCatNoTasks}
-            setDeleteCatNoTasks={setDeleteCatNoTasks}
+            deleteCatNoTasks={deleteCatNoTasksModal}
+            setDeleteCatNoTasks={setDeleteCatNoTasksModal}
           />
         ) : null}
       </form>
-      {deleteCatNoTasks || deleteCatWithTasks ? (
+      {deleteCatNoTasksModal || deleteCatWithTasksModal ? (
         <div className={s.settingsCategoryModal__forGroundOverlay}></div>
       ) : null}
     </div>

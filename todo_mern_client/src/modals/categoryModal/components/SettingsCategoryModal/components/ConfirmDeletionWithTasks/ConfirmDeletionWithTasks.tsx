@@ -2,7 +2,13 @@ import { useState, useContext } from "react";
 import s from "./confirmdeletionwithtasks.module.scss";
 import { DataContext } from "../../../../../../context/DataContext";
 
-export default function ConfirmDeletionWithTasks() {
+type PropType = {
+  setDeleteCatWithTasksModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function ConfirmDeletionWithTasks({
+  setDeleteCatWithTasksModal,
+}: PropType) {
   const [userInput, setUserInput] = useState("");
   const { selectedCategory } = useContext(DataContext);
 
@@ -35,6 +41,7 @@ export default function ConfirmDeletionWithTasks() {
         <button
           className={`${s.buttonWrapper__buttons} ${s.buttonWrapper__cancelButton}`}
           type="button"
+          onClick={() => setDeleteCatWithTasksModal(false)}
         >
           cancel
         </button>

@@ -1,6 +1,6 @@
 import s from "./categorymodal.module.scss";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { DataContext } from "../../context/DataContext";
 import { ModalVisibilityContext } from "../../context/ModalVisibilityContext";
 import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides";
@@ -31,6 +31,7 @@ export default function CategoryModal() {
   }
 
   // To make sure the width rule is 0 when the modal is opened to see the progressBar width transion from 0 to it respective state.
+
   const percentageWidth = !categoryModalVisibility
     ? 0
     : getProgressPercentage(tasks, selectedCategory?._id) + "%";
