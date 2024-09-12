@@ -11,7 +11,7 @@ type TaskType = {
   priority?: string;
   completed?: boolean;
   userId: ObjectId;
-  categoryId?: ObjectId | "";
+  categoryId?: ObjectId;
 };
 
 export default function taskController(db: Db) {
@@ -103,7 +103,7 @@ export default function taskController(db: Db) {
           title: title,
           description: description,
           dueDate: dueDate,
-          categoryId: categoryId,
+          categoryId: new ObjectId(categoryId),
           priority: priority,
           userId: new ObjectId(userId),
           completed: false,

@@ -1,0 +1,150 @@
+  $taskModalBorderRamius: 1rem;
+
+  .categoryModal {
+    position: absolute;
+    border-radius: var(--modalBorderRadius);
+    border: 2px solid var(--light-blue);
+    position: absolute;
+    /* background: var(--dark-blue); */
+    background: #000f26;
+    height: 90svh;
+    width: 90vw;
+    z-index: 999;
+    border-radius: $taskModalBorderRamius;
+    padding: 2.5rem 1rem 1rem 1rem;
+    align-self: center;
+    right: -100%;
+    display: grid;
+    grid-template-rows: 2fr 1fr 3fr 10fr 2fr;
+
+    &__exitBtn {
+      position: absolute;
+      font-size: 2rem;
+      color: white;
+      top: 1rem;
+      left: 1rem;
+    }
+
+    &__settingsButton {
+      position: absolute;
+      height: 1.9rem;
+      width: 1.9rem;
+      right: 1rem;
+      top: 1rem;
+      color: darkgrey;
+    }
+
+    &Hide {
+      animation: hideModalAnim 0.5s forwards;
+    }
+
+    &Visible {
+      animation: showModalAnim 0.5s forwards;
+    }
+
+    &__heading {
+      color: var(--text-color);
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      text-transform: capitalize;
+      justify-self: center;
+    }
+
+    &__swiper {
+      height: 100%;
+      width: 100%;
+    }
+
+
+    &__doneButton {
+      border: none;
+      background: green;
+      border-radius: 1rem;
+      background: var(--pink);
+      background: var(--light-blue);
+      height: 2.3rem;
+      align-self: flex-end;
+      font-size: 1.2rem;
+      color: var(--text-color);
+    }
+
+  }
+
+
+  .progressBar {
+    /* background-color: var(--progressBar-color); */
+    background-color: darkslategray;
+    height: .5rem;
+    border-radius: 3rem;
+    display: flex;
+    margin: 0 0.3rem;
+    align-self: center;
+
+    &__progress {
+      transition: width 0.8s ease-out;
+      height: .5rem;
+      align-self: center;
+      border-radius: 3rem;
+    }
+  }
+
+
+
+
+
+  @keyframes showModalAnim {
+    0% {
+      visibility: visible;
+    }
+
+    20% {
+      right: 20%;
+    }
+
+    60% {
+      right: -1%;
+    }
+
+    100% {
+      /*5% to land in the middle(corresponding to its width)*/
+      right: 5%;
+    }
+  }
+
+  @keyframes hideModalAnim {
+    0% {
+      right: 0;
+    }
+
+    20% {
+      right: 30%;
+    }
+
+    99% {
+      right: -100%;
+    }
+
+    100% {
+      visibility: hidden;
+    }
+
+  }
+
+
+  .defaultVisibilityHidden {
+    visibility: hidden;
+  }
+
+  .forGroundOverlay {
+    position: absolute;
+    background: #000000d4;
+    z-index: 199;
+    height: 90svh;
+    width: 90vw;
+    border-radius: $taskModalBorderRamius;
+    justify-self: center;
+    align-self: center;
+    border: 2px solid var(--light-blue);
+  }

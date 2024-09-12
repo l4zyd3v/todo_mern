@@ -3,7 +3,7 @@
   border-radius: 15px;
   position: relative;
   z-index: 500;
-  color: vag(--text-color);
+  color: var(--text-color);
 
   display: grid;
   grid-template-columns: 2fr 10fr;
@@ -13,10 +13,14 @@
   color: var(--text-color);
 
   &__clickableTitleToOpenModal {
-    border: 2px solid green;
     height: 100%;
     display: flex;
     align-items: center;
     padding-left: 0.5rem;
   }
+}
+
+.categoryModal__card {
+  border: 2px solid var(--light-blue);
+  /* background: linear-gradient(to right, var(--dark-blue), var(--dark-blue), var(--light-blue)); */
 }

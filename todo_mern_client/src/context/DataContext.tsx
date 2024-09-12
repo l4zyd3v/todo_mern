@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { CategoriesInterface, TasksInterface } from "../types";
 
 interface DataContextType {
@@ -12,7 +12,8 @@ interface DataContextType {
   selectedTask: TasksInterface | null;
   setSelectedTask: (id: string) => void;
 
-  setTaskCompletion?: (taskId: string) => void;
+  selectedCategory: CategoriesInterface | null;
+  setSelectedCategory: (categoryId: string) => void;
 }
 
 interface DataContextProviderProps {
@@ -20,22 +21,30 @@ interface DataContextProviderProps {
 }
 
 export const DataContext = createContext<DataContextType>({
-  setCategories: () => {},
-  addCategory: () => {},
+  setCategories: () => null,
+  addCategory: () => null,
   categories: [],
-  setTasks: () => {},
-  addTask: () => {},
+  setTasks: () => null,
+  addTask: () => null,
   tasks: [],
   selectedTask: null,
-  setSelectedTask: () => {},
-
-  setTaskCompletion: () => {},
+  setSelectedTask: () => null,
+  selectedCategory: null,
+  setSelectedCategory: () => null,
 });
 
 export function DataContextProvider({ children }: DataContextProviderProps) {
   const [categories, setCategories] = useState<CategoriesInterface[]>([]);
   const [tasks, setTasks] = useState<TasksInterface[]>([]);
   const [selectedTask, setCurrentTask] = useState<TasksInterface | null>(null);
+  const [selectedCategory, setCurrentCategory] =
+    useState<CategoriesInterface | null>(null);
+
+  const setSelectedCategory = (categoryId: string) => {
+    setCurrentCategory(
+      categories.find((category) => category._id === categoryId) || null,
+    );
+  };
 
   const setSelectedTask = (taskId: string) => {
     setCurrentTask(tasks.find((task) => task._id === taskId) || null);
@@ -49,13 +58,21 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
-  const setTaskCompletion = (taskId: string) => {
-    setTasks(
-      tasks.map((task) =>
-        task._id === taskId ? { ...task, completed: !task.completed } : task,
-      ),
-    );
-  };
+  useEffect(() => {
+    if (selectedCategory) {
+      const updatedCategory = categories.find(
+        (category) => category._id === selectedCategory._id,
+      );
+      setCurrentCategory(updatedCategory || null);
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    if (selectedTask) {
+      const updatedTask = tasks.find((task) => task._id === selectedTask._id);
+      setCurrentTask(updatedTask || null);
+    }
+  }, [tasks]);
 
   const value = {
     categories,
@@ -64,9 +81,10 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     tasks,
     setTasks,
     addTask,
-    setTaskCompletion,
     selectedTask,
     setSelectedTask,
+    selectedCategory,
+    setSelectedCategory,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

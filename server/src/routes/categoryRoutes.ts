@@ -18,6 +18,26 @@ export function categoryRoutes(db: Db) {
     authControl.authenticateToken,
     controller.createCategory,
   );
+  router.put(
+    "/categories/configurecategories/:categoryId",
+    authControl.authenticateToken,
+    controller.configureCategory,
+  );
+  router.get(
+    "/categories/:categoryId/checktasks",
+    authControl.authenticateToken,
+    controller.checkCategoryTasks,
+  );
+  router.delete(
+    "/deletecategory/:categoryId",
+    authControl.authenticateToken,
+    controller.deleteCategory,
+  );
+  router.delete(
+    "/deletecategory-tasks/:categoryId",
+    authControl.authenticateToken,
+    controller.deleteCategoryAndTasks,
+  );
 
   return router;
 }

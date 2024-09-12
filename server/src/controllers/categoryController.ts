@@ -32,6 +32,49 @@ export default function categoryController(db: Db) {
       }
     },
 
+    configureCategory: async (req: Request, res: Response) => {
+      const { name, color } = req.body;
+
+      try {
+        const { userId } = req;
+        const { categoryId } = req.params;
+        const collection = db.collection("categories");
+
+        const category = await collection.findOne({
+          _id: new ObjectId(categoryId),
+        });
+
+        if (category) {
+          let updatedCategory: Partial<CategoryType> = {};
+
+          if (name !== undefined) updatedCategory.name = name;
+          if (color !== undefined) updatedCategory.color = color;
+
+          const result = await collection.updateOne(
+            { _id: new ObjectId(categoryId) },
+            { $set: updatedCategory },
+          );
+
+          if (result.modifiedCount === 1) {
+            res.status(200).json({
+              message: "Category updated successfully",
+              modified: true,
+            });
+            console.log("User updated a category");
+          } else if (result.modifiedCount === 0) {
+            res.status(200).json({
+              message: "No changes were made",
+              modified: false,
+            });
+          } else {
+            res.status(404).json({ message: "Categories not found" });
+          }
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
+
     createCategory: async (req: Request, res: Response) => {
       const collection = db.collection("categories");
       const { userId } = req;
@@ -73,6 +116,85 @@ export default function categoryController(db: Db) {
         console.log(
           "Something went wrong in categoryController/createCategory",
         );
+        res.status(500).json({ message: e.message });
+      }
+    },
+
+    checkCategoryTasks: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
+        const tasks = await db
+          .collection("tasks")
+          .find({
+            categoryId: new ObjectId(categoryId),
+          })
+          .toArray();
+
+        if (tasks.length > 0) {
+          res.status(200).json({ hasTasks: true });
+        } else {
+          res.status(200).json({ hasTasks: false });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
+
+    deleteCategory: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
+        const categoryDeletedResult = await db
+          .collection("categories")
+          .deleteOne({
+            _id: new ObjectId(categoryId),
+          });
+
+        if (categoryDeletedResult.deletedCount === 1) {
+          res.json({ message: "category deleted successfully" });
+          console.log("User deleted a category");
+        } else {
+          res.status(404).json({ message: "Category not found" });
+        }
+      } catch (e: any) {
+        res.status(500).json({ message: e.message });
+      }
+    },
+
+    deleteCategoryAndTasks: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+
+      try {
+        // Check if there are tasks associated with the category
+        const tasks = await db
+          .collection("tasks")
+          .find({
+            categoryId: new ObjectId(categoryId),
+          })
+          .toArray();
+
+        // If there are tasks, delete them
+        if (tasks.length > 0) {
+          const taskDeletionResult = await db.collection("tasks").deleteMany({
+            categoryId: new ObjectId(categoryId),
+          });
+        }
+
+        // Proceed to delete the category
+        const categoryDeletedResult = await db
+          .collection("categories")
+          .deleteOne({
+            _id: new ObjectId(categoryId),
+          });
+
+        if (categoryDeletedResult.deletedCount === 1) {
+          res.json({ message: "category and its tasks deleted successfully" });
+          console.log("User deleted a category and its tasks");
+        } else {
+          res.status(404).json({ message: "Category and/or tasks not found" });
+        }
+      } catch (e: any) {
         res.status(500).json({ message: e.message });
       }
     },

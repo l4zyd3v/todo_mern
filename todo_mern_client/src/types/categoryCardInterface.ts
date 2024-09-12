@@ -1,4 +1,4 @@
-import { TodoCardInterface } from ".";
+import { TasksInterface } from "./index";
 
 export interface CategoryCardInterface {
   key?: string;
@@ -7,5 +7,5 @@ export interface CategoryCardInterface {
   color: string;
   userId: string;
   taskAmountOfCategory: number;
-  tasks: Array<TodoCardInterface>;
+  tasks: Array<TasksInterface>;
 }

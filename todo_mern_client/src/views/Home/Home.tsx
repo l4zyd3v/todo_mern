@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useContext, useMemo } from "react";
 import { NavToggleContext } from "../../context/NavToggleContext.tsx";
 import { UserLoggedInContext } from "../../context/UserLoggedInContext";
 import { DataContext } from "../../context/DataContext";
+import { ModalVisibilityContext } from "../../context/ModalVisibilityContext.tsx";
 import s from "./home.module.scss";
 import axios from "axios";
 // importanime, { AnimeInstance } from "animejs";
@@ -24,8 +25,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
-import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
+// import TaskCreateModal from "../../modals/formModal/TaskCreateModal/TaskCreateModal";
+// import TaskConfigureModal from "../../modals/formModal/TaskConfigureModal/TaskConfigureModal";
+// import CategoryModal from "../../modals/formModal/categoryModal/CategoryModal.tsx";
+import TaskCreateModal from "../../modals/taskModals/TaskCreateModal/TaskCreateModal";
+import TaskConfigureModal from "../../modals/taskModals/TaskConfigureModal/TaskConfigureModal";
+import CategoryModal from "../../modals/categoryModal/CategoryModal.tsx";
+
+import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides.tsx";
 
 type UserProfile = {
   _id?: string;
@@ -40,20 +47,27 @@ type UserProfile = {
 };
 
 export default function Home() {
+  // states
   const [user, setUser] = useState<UserProfile[]>([]);
-  const [modalVisibility, setModalVisibility] = useState<null | boolean>(null);
-  const [taskConfigureVisibility, setTaskConfigureVisibility] = useState<
-    null | boolean
-  >(null);
+
+  // Contexts
   const { categories, setCategories, tasks, setTasks, selectedTask } =
     useContext(DataContext);
   const { toggleNav, setToggleNav } = useContext(NavToggleContext);
+  const {
+    taskConfigureModalVisibility,
+    setTaskConfigureModalVisibility,
+    taskCreateModalVisibility,
+    setTaskCreateModalVisibility,
+    categoryModalVisibility,
+    setCategoryModalVisibility,
+    categorySettingsVisibility,
+    setCategorySettingsVisibility,
+  } = useContext(ModalVisibilityContext);
   const { userLoggedIn, setUserLoggedIn, setUserId } =
     useContext(UserLoggedInContext);
 
   const navigate = useNavigate();
-
-  // console.log("!!!!!!!!! selectedTask, completed: ", selectedTask?.completed);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -160,41 +174,41 @@ export default function Home() {
     });
   }
 
-  function getTaskColorRelatedToCategory(
-    taskCategoryId: string | undefined,
-    categories: CategoriesInterface[],
-  ) {
-    for (let category of categories) {
-      if (category._id === taskCategoryId) {
-        return category.color;
-      }
-    }
-  }
+  // function getTaskColorRelatedToCategory(
+  //   taskCategoryId: string | undefined,
+  //   categories: CategoriesInterface[],
+  // ) {
+  //   for (let category of categories) {
+  //     if (category._id === taskCategoryId) {
+  //       return category.color;
+  //     }
+  //   }
+  // }
 
-  function renderTasks() {
-    return [...tasks].reverse().map((task) => {
-      const { _id, title, description, categoryId, completed } = task;
-
-      const categoryColor = getTaskColorRelatedToCategory(
-        categoryId,
-        categories,
-      );
-
-      return (
-        <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
-          <TodoCard
-            _id={_id}
-            title={title}
-            description={description}
-            color={categoryColor}
-            completed={completed}
-            setTaskConfigureVisibility={setTaskConfigureVisibility}
-            taskConfigureVisibility={taskConfigureVisibility}
-          />
-        </SwiperSlide>
-      );
-    });
-  }
+  // function renderTasks() {
+  //   return [...tasks].reverse().map((task) => {
+  //     const { _id, title, description, categoryId, completed } = task;
+  //
+  //     const categoryColor = getTaskColorRelatedToCategory(
+  //       categoryId,
+  //       categories,
+  //     );
+  //
+  //     return (
+  //       <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
+  //         <TodoCard
+  //           _id={_id}
+  //           title={title}
+  //           description={description}
+  //           color={categoryColor}
+  //           completed={completed}
+  //           setTaskConfigureVisibility={setTaskConfigureVisibility}
+  //           taskConfigureVisibility={taskConfigureVisibility}
+  //         />
+  //       </SwiperSlide>
+  //     );
+  //   });
+  // }
 
   return (
     <>
@@ -214,39 +228,37 @@ export default function Home() {
         </div>
         <div className={s.cardWrapper}>
           <h2 className={s.cardWrapper__heading}>today's tasks</h2>
-          <Swiper
-            slidesPerView={5}
-            spaceBetween={3}
-            direction={"vertical"}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Pagination]}
-            className={s.cardWrapper__swiper}
-          >
-            {renderTasks()}
-          </Swiper>
+          <SwiperTasksSlides
+            s={s}
+            parentComponent={"Home"}
+            numberOfSlides={5}
+          />
         </div>
+        <NewTaskBtn setModal={setTaskCreateModalVisibility} />
 
-        <NewTaskBtn setModal={setModalVisibility} />
-        <TaskCreateModal
-          visibility={modalVisibility}
-          setVisibility={setModalVisibility}
-        />
-        {(modalVisibility || taskConfigureVisibility) && (
+        <TaskCreateModal />
+
+        <TaskConfigureModal />
+
+        <CategoryModal />
+
+        {(taskCreateModalVisibility ||
+          taskConfigureModalVisibility ||
+          categoryModalVisibility) && (
           <div
             onClick={() => {
-              setModalVisibility(false);
-              setTaskConfigureVisibility(false);
+              taskCreateModalVisibility && setTaskCreateModalVisibility(false);
+              taskConfigureModalVisibility &&
+                setTaskConfigureModalVisibility(false);
+              categoryModalVisibility && setCategoryModalVisibility(false);
+              categorySettingsVisibility &&
+                setCategorySettingsVisibility(false);
             }}
             className={s.main__modalBackground}
           ></div>
         )}
-        <TaskConfigureModal
-          visibility={taskConfigureVisibility}
-          setVisibility={setTaskConfigureVisibility}
-        />
       </main>
+
       <Nav
         firstname={user[0]?.credentials.firstName}
         lastname={user[0]?.credentials.lastName}
