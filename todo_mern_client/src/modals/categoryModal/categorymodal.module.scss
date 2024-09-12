@@ -12,13 +12,18 @@
     z-index: 999;
     border-radius: $taskModalBorderRamius;
     padding: 2.5rem 1rem 1rem 1rem;
-
-
     align-self: center;
-
     right: -100%;
     display: grid;
     grid-template-rows: 2fr 1fr 3fr 10fr 2fr;
+
+    &__exitBtn {
+      position: absolute;
+      font-size: 2rem;
+      color: white;
+      top: 1rem;
+      left: 1rem;
+    }
 
     &__settingsButton {
       position: absolute;
@@ -44,6 +49,7 @@
       align-items: center;
       position: relative;
       text-transform: capitalize;
+      justify-self: center;
     }
 
     &__swiper {

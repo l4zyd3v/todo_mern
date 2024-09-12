@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { CategoriesInterface, TasksInterface } from "../types";
 
 interface DataContextType {
@@ -37,7 +37,6 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const [categories, setCategories] = useState<CategoriesInterface[]>([]);
   const [tasks, setTasks] = useState<TasksInterface[]>([]);
   const [selectedTask, setCurrentTask] = useState<TasksInterface | null>(null);
-
   const [selectedCategory, setCurrentCategory] =
     useState<CategoriesInterface | null>(null);
 
@@ -58,6 +57,22 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const addTask = (newTask: TasksInterface) => {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const updatedCategory = categories.find(
+        (category) => category._id === selectedCategory._id,
+      );
+      setCurrentCategory(updatedCategory || null);
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    if (selectedTask) {
+      const updatedTask = tasks.find((task) => task._id === selectedTask._id);
+      setCurrentTask(updatedTask || null);
+    }
+  }, [tasks]);
 
   const value = {
     categories,

@@ -1,6 +1,7 @@
 import s from "./categorymodal.module.scss";
+import { IoIosCloseCircle } from "react-icons/io";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/DataContext";
 import { ModalVisibilityContext } from "../../context/ModalVisibilityContext";
 import SwiperTasksSlides from "../../components/SwiperTasksSLides/SwiperTasksSlides";
@@ -9,7 +10,7 @@ import { IoMdSettings } from "react-icons/io";
 import SettingsCategoryModal from "./components/SettingsCategoryModal/SettingsCategoryModal";
 
 export default function CategoryModal() {
-  const { selectedCategory, tasks } = useContext(DataContext);
+  const { selectedCategory, tasks, categories } = useContext(DataContext);
   const {
     categoryModalVisibility,
     setCategoryModalVisibility,
@@ -30,6 +31,14 @@ export default function CategoryModal() {
     }`;
   }
 
+  useEffect(() => {
+    console.log(selectedCategory?.name);
+    console.log(
+      categories.find((category) => category._id === selectedCategory?._id) ||
+        null,
+    );
+  }, [setCategorySettingsVisibility, categorySettingsVisibility]);
+
   // To make sure the width rule is 0 when the modal is opened to see the progressBar width transion from 0 to it respective state.
 
   const percentageWidth = !categoryModalVisibility
@@ -38,6 +47,10 @@ export default function CategoryModal() {
 
   return (
     <div className={getCategoryModalClassName()}>
+      <IoIosCloseCircle
+        onClick={() => setCategoryModalVisibility(false)}
+        className={s.categoryModal__exitBtn}
+      />
       <IoMdSettings
         className={s.categoryModal__settingsButton}
         onClick={() => setCategorySettingsVisibility(true)}
