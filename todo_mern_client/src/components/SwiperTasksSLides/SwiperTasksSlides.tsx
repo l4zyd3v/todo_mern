@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
-import TodoCard from "../TodoCard/TodoCard";
+import TaskCard from "../TaskCard/TaskCard";
 
 import { CategoriesInterface, TasksInterface } from "../../types";
 
@@ -64,7 +64,7 @@ export default function SwiperTasksSlides({
 
       return (
         <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
-          <TodoCard
+          <TaskCard
             _id={_id}
             title={title}
             description={description}
@@ -88,7 +88,7 @@ export default function SwiperTasksSlides({
 
       return (
         <SwiperSlide key={task._id} className={s.cardWrapper__swiperSlide}>
-          <TodoCard
+          <TaskCard
             _id={_id}
             title={title}
             description={description}

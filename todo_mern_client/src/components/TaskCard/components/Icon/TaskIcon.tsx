@@ -1,4 +1,4 @@
-import s from "./todoicon.module.scss";
+import s from "./taskicon.module.scss";
 import { FaCheck } from "react-icons/fa";
 import { TasksInterface } from "../../../../types";
 
@@ -12,7 +12,7 @@ type TodoIconProps = {
   selectedTask: TasksInterface | null | undefined;
 };
 
-export default function TodoIcon({
+export default function TaskIcon({
   color,
   isCompleted,
   setIsCompleted,

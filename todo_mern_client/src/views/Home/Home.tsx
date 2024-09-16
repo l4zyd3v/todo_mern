@@ -12,13 +12,7 @@ import {
   CategoriesInterface,
   TasksInterface,
 } from "../../types";
-import {
-  TodoCard,
-  NewTaskBtn,
-  CategoriesCard,
-  Header,
-  Nav,
-} from "../../components";
+import { NewTaskBtn, CategoriesCard, Header, Nav } from "../../components";
 
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
