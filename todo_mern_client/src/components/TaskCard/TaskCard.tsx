@@ -25,7 +25,7 @@ const TaskCard: React.FC<TodoCardInterface> = ({
 
   useEffect(() => {
     setIsCompleted(completed);
-  }, [taskConfigureModalVisibility]);
+  }, [taskConfigureModalVisibility, categoryModalVisibility]);
 
   function getCardClassname() {
     return `
